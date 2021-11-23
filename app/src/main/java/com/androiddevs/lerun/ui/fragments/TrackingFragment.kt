@@ -1,8 +1,14 @@
 package com.androiddevs.lerun.ui.fragments
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -18,26 +24,31 @@ import com.androiddevs.lerun.utils.Constants.ACTION_PAUSE_SERVICE
 import com.androiddevs.lerun.utils.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.androiddevs.lerun.utils.Constants.ACTION_STOP_SERVICE
 import com.androiddevs.lerun.utils.Constants.MAP_CAMERA_ZOOM
-import com.androiddevs.lerun.utils.Constants.POLYLINE_COLOR
 import com.androiddevs.lerun.utils.Constants.POLYLINE_WIDTH
 import com.androiddevs.lerun.utils.TrackingUtility
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_tracking.*
+import kotlinx.android.synthetic.main.new_activity_main.*
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.round
+import com.google.android.gms.maps.model.LatLng
+
 
 const val CANCEL_TRACKING_DIALOG_TAG = "CancelDialog"
 
 @AndroidEntryPoint
-class TrackingFragment : Fragment() {
+class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
+    GoogleMap.OnMyLocationClickListener {
 
     private var _binding: FragmentTrackingBinding? = null
     private val binding get() = _binding!!
@@ -47,11 +58,14 @@ class TrackingFragment : Fragment() {
     private var isTracking = false
     private var pathPoints = mutableListOf<Polyline>()
 
-    private var map: GoogleMap? = null
+    private lateinit var map: GoogleMap
+
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private var currentTimeMillis = 0L
 
     private var menu: Menu? = null
+
 
     @set:Inject
     var weight = 80f
@@ -71,6 +85,9 @@ class TrackingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
 
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireActivity())
+
         if (savedInstanceState != null) {
             val cancelTrackingDialog = parentFragmentManager.findFragmentByTag(
                 CANCEL_TRACKING_DIALOG_TAG
@@ -82,6 +99,7 @@ class TrackingFragment : Fragment() {
         }
 
         binding.btnToggleRun.setOnClickListener {
+            binding.cardCancelRun!!.visibility = View.VISIBLE
             toggleRun()
         }
 
@@ -90,13 +108,22 @@ class TrackingFragment : Fragment() {
             endRunAndSaveToDatabase()
         }
 
+
+        binding.mapView.getMapAsync(this)
+
         binding.mapView.getMapAsync {
             map = it
             addAllPolylines()
         }
 
+        binding.cardCancelRun!!.setOnClickListener {
+            showCancelTrackingDialog()
+        }
+
         subscribeToObservers()
     }
+
+
 
     private fun subscribeToObservers() {
         TrackingService.isTracking.observe(viewLifecycleOwner, Observer {
@@ -115,6 +142,7 @@ class TrackingFragment : Fragment() {
             binding.tvTimer.text = formattedTime
         })
     }
+
 
     private fun toggleRun() {
         if (isTracking) {
@@ -164,10 +192,12 @@ class TrackingFragment : Fragment() {
     private fun updateTracking(isTracking: Boolean) {
         this.isTracking = isTracking
         if (!isTracking && currentTimeMillis > 0L) {
-            binding.btnToggleRun.text = "Start"
+            binding.textStart?.text = "Start"
+            binding.icBtnStart?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_play))
             binding.btnFinishRun.visibility = View.VISIBLE
         } else if (isTracking) {
-            binding.btnToggleRun.text = "Stop"
+            binding.textStart?.text = "Stop"
+            binding.icBtnStart?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_stop))
             menu?.getItem(0)?.isVisible = true
             binding.btnFinishRun.visibility = View.GONE
         }
@@ -237,7 +267,7 @@ class TrackingFragment : Fragment() {
     private fun addAllPolylines() {
         for (polyline in pathPoints) {
             val polylineOptions = PolylineOptions()
-                .color(POLYLINE_COLOR)
+                .color(ContextCompat.getColor(requireContext(), R.color.ijo))
                 .width(POLYLINE_WIDTH)
                 .addAll(polyline)
             map?.addPolyline(polylineOptions)
@@ -250,7 +280,7 @@ class TrackingFragment : Fragment() {
             val lastLatLng = pathPoints.last().last()
 
             val polylineOption = PolylineOptions()
-                .color(POLYLINE_COLOR)
+                .color(ContextCompat.getColor(requireContext(), R.color.ijo))
                 .width(POLYLINE_WIDTH)
                 .add(preLastLatLng)
                 .add(lastLatLng)
@@ -297,5 +327,53 @@ class TrackingFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding.mapView.onSaveInstanceState(outState)
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+
+        loadTheme(map)
+
+        if (ActivityCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
+        map.isMyLocationEnabled = true
+        map.setOnMyLocationButtonClickListener(this)
+        map.setOnMyLocationClickListener(this)
+        map.uiSettings.isMyLocationButtonEnabled = false
+
+        fusedLocationProviderClient.lastLocation
+            .addOnSuccessListener { location ->
+                val myLocation = LatLng(location.latitude, location.longitude)
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16f))
+            }
+
+    }
+
+    private fun loadTheme(googleMap: GoogleMap) {
+        try {
+            val isSuccess =
+                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireActivity(),
+                    R.raw.style_json))
+
+            if (!isSuccess) {
+                Log.e("MAPS", "Failed")
+            }
+        } catch (e: Exception) {
+            Log.e("MAPS", e.message)
+        }
+    }
+
+    override fun onMyLocationButtonClick(): Boolean {
+        return false
+    }
+
+    override fun onMyLocationClick(location: Location) {
+
     }
 }

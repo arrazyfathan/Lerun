@@ -9,6 +9,10 @@
         app:destination="@+id/trackingFragment"
         app:launchSingleTop="true" />
 
+    <action
+        android:id="@+id/from_main_activity_to_tracking"
+        app:destination="@+id/trackingFragment" />
+
     <fragment
         android:id="@+id/runFragment"
         android:name="com.androiddevs.lerun.ui.fragments.RunFragment"

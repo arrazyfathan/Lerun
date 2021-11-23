@@ -13,7 +13,18 @@
     <color name="md_blue_A200">#448AFF</color>
     <color name="md_blue_A400">#2979FF</color>
     <color name="md_blue_A700">#2962FF</color>
-    <color name="colorAccent">#FFE600</color>
-    <color name="errorColor">#D50000</color>
+    <color name="colorAccent">#bbf246</color>
+    <color name="errorColor">#EC3131</color>
+
+    <!-- Dark -->
+    <color name="ijo_tua">#77A613</color>
+    <color name="green_dark_accent">#445E0C</color>
+    <color name="ijo">#bbf246</color>
+    <color name="main_dark">#101010</color>
+    <color name="secondary_dark">#212121</color>
+    <color name="text_dark">#8C8C8C</color>
+    <color name="blue_dark">#3068DF</color>
+    <color name="blue_accent">#62F3F6</color>
+    <color name="dark_accent_text">#737377</color>
 
 </resources>

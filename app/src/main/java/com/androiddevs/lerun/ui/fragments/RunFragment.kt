@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androiddevs.lerun.R
+import com.androiddevs.lerun.adapters.LatestRunAdapter
 import com.androiddevs.lerun.adapters.RunAdapter
 import com.androiddevs.lerun.databinding.FragmentRunBinding
 import com.androiddevs.lerun.ui.viewmodels.MainViewModel
@@ -21,8 +22,11 @@ import com.androiddevs.lerun.utils.SortType
 import com.androiddevs.lerun.utils.TrackingUtility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_run.*
+import kotlinx.android.synthetic.main.new_item_run.view.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import java.text.SimpleDateFormat
+import java.util.*
 
 @AndroidEntryPoint
 class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
@@ -32,7 +36,8 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     private val viewModel: MainViewModel by viewModels()
 
-    private lateinit var runAdapter: RunAdapter
+
+    private lateinit var latestRunAdapter: LatestRunAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +52,7 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        getToday()
         requestPermissions()
         setupRecyclerView()
 
@@ -74,18 +79,34 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         }
 
 
+
         viewModel.runs.observe(viewLifecycleOwner, Observer {
-            runAdapter.submitList(it)
+            latestRunAdapter.submitLatestList(it)
         })
 
-        binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_runFragment_to_trackingFragment)
+    }
+
+    private fun getToday() {
+        val calendar = Calendar.getInstance()
+        when (calendar.get(Calendar.HOUR_OF_DAY)) {
+            in 0..11 -> {
+                binding.tvDateToday.text = "Good Morning"
+            }
+            in 12..15 -> {
+                binding.tvDateToday.text = "Good Afternoon"
+            }
+            in 16..20 -> {
+                binding.tvDateToday.text = "Good Evening"
+            }
+            in 21..23 -> {
+                binding.tvDateToday.text = "Good Night"
+            }
         }
     }
 
     private fun setupRecyclerView() = binding.rvRuns.apply {
-        runAdapter = RunAdapter()
-        adapter = runAdapter
+        latestRunAdapter = LatestRunAdapter()
+        adapter = latestRunAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
 

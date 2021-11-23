@@ -80,8 +80,6 @@ class SetupFragment : Fragment() {
             .putFloat(KEY_WEIGHT, weight.toFloat())
             .putBoolean(KEY_FIRST_TIME_TOGGLE, false)
             .apply()
-        val toolbarText = "Let's go, $name!"
-        requireActivity().tvToolbarTitle.text = toolbarText
         return true
     }
 

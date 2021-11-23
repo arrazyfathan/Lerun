@@ -17,8 +17,7 @@ class CancelTrackingDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogTheme)
             .setTitle("Cancel the run?")
-            .setMessage("Are you sure to cancle the run and delete the data")
-            .setIcon(R.drawable.ic_delete)
+            .setMessage("Are you sure to cancel the run and delete the data")
             .setPositiveButton("Yes") { _, _ ->
                 yesListener?.let { yes ->
                     yes()

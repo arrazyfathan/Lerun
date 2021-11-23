@@ -2,16 +2,16 @@
 
     <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Original AppCompat attributes. -->
-        <item name="colorPrimary">@color/md_blue_900</item>
-        <item name="colorSecondary">@color/md_blue_500</item>
-        <item name="android:colorBackground">@color/md_blue_700</item>
+        <item name="colorPrimary">@color/main_dark</item>
+        <item name="colorSecondary">@color/secondary_dark</item>
+        <item name="android:colorBackground">@color/main_dark</item>
         <item name="colorError">@color/errorColor</item>
 
         <!-- New MaterialComponents attributes. -->
         <item name="colorPrimaryVariant">@android:color/white</item>
-        <item name="colorSecondaryVariant">@color/md_blue_400</item>
+        <item name="colorSecondaryVariant">@color/secondary_dark</item>
         <!--> toolbar color -->
-        <item name="colorSurface">@color/md_blue_900</item>
+        <item name="colorSurface">@color/main_dark</item>
         <item name="colorOnPrimary">@color/md_blue_50</item>
         <item name="colorOnSecondary">@color/md_blue_50</item>
         <item name="colorOnBackground">@color/md_blue_50</item>
@@ -52,5 +52,6 @@
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/colorAccent</item>
     </style>
+
 
 </resources>

@@ -1,6 +1,8 @@
 package com.androiddevs.lerun.utils
 
 import android.graphics.Color
+import androidx.core.content.ContextCompat
+import com.androiddevs.lerun.R
 
 object Constants {
 
@@ -29,9 +31,8 @@ object Constants {
 
 
     //Color polyline
-    const val POLYLINE_COLOR = Color.RED
-    const val POLYLINE_WIDTH = 8f
-    const val MAP_CAMERA_ZOOM = 15f
+    const val POLYLINE_WIDTH = 12f
+    const val MAP_CAMERA_ZOOM = 16f
 
     //timer
     const val TIMER_UPDATE_INTERVAL = 50L

@@ -3,6 +3,35 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/activity_selector.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/bottom_nav_selector.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_add_black.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_average_speed.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_calories_burned.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_close_white.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_delete.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_directions_run_black_24dp.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_graph.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_pause_black_24dp.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_run.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_settings.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_stop_black_24dp.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/radius_100.xml" value="0.20092592592592592" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/radius_img.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/setting_selector.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_run.xml" value="0.33" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_settings.xml" value="0.209375" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_setup.xml" value="0.209375" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_tracking.xml" value="0.33" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/item_run.xml" value="0.33" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/marker_view.xml" value="0.209375" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/new_activity_main.xml" value="0.41875" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/new_fragment_tracking.xml" value="0.209375" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/new_item_run.xml" value="0.33" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/menu/bottom_nav_menu.xml" value="0.209375" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.22552083333333334" />
         <entry key="app/src/main/res/layout-land/fragment_statistics.xml" value="0.3640625" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.21510416666666668" />
         <entry key="app/src/main/res/layout/fragment_run.xml" value="0.21510416666666668" />
