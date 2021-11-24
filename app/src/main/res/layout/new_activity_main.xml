@@ -17,11 +17,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:defaultNavHost="true"
-            tools:layout="@layout/fragment_run"
-            app:navGraph="@navigation/nav_graph" />
+            app:navGraph="@navigation/nav_graph"
+            tools:layout="@layout/fragment_run" />
 
     </FrameLayout>
 
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/overlay"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior" />
 
     <FrameLayout
         android:id="@+id/container_nav_menu"
@@ -58,8 +65,8 @@
             android:layout_gravity="center"
             android:contentDescription="@string/floating"
             android:src="@drawable/ic_add_black"
-            app:elevation="10dp"
-            app:backgroundTint="@color/ijo_tua" />
+            app:backgroundTint="@color/ijo_tua"
+            app:elevation="10dp" />
 
     </FrameLayout>
 

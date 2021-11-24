@@ -43,11 +43,13 @@ class MainActivity : AppCompatActivity() {
                         bottomNavigationView.visibility = View.VISIBLE
                         container_nav_menu.visibility = View.VISIBLE
                         fabinside.visibility = View.VISIBLE
+                        overlay.visibility = View.VISIBLE
                     }
                     else -> {
                         bottomNavigationView.visibility = View.GONE
                         container_nav_menu.visibility = View.GONE
                         fabinside.visibility = View.GONE
+                        overlay.visibility = View.GONE
                     }
                 }
 

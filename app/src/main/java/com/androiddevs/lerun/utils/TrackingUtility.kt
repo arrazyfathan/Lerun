@@ -49,6 +49,21 @@ object TrackingUtility {
 
     }
 
+    fun formatDuration(ms: Long): String {
+        var millisecond = ms
+        val hours = TimeUnit.MILLISECONDS.toHours(millisecond)
+        millisecond -= TimeUnit.HOURS.toMillis(hours)
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(millisecond)
+        millisecond -= TimeUnit.MINUTES.toMillis(minutes)
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(millisecond)
+        return if (hours < 1) {
+            "${if (minutes < 10) "" else ""}${minutes}m " +  "${if (seconds < 10) "0" else ""}${seconds}s"
+        } else {
+            "${if (hours < 10) "0" else ""}${hours}h" + "${if (minutes < 10) "0" else ""}${minutes}m"
+
+        }
+    }
+
     fun calculatePolylineLength(polyline: Polyline): Float {
         var distance = 0f
         for (i in 0..polyline.size - 2) {
@@ -56,7 +71,11 @@ object TrackingUtility {
             val pos2 = polyline[i + 1]
 
             val result = FloatArray(1)
-            Location.distanceBetween(pos1.latitude, pos1.longitude, pos2.latitude, pos2.longitude, result)
+            Location.distanceBetween(pos1.latitude,
+                pos1.longitude,
+                pos2.latitude,
+                pos2.longitude,
+                result)
 
             distance += result[0]
         }

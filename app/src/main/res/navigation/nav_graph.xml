@@ -11,7 +11,9 @@
 
     <action
         android:id="@+id/from_main_activity_to_tracking"
-        app:destination="@+id/trackingFragment" />
+        app:destination="@+id/trackingFragment"
+        app:enterAnim="@anim/slide_up"
+        app:popExitAnim="@anim/slide_down" />
 
     <fragment
         android:id="@+id/runFragment"
@@ -31,7 +33,9 @@
         android:label="TrackingFragment">
         <action
             android:id="@+id/action_trackingFragment_to_runFragment"
-            app:destination="@id/runFragment" />
+            app:destination="@id/runFragment"
+            app:enterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_down" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"

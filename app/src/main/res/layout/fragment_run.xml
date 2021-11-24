@@ -52,12 +52,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="24dp"
             android:fontFamily="@font/inter_bold"
+            android:text="Samatha Williams"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/image_profile"
-            app:layout_constraintTop_toBottomOf="@id/tv_date_today"
-            android:text="Samatha Williams" />
+            app:layout_constraintTop_toBottomOf="@id/tv_date_today" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/banner"
@@ -71,6 +71,40 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_name">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="24dp">
+
+                <TextView
+                    android:id="@+id/lets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_semibold"
+                    android:text="Try full access \nfor free now"
+                    android:textColor="@color/green_dark_accent"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/inter_semibold"
+                    android:text="Go Premium"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    app:cornerRadius="100dp"
+                    app:layout_constraintStart_toStartOf="@+id/lets"
+                    app:layout_constraintTop_toBottomOf="@+id/lets" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </com.google.android.material.card.MaterialCardView>
@@ -94,7 +128,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:fontFamily="@font/inter_semibold"
-            android:text="Stats"
+            android:text="Statistics"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -130,6 +164,7 @@
                     android:tint="@color/ijo" />
 
                 <TextView
+                    android:id="@+id/totalCalories"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
@@ -181,6 +216,7 @@
                     android:tint="@color/ijo" />
 
                 <TextView
+                    android:id="@+id/averageSpeed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
@@ -232,6 +268,7 @@
                     android:tint="@color/ijo" />
 
                 <TextView
+                    android:id="@+id/totalDistance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
@@ -282,6 +319,7 @@
                     android:tint="@color/ijo" />
 
                 <TextView
+                    android:id="@+id/totalTimeRun"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
@@ -335,7 +373,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:fontFamily="@font/inter_semibold"
-            android:text="Latest Activity"
+            android:text="Recent Activities"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"

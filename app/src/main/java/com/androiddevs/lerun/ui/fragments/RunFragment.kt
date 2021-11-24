@@ -17,6 +17,7 @@ import com.androiddevs.lerun.adapters.LatestRunAdapter
 import com.androiddevs.lerun.adapters.RunAdapter
 import com.androiddevs.lerun.databinding.FragmentRunBinding
 import com.androiddevs.lerun.ui.viewmodels.MainViewModel
+import com.androiddevs.lerun.ui.viewmodels.StatisticViewModel
 import com.androiddevs.lerun.utils.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.androiddevs.lerun.utils.SortType
 import com.androiddevs.lerun.utils.TrackingUtility
@@ -27,6 +28,7 @@ import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.round
 
 @AndroidEntryPoint
 class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
@@ -34,8 +36,11 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     private var _binding: FragmentRunBinding? = null
     private val binding get() = _binding!!
 
+    // main view model
     private val viewModel: MainViewModel by viewModels()
 
+    //stats model
+    private val statsModel: StatisticViewModel by viewModels()
 
     private lateinit var latestRunAdapter: LatestRunAdapter
 
@@ -79,11 +84,46 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         }
 
 
+        subscribeObservers()
 
         viewModel.runs.observe(viewLifecycleOwner, Observer {
             latestRunAdapter.submitLatestList(it)
         })
 
+    }
+
+    private fun subscribeObservers() {
+        statsModel.totalCaloriesBurned.observe(viewLifecycleOwner, Observer { calories ->
+            calories?.let {
+                val totalCalories = "$calories kcal"
+                binding.totalCalories.text = totalCalories
+            }
+
+        })
+
+        statsModel.totalAverageSpeed.observe(viewLifecycleOwner, Observer { avgSpeed ->
+            avgSpeed?.let {
+                val totalAverageSpeed = "${round(avgSpeed * 10f) / 10} km/h"
+                binding.averageSpeed.text = totalAverageSpeed
+            }
+        })
+
+        statsModel.totalDistance.observe(viewLifecycleOwner, Observer { distance ->
+            distance?.let {
+                val km = it / 1000f
+                val totalDistance = round(km * 10f) / 10
+                val totalDistanceString = "$totalDistance km"
+
+                binding.totalDistance.text = totalDistanceString
+            }
+        })
+
+        statsModel.totalTimeRun.observe(viewLifecycleOwner, Observer { duration ->
+            duration?.let {
+                val totalTimeRun = TrackingUtility.formatDuration(duration)
+                binding.totalTimeRun.text = totalTimeRun
+            }
+        })
     }
 
     private fun getToday() {
