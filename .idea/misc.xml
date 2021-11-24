@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable-v23/splash_image.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/activity_selector.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/bottom_nav_selector.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_add_black.xml" value="0.22552083333333334" />
@@ -17,10 +18,13 @@
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_run.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_settings.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_stop_black_24dp.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/logo_rounded.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/logo_splash.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/overlay.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/radius_100.xml" value="0.20092592592592592" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/radius_img.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/setting_selector.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/splash_image.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_run.xml" value="0.33" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_settings.xml" value="0.209375" />

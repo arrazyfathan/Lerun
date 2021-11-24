@@ -59,7 +59,7 @@ object TrackingUtility {
         return if (hours < 1) {
             "${if (minutes < 10) "" else ""}${minutes}m " +  "${if (seconds < 10) "0" else ""}${seconds}s"
         } else {
-            "${if (hours < 10) "0" else ""}${hours}h" + "${if (minutes < 10) "0" else ""}${minutes}m"
+            "${if (hours < 10) "" else ""}${hours}h" + "${if (minutes < 10) "0" else ""}${minutes}m"
 
         }
     }
