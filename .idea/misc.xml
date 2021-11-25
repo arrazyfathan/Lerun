@@ -6,6 +6,8 @@
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable-v23/splash_image.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/activity_selector.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/bottom_nav_selector.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/bottom_sheet_background.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_activity_selected.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_add_black.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_average_speed.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_calories_burned.xml" value="0.22552083333333334" />
@@ -14,6 +16,7 @@
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_directions_run_black_24dp.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_graph.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_pause_black_24dp.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_run.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/ic_settings.xml" value="0.22552083333333334" />
@@ -22,10 +25,13 @@
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/logo_splash.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/overlay.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/radius_100.xml" value="0.20092592592592592" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/radius_10_dp.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/radius_img.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/setting_selector.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/splash_image.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/bottom_sheet.xml" value="0.33" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/dialog_layout.xml" value="0.33" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_run.xml" value="0.33" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_settings.xml" value="0.209375" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_setup.xml" value="0.209375" />

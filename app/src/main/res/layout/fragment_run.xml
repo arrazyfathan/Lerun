@@ -169,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:fontFamily="@font/inter_bold"
-                    android:text="200 Kcal"
+                    android:text="0 kcal"
                     android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
@@ -221,7 +221,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:fontFamily="@font/inter_bold"
-                    android:text="18 Km/h"
+                    android:text="0 km/h"
                     android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
@@ -273,7 +273,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:fontFamily="@font/inter_bold"
-                    android:text="200 Km"
+                    android:text="0 km"
                     android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
@@ -324,7 +324,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:fontFamily="@font/inter_bold"
-                    android:text="18 Hours"
+                    android:text="0h0m0s"
                     android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
@@ -395,7 +395,7 @@
             tools:listitem="@layout/new_item_run" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button"
+            android:id="@+id/btnSeeMore"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginStart="24dp"

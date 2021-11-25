@@ -7,8 +7,11 @@ import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.EditText
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -17,7 +20,6 @@ import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentTrackingBinding
 import com.androiddevs.lerun.db.Run
 import com.androiddevs.lerun.services.Polyline
-import com.androiddevs.lerun.services.Polylines
 import com.androiddevs.lerun.services.TrackingService
 import com.androiddevs.lerun.ui.viewmodels.MainViewModel
 import com.androiddevs.lerun.utils.Constants.ACTION_PAUSE_SERVICE
@@ -32,16 +34,18 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_tracking.*
 import kotlinx.android.synthetic.main.new_activity_main.*
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.round
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 
 
 const val CANCEL_TRACKING_DIALOG_TAG = "CancelDialog"
@@ -58,7 +62,7 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
     private var isTracking = false
     private var pathPoints = mutableListOf<Polyline>()
 
-    private lateinit var map: GoogleMap
+    private var map: GoogleMap? = null
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -99,15 +103,8 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
         }
 
         binding.btnToggleRun.setOnClickListener {
-            binding.cardCancelRun!!.visibility = View.VISIBLE
             toggleRun()
         }
-
-        binding.btnFinishRun.setOnClickListener {
-            zoomToSeeWholeTrack()
-            endRunAndSaveToDatabase()
-        }
-
 
         binding.mapView.getMapAsync(this)
 
@@ -121,8 +118,62 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
         }
 
         subscribeToObservers()
+
+        binding.btnFinishRun.setOnClickListener {
+            showDialogFinish()
+
+        }
+
     }
 
+    private fun showDialogFinish() {
+        val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet, null)
+        dialog.setContentView(view)
+
+        val tvName = view.findViewById<EditText>(R.id.et_name)
+        val btnSave = view.findViewById<MaterialButton>(R.id.btn_save_dialog)
+        val btnCancel = view.findViewById<MaterialButton>(R.id.btn_save_cancel)
+        val duration = view.findViewById<TextView>(R.id.timer_sheet)
+        val calories = view.findViewById<TextView>(R.id.calories_sheet)
+        val distance = view.findViewById<TextView>(R.id.distance_sheet)
+        val speed = view.findViewById<TextView>(R.id.speed_sheet)
+        val validation = view.findViewById<TextView>(R.id.validation)
+
+        var distanceInMeters = 0
+        for (polyline in pathPoints) {
+            distanceInMeters += TrackingUtility.calculatePolylineLength(polyline).toInt()
+        }
+        val averageSpeed =
+            round((distanceInMeters / 1000f) / (currentTimeMillis / 1000f / 60 / 60) * 10) / 10f
+        val caloriesBurned = ((distanceInMeters / 1000f) * weight).toInt()
+
+        //set data
+        duration.text = TrackingUtility.getFormattedStopWatchTime(currentTimeMillis, true)
+        distance.text = distanceInMeters.toString()
+        calories.text = caloriesBurned.toString()
+        speed.text = averageSpeed.toString()
+
+        btnSave.setOnClickListener {
+            if (tvName.text.isNullOrEmpty()) {
+                validation.visibility = View.VISIBLE
+            } else {
+                val name = tvName.text.toString()
+
+                zoomToSeeWholeTrack()
+                endRunAndSaveToDatabase(name)
+                dialog.dismiss()
+            }
+        }
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+
+        dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        dialog.show()
+    }
 
 
     private fun subscribeToObservers() {
@@ -140,6 +191,10 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
             currentTimeMillis = it
             val formattedTime = TrackingUtility.getFormattedStopWatchTime(currentTimeMillis, true)
             binding.tvTimer.text = formattedTime
+
+            if (currentTimeMillis > 0L) {
+                binding.cardCancelRun!!.visibility = View.VISIBLE
+            }
         })
     }
 
@@ -193,11 +248,13 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
         this.isTracking = isTracking
         if (!isTracking && currentTimeMillis > 0L) {
             binding.textStart?.text = "Start"
-            binding.icBtnStart?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_play))
+            binding.icBtnStart?.setImageDrawable(ContextCompat.getDrawable(requireContext(),
+                R.drawable.ic_play))
             binding.btnFinishRun.visibility = View.VISIBLE
         } else if (isTracking) {
             binding.textStart?.text = "Stop"
-            binding.icBtnStart?.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_stop))
+            binding.icBtnStart?.setImageDrawable(ContextCompat.getDrawable(requireContext(),
+                R.drawable.ic_stop))
             menu?.getItem(0)?.isVisible = true
             binding.btnFinishRun.visibility = View.GONE
         }
@@ -232,7 +289,7 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
         )
     }
 
-    private fun endRunAndSaveToDatabase() {
+    private fun endRunAndSaveToDatabase(name: String) {
         map?.snapshot { bitmap ->
             var distanceInMeters = 0
             for (polyline in pathPoints) {
@@ -256,7 +313,7 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
 
             Snackbar.make(
                 requireActivity().rootView,
-                "Run saved successfully",
+                "Run saved successfully $name",
                 Snackbar.LENGTH_LONG
             ).show()
 
@@ -329,10 +386,9 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
         binding.mapView.onSaveInstanceState(outState)
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
+    override fun onMapReady(googleMap: GoogleMap?) {
         map = googleMap
-
-        loadTheme(map)
+        map?.let { loadTheme(it) }
 
         if (ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
@@ -342,15 +398,15 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
             return
         }
 
-        map.isMyLocationEnabled = true
-        map.setOnMyLocationButtonClickListener(this)
-        map.setOnMyLocationClickListener(this)
-        map.uiSettings.isMyLocationButtonEnabled = false
+        map?.isMyLocationEnabled = true
+        map?.setOnMyLocationButtonClickListener(this)
+        map?.setOnMyLocationClickListener(this)
+        map?.uiSettings?.isMyLocationButtonEnabled = false
 
         fusedLocationProviderClient.lastLocation
             .addOnSuccessListener { location ->
                 val myLocation = LatLng(location.latitude, location.longitude)
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16f))
+                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16f))
             }
 
     }

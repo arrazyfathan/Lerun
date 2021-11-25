@@ -8,4 +8,12 @@
         <item>Average Speed</item>
         <item>Calories Burned</item>
     </string-array>
+
+
+    <string name="dialog_positive">Save</string>
+    <string name="dialog_negative">Cancel</string>
+    <string name="dialog_title">Title</string>
+    <string name="dialog_message">Enter your title run</string>
+    <string name="hint_run_title">Enter your run title</string>
+    <string name="run_deatail_label">Run Detail</string>
 </resources>

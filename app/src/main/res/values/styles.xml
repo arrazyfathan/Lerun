@@ -33,6 +33,7 @@
         <item name="textAppearanceOverline">@style/TextAppearance.MaterialComponents.Overline</item>
 
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+
     </style>
 
     <style name="TextViewStyle" parent="Widget.MaterialComponents.TextView">
@@ -57,5 +58,18 @@
         <item name="android:windowBackground">@drawable/splash_image</item>
         <item name="android:statusBarColor">@color/main_dark</item>
     </style>
+
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="colorSecondary">@color/main_dark</item>
+        <item name="android:colorBackground">@color/main_dark</item>
+        <item name="backgroundColor">@color/main_dark</item>
+        <item name="backgroundTint">@color/main_dark</item>
+    </style>
+
 
 </resources>
