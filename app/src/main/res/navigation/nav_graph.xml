@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_runFragment_to_trackingFragment"
             app:destination="@id/trackingFragment" />
+        <argument
+            android:name="latestrun"
+            app:argType="com.androiddevs.lerun.db.Run" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

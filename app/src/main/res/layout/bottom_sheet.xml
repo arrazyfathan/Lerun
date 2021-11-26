@@ -9,7 +9,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
+        android:layout_margin="18dp"
         android:backgroundTint="@color/main_dark"
         android:backgroundTintMode="multiply"
         app:cardCornerRadius="10dp"
@@ -75,9 +75,9 @@
                 android:backgroundTint="#0B0B0B"
                 android:fontFamily="@font/inter_regular"
                 android:hint="@string/hint_run_title"
-                android:paddingStart="8dp"
+                android:paddingStart="24dp"
                 android:paddingTop="10dp"
-                android:paddingEnd="8dp"
+                android:paddingEnd="24dp"
                 android:paddingBottom="10dp"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
@@ -167,7 +167,7 @@
                         android:fontFamily="@font/inter_semibold"
                         android:text="0"
                         android:textColor="@android:color/white"
-                        android:textSize="30sp" />
+                        android:textSize="24sp" />
 
                 </LinearLayout>
 
@@ -213,7 +213,7 @@
                         android:fontFamily="@font/inter_semibold"
                         android:text="0"
                         android:textColor="@android:color/white"
-                        android:textSize="30sp" />
+                        android:textSize="24sp" />
 
                 </LinearLayout>
 
@@ -259,7 +259,7 @@
                         android:fontFamily="@font/inter_semibold"
                         android:text="0"
                         android:textColor="@android:color/white"
-                        android:textSize="30sp" />
+                        android:textSize="24sp" />
 
                 </LinearLayout>
 

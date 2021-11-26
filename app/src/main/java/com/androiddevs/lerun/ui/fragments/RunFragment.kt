@@ -1,6 +1,7 @@
 package com.androiddevs.lerun.ui.fragments
 
 import android.Manifest
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import com.androiddevs.lerun.adapters.RunAdapter
 import com.androiddevs.lerun.databinding.FragmentRunBinding
 import com.androiddevs.lerun.ui.viewmodels.MainViewModel
 import com.androiddevs.lerun.ui.viewmodels.StatisticViewModel
+import com.androiddevs.lerun.utils.Constants.KEY_NAME
 import com.androiddevs.lerun.utils.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.androiddevs.lerun.utils.SortType
 import com.androiddevs.lerun.utils.TrackingUtility
@@ -28,6 +30,7 @@ import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 import kotlin.math.round
 
 @AndroidEntryPoint
@@ -44,6 +47,9 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     private lateinit var latestRunAdapter: LatestRunAdapter
 
+    @Inject
+    lateinit var sharedPref: SharedPreferences
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,6 +64,7 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         super.onViewCreated(view, savedInstanceState)
 
         getToday()
+        loadName()
         requestPermissions()
         setupRecyclerView()
 
@@ -86,10 +93,25 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
         subscribeObservers()
 
-        viewModel.runs.observe(viewLifecycleOwner, Observer {
-            latestRunAdapter.submitLatestList(it)
+        viewModel.runs.observe(viewLifecycleOwner, Observer { list ->
+            if (list.isEmpty()) {
+                binding.tvLabelLatest.visibility = View.GONE
+                binding.rvRuns.visibility = View.GONE
+                binding.btnSeeMore.visibility = View.INVISIBLE
+            } else {
+                binding.tvLabelLatest.visibility = View.VISIBLE
+                binding.rvRuns.visibility = View.VISIBLE
+                binding.btnSeeMore.visibility = View.VISIBLE
+                latestRunAdapter.submitLatestList(list)
+            }
+
         })
 
+    }
+
+    private fun loadName() {
+        val name = sharedPref.getString(KEY_NAME, "")
+        binding.tvName.text = name
     }
 
     private fun subscribeObservers() {

@@ -72,7 +72,7 @@ class SetupFragment : Fragment() {
     private fun writePersonalDataToSharedPref(): Boolean {
         val name = binding.etName.text.toString()
         val weight = binding.etWeight.text.toString()
-        if(name.isEmpty() || weight.isEmpty()) {
+        if(name.isEmpty() || name.isBlank() || weight.isEmpty() || weight.isBlank()) {
             return false
         }
         sharedPref.edit()

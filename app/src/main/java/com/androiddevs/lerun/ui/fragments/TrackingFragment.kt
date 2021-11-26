@@ -5,13 +5,17 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -154,14 +158,31 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
         calories.text = caloriesBurned.toString()
         speed.text = averageSpeed.toString()
 
+        tvName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0.isNullOrEmpty() || p0.isBlank()) {
+                    validation.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                validation.visibility = View.GONE
+            }
+
+        })
+
         btnSave.setOnClickListener {
-            if (tvName.text.isNullOrEmpty()) {
+            if (tvName.text.isBlank() || tvName.text.isNullOrEmpty()) {
                 validation.visibility = View.VISIBLE
             } else {
-                val name = tvName.text.toString()
+                val title = tvName.text.toString()
 
                 zoomToSeeWholeTrack()
-                endRunAndSaveToDatabase(name)
+                endRunAndSaveToDatabase(title)
                 dialog.dismiss()
             }
         }
@@ -289,8 +310,11 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
         )
     }
 
-    private fun endRunAndSaveToDatabase(name: String) {
+    private fun endRunAndSaveToDatabase(title: String) {
         map?.snapshot { bitmap ->
+
+
+
             var distanceInMeters = 0
             for (polyline in pathPoints) {
                 distanceInMeters += TrackingUtility.calculatePolylineLength(polyline).toInt()
@@ -303,6 +327,7 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
 
             val run = Run(
                 bitmap,
+                title,
                 dateTimeStamp,
                 averageSpeed,
                 distanceInMeters,
@@ -313,7 +338,7 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
 
             Snackbar.make(
                 requireActivity().rootView,
-                "Run saved successfully $name",
+                "Run saved successfully",
                 Snackbar.LENGTH_LONG
             ).show()
 
@@ -405,8 +430,12 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
 
         fusedLocationProviderClient.lastLocation
             .addOnSuccessListener { location ->
-                val myLocation = LatLng(location.latitude, location.longitude)
-                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16f))
+                try {
+                    val myLocation = LatLng(location.latitude, location.longitude)
+                    map?.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16f))
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                }
             }
 
     }
