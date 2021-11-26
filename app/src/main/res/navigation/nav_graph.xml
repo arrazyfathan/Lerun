@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/setupFragment">
 
@@ -25,6 +26,9 @@
         <argument
             android:name="latestrun"
             app:argType="com.androiddevs.lerun.db.Run" />
+        <action
+            android:id="@+id/action_runFragment_to_detailRunFragment"
+            app:destination="@id/detailRunFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -52,4 +56,9 @@
             android:id="@+id/action_setupFragment_to_runFragment"
             app:destination="@id/runFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/detailRunFragment"
+        android:name="com.androiddevs.lerun.ui.fragments.DetailRunFragment"
+        android:label="fragment_detail_run"
+        tools:layout="@layout/fragment_detail_run" />
 </navigation>

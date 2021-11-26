@@ -16,6 +16,12 @@ import java.util.*
 
 class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHolder>() {
 
+    private var onItemClickListener: ((Run) -> Unit)? = null
+
+    fun setOnClickListener(listener: (Run) -> Unit) {
+        onItemClickListener= listener
+    }
+
     inner class LatestRunViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LatestRunViewHolder {
@@ -48,6 +54,12 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
 
             //time
             tvTime.text = TrackingUtility.getFormattedStopWatchTime(run.timeInMillis)
+
+            setOnClickListener {
+                onItemClickListener?.let {
+                    it(run)
+                }
+            }
 
         }
     }

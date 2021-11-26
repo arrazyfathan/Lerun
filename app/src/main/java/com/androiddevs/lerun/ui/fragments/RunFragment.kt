@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.adapters.LatestRunAdapter
@@ -68,6 +69,8 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         requestPermissions()
         setupRecyclerView()
 
+
+
         when(viewModel.sortType) {
             SortType.DATE -> spFilter.setSelection(0)
             SortType.RUNNING_TIME -> spFilter.setSelection(1)
@@ -106,6 +109,17 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             }
 
         })
+
+        latestRunAdapter.setOnClickListener {
+            val bundle = Bundle().apply {
+                putSerializable("latestrun", it)
+
+            }
+            findNavController().navigate(
+                R.id.action_runFragment_to_detailRunFragment,
+                bundle
+            )
+        }
 
     }
 
