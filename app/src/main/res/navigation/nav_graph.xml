@@ -28,7 +28,9 @@
             app:argType="com.androiddevs.lerun.db.Run" />
         <action
             android:id="@+id/action_runFragment_to_detailRunFragment"
-            app:destination="@id/detailRunFragment" />
+            app:destination="@id/detailRunFragment"
+            app:enterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_down" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

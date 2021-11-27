@@ -8,6 +8,11 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentDetailRunBinding
+import com.androiddevs.lerun.utils.TrackingUtility
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.new_item_run.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DetailRunFragment : Fragment() {
 
@@ -28,9 +33,35 @@ class DetailRunFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val run = args.latestrun
-        binding.tvRunTry.text = run.toString()
+        loadDetail()
 
+
+    }
+
+    private fun loadDetail() {
+        val run = args.latestrun
+
+        val title = run.title
+        binding.titleRun.text = title
+
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = run.timestamp
+        }
+        val dateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
+        binding.dateRun.text = dateFormat.format(calendar.time)
+
+        Glide.with(requireActivity()).load(run.img).into(binding.snapshotImage)
+
+        val distanceInKm = "${run.distanceInMeters / 1000f} Km"
+        binding.distanceDetail.text = distanceInKm
+
+        binding.durationDetail.text = TrackingUtility.getFormattedStopWatchTime(run.timeInMillis)
+
+        val calories = "${run.caloriesBurned}kcal"
+        binding.caloriesDetail.text = calories
+
+        val speed = "${run.avgSpeedInKMH}km/h"
+        binding.averageSpeedDetail.text = speed
 
     }
 }

@@ -47,6 +47,8 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
             val dateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
             tvDate.text = dateFormat.format(calendar.time)
 
+            val title = run.title
+            tvTitleRun.text = title
 
             //distance
             val distanceInKm = "${run.distanceInMeters / 1000f } Km"
