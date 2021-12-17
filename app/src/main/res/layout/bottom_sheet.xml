@@ -111,7 +111,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:text="Duration"
                         android:textColor="@color/dark_accent_text"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/timer_sheet"
@@ -122,7 +122,7 @@
                         android:fontFamily="@font/inter_semibold"
                         android:text="00:00:00:00"
                         android:textColor="@android:color/white"
-                        android:textSize="40sp" />
+                        android:textSize="38sp" />
 
                 </LinearLayout>
 
@@ -156,7 +156,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:text="Calories"
                         android:textColor="@color/dark_accent_text"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/calories_sheet"
@@ -167,7 +167,7 @@
                         android:fontFamily="@font/inter_semibold"
                         android:text="0"
                         android:textColor="@android:color/white"
-                        android:textSize="24sp" />
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -202,7 +202,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:text="Distance"
                         android:textColor="@color/dark_accent_text"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/distance_sheet"
@@ -213,7 +213,7 @@
                         android:fontFamily="@font/inter_semibold"
                         android:text="0"
                         android:textColor="@android:color/white"
-                        android:textSize="24sp" />
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -248,7 +248,7 @@
                         android:fontFamily="@font/inter_regular"
                         android:text="Speed"
                         android:textColor="@color/dark_accent_text"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/speed_sheet"
@@ -259,7 +259,7 @@
                         android:fontFamily="@font/inter_semibold"
                         android:text="0"
                         android:textColor="@android:color/white"
-                        android:textSize="24sp" />
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 

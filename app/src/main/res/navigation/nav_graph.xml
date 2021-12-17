@@ -31,6 +31,11 @@
             app:destination="@id/detailRunFragment"
             app:enterAnim="@anim/slide_up"
             app:popExitAnim="@anim/slide_down" />
+        <action
+            android:id="@+id/action_runFragment_to_allRunFragment"
+            app:destination="@id/allRunFragment"
+            app:enterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_down" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -63,4 +68,9 @@
         android:name="com.androiddevs.lerun.ui.fragments.DetailRunFragment"
         android:label="fragment_detail_run"
         tools:layout="@layout/fragment_detail_run" />
+    <fragment
+        android:id="@+id/allRunFragment"
+        android:name="com.androiddevs.lerun.ui.fragments.AllRunFragment"
+        android:label="fragment_all_run"
+        tools:layout="@layout/fragment_all_run" />
 </navigation>

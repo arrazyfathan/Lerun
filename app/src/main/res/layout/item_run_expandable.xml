@@ -2,10 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/animation_parent"
+    android:layout_marginBottom="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
+        android:clickable="true"
+        android:focusable="true"
         android:id="@+id/base_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,7 +23,7 @@
             android:id="@+id/root_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/main_dark">
+            android:background="@color/secondary_dark">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/container_imageview"
@@ -81,18 +85,20 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/stats_view"
-        android:visibility="gone"
+        android:id="@+id/stats_view_expandable"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="200dp"
         app:cardElevation="0dp"
         android:layout_marginBottom="8dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:cardBackgroundColor="@color/main_dark"
+        app:cardBackgroundColor="@color/ijo"
         app:layout_constraintTop_toBottomOf="@id/base_view">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -104,6 +110,7 @@
                 android:id="@+id/divider_horizontal"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
+                android:backgroundTint="@color/main_dark"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -113,6 +120,7 @@
             <View
                 android:id="@+id/divider_vertical"
                 android:layout_width="1dp"
+                android:backgroundTint="@color/main_dark"
                 android:layout_height="match_parent"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -127,7 +135,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="Distance"
-                android:textColor="@color/text_dark"
+                android:textColor="@color/main_dark"
                 app:layout_constraintEnd_toStartOf="@id/divider_vertical"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -139,7 +147,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/inter_semibold"
                 android:text="100Km"
-                android:textColor="@android:color/white"
+                android:textColor="@color/main_dark"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/label_distance_detail"
                 app:layout_constraintStart_toStartOf="@+id/label_distance_detail"
@@ -153,7 +161,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="Average Speed"
-                android:textColor="@color/text_dark"
+                android:textColor="@color/main_dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/divider_vertical"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -165,7 +173,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/inter_semibold"
                 android:text="9km/h"
-                android:textColor="@android:color/white"
+                android:textColor="@color/main_dark"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/label_average_speed_detail"
                 app:layout_constraintStart_toStartOf="@+id/label_average_speed_detail"
@@ -178,7 +186,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="Duration"
-                android:textColor="@color/text_dark"
+                android:textColor="@color/main_dark"
                 app:layout_constraintEnd_toStartOf="@id/divider_vertical"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/divider_horizontal" />
@@ -190,7 +198,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/inter_semibold"
                 android:text="30m20s"
-                android:textColor="@android:color/white"
+                android:textColor="@color/main_dark"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/label_duration_detail"
                 app:layout_constraintStart_toStartOf="@+id/label_duration_detail"
@@ -203,7 +211,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="Calories Burned"
-                android:textColor="@color/text_dark"
+                android:textColor="@color/main_dark"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/divider_vertical"
                 app:layout_constraintTop_toBottomOf="@+id/divider_horizontal" />
@@ -215,7 +223,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/inter_semibold"
                 android:text="30m20s"
-                android:textColor="@android:color/white"
+                android:textColor="@color/main_dark"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/label_calories_detail"
                 app:layout_constraintStart_toStartOf="@+id/label_calories_detail"

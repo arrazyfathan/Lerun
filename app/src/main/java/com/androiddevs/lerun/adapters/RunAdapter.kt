@@ -1,16 +1,24 @@
 package com.androiddevs.lerun.adapters
 
+import android.transition.AutoTransition
+import android.transition.TransitionManager
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Interpolator
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Slide
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.db.Run
 import com.androiddevs.lerun.utils.TrackingUtility
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_run.view.*
+import kotlinx.android.synthetic.main.item_run.view.ivRunImage
+import kotlinx.android.synthetic.main.item_run_expandable.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,7 +30,7 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RunViewHolder {
         return RunViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.item_run,
+                R.layout.item_run_expandable,
                 parent,
                 false
             )
@@ -35,27 +43,25 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
             // img
             Glide.with(this).load(run.img).into(ivRunImage)
 
-            //date
-            val calendar = Calendar.getInstance().apply {
-                timeInMillis = run.timestamp
+            base_view.setOnClickListener {
+                val slide = android.transition.Slide(Gravity.TOP)
+                    .setDuration(600)
+                    .addTarget(R.id.stats_view_expandable)
+
+
+                if(stats_view_expandable.visibility == View.VISIBLE) {
+                    TransitionManager.beginDelayedTransition(animation_parent, slide)
+                    stats_view_expandable.visibility = View.GONE
+                    image_button.setImageResource(R.drawable.ic_down)
+                } else {
+                    TransitionManager.beginDelayedTransition(animation_parent, slide)
+                    stats_view_expandable.visibility = View.VISIBLE
+                    image_button.setImageResource(R.drawable.ic_up)
+                }
             }
-            val dateFormat = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
-            tvDate.text = dateFormat.format(calendar.time)
 
-            //average speed
-            val averageSpeed = "${run.avgSpeedInKMH} km/h"
-            tvAvgSpeed.text = averageSpeed
 
-            //distance
-            val distanceInKm = "${run.distanceInMeters / 1000f } km"
-            tvDistance.text = distanceInKm
 
-            //time
-            tvTime.text = TrackingUtility.getFormattedStopWatchTime(run.timeInMillis)
-
-            //calories
-            val caloriesBurned = "${run.caloriesBurned} kcal"
-            tvCalories.text = caloriesBurned
         }
     }
 

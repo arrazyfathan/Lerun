@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:scrollbars="none"
     android:background="@color/main_dark">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +22,7 @@
             android:fontFamily="@font/inter_semibold"
             android:text="Morning Run"
             android:textColor="@android:color/white"
-            android:textSize="26sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,14 +36,14 @@
             android:fontFamily="@font/inter_regular"
             android:text="Sunday, 24 February 2021"
             android:textColor="@color/text_dark"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title_run" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/image_container_detail"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="400dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="24dp"
@@ -105,6 +106,7 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/inter_medium"
                     android:text="Distance"
+                    android:textSize="12sp"
                     android:textColor="@color/text_dark"
                     app:layout_constraintEnd_toStartOf="@id/divider_vertical"
                     app:layout_constraintStart_toStartOf="parent"
@@ -118,7 +120,7 @@
                     android:fontFamily="@font/inter_semibold"
                     android:text="100Km"
                     android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/label_distance_detail"
                     app:layout_constraintStart_toStartOf="@+id/label_distance_detail"
                     app:layout_constraintTop_toBottomOf="@id/label_distance_detail" />
@@ -131,6 +133,7 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/inter_medium"
                     android:text="Average Speed"
+                    android:textSize="12sp"
                     android:textColor="@color/text_dark"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/divider_vertical"
@@ -144,7 +147,7 @@
                     android:fontFamily="@font/inter_semibold"
                     android:text="9km/h"
                     android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/label_average_speed_detail"
                     app:layout_constraintStart_toStartOf="@+id/label_average_speed_detail"
                     app:layout_constraintTop_toBottomOf="@id/label_distance_detail" />
@@ -156,6 +159,7 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/inter_medium"
                     android:text="Duration"
+                    android:textSize="12sp"
                     android:textColor="@color/text_dark"
                     app:layout_constraintEnd_toStartOf="@id/divider_vertical"
                     app:layout_constraintStart_toStartOf="parent"
@@ -169,7 +173,7 @@
                     android:fontFamily="@font/inter_semibold"
                     android:text="30m20s"
                     android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/label_duration_detail"
                     app:layout_constraintStart_toStartOf="@+id/label_duration_detail"
                     app:layout_constraintTop_toBottomOf="@+id/label_duration_detail" />
@@ -181,6 +185,7 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/inter_medium"
                     android:text="Calories Burned"
+                    android:textSize="12sp"
                     android:textColor="@color/text_dark"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/divider_vertical"
@@ -194,7 +199,7 @@
                     android:fontFamily="@font/inter_semibold"
                     android:text="30m20s"
                     android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/label_calories_detail"
                     app:layout_constraintStart_toStartOf="@+id/label_calories_detail"
                     app:layout_constraintTop_toBottomOf="@+id/label_calories_detail" />

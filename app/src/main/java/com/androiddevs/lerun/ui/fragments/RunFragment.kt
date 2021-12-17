@@ -96,6 +96,12 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
         subscribeObservers()
 
+        binding.btnSeeMore.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_runFragment_to_allRunFragment
+            )
+        }
+
         viewModel.runs.observe(viewLifecycleOwner, Observer { list ->
             if (list.isEmpty()) {
                 binding.tvLabelLatest.visibility = View.GONE
