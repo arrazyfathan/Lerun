@@ -31,11 +31,12 @@
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/drawable/splash_image.xml" value="0.22552083333333334" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/bottom_sheet.xml" value="0.33" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/bottom_sheet_edit_profile.xml" value="0.25" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/dialog_layout.xml" value="0.33" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_all_run.xml" value="0.33" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_detail_run.xml" value="0.33" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_run.xml" value="0.33" />
-        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_settings.xml" value="0.209375" />
+        <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_settings.xml" value="0.5" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_setup.xml" value="0.209375" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_statistics.xml" value="0.209375" />
         <entry key="..\:/Android/AndroidWithKotlin/lerun/app/src/main/res/layout/fragment_tracking.xml" value="0.33" />
