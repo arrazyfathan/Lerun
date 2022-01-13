@@ -10,7 +10,7 @@ Lerun is a running tracking application based on modern Android tech-stacks and 
 </p>
 
 <p align="center">
-<img src=""/>
+<img src="previews/final.png"/>
 </p>
 
 ## Tech stack & Open-source libraries
