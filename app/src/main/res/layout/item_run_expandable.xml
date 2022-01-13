@@ -36,7 +36,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/ivRunImage"
+                    android:id="@+id/ivRunImageExpand"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -57,13 +57,13 @@
                 android:text="Name Your Run"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/tvDate"
+                app:layout_constraintBottom_toTopOf="@+id/tvDateExpand"
                 app:layout_constraintStart_toEndOf="@+id/container_imageview"
                 app:layout_constraintTop_toTopOf="@+id/container_imageview"
                 tools:text="Name Your Run" />
 
             <TextView
-                android:id="@+id/tvDate"
+                android:id="@+id/tvDateExpand"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_regular"
