@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/animation_parent"
-    android:layout_marginBottom="10dp"
+    android:id="@+id/base_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:layout_marginBottom="8dp"
+    android:focusable="true"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
 
-    <com.google.android.material.card.MaterialCardView
-        android:clickable="true"
-        android:focusable="true"
-        android:id="@+id/base_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="12dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:cardElevation="4dp">
+        android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/root_view"
@@ -86,149 +84,151 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/stats_view_expandable"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="200dp"
-        app:cardElevation="0dp"
-        android:layout_marginBottom="8dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:cardBackgroundColor="@color/ijo"
-        app:layout_constraintTop_toBottomOf="@id/base_view">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_height="match_parent">
 
-            <View
-                android:id="@+id/divider_horizontal"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:backgroundTint="@color/main_dark"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/stats_view_expandable"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="-999dp"
+                android:layout_marginBottom="8dp"
+                app:cardBackgroundColor="@color/ijo"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp">
 
-            <View
-                android:id="@+id/divider_vertical"
-                android:layout_width="1dp"
-                android:backgroundTint="@color/main_dark"
-                android:layout_height="match_parent"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
 
-            <TextView
-                android:id="@+id/label_distance_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_medium"
-                android:text="Distance"
-                android:textColor="@color/main_dark"
-                app:layout_constraintEnd_toStartOf="@id/divider_vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    <View
+                        android:id="@+id/divider_horizontal"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="?android:attr/listDivider"
+                        android:backgroundTint="@color/main_dark"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/distance_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/inter_semibold"
-                android:text="100Km"
-                android:textColor="@color/main_dark"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="@+id/label_distance_detail"
-                app:layout_constraintStart_toStartOf="@+id/label_distance_detail"
-                app:layout_constraintTop_toBottomOf="@id/label_distance_detail" />
+                    <View
+                        android:id="@+id/divider_vertical"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="?android:attr/listDivider"
+                        android:backgroundTint="@color/main_dark"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/label_distance_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="Distance"
+                        android:textColor="@color/main_dark"
+                        app:layout_constraintEnd_toStartOf="@id/divider_vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/distance_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/inter_semibold"
+                        android:text="100Km"
+                        android:textColor="@color/main_dark"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="@+id/label_distance_detail"
+                        app:layout_constraintStart_toStartOf="@+id/label_distance_detail"
+                        app:layout_constraintTop_toBottomOf="@id/label_distance_detail" />
 
 
-            <TextView
-                android:id="@+id/label_average_speed_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_medium"
-                android:text="Average Speed"
-                android:textColor="@color/main_dark"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/divider_vertical"
-                app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/label_average_speed_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="Average Speed"
+                        android:textColor="@color/main_dark"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/divider_vertical"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/average_speed_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/inter_semibold"
-                android:text="9km/h"
-                android:textColor="@color/main_dark"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="@+id/label_average_speed_detail"
-                app:layout_constraintStart_toStartOf="@+id/label_average_speed_detail"
-                app:layout_constraintTop_toBottomOf="@id/label_distance_detail" />
+                    <TextView
+                        android:id="@+id/average_speed_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/inter_semibold"
+                        android:text="9km/h"
+                        android:textColor="@color/main_dark"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="@+id/label_average_speed_detail"
+                        app:layout_constraintStart_toStartOf="@+id/label_average_speed_detail"
+                        app:layout_constraintTop_toBottomOf="@id/label_distance_detail" />
 
-            <TextView
-                android:id="@+id/label_duration_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_medium"
-                android:text="Duration"
-                android:textColor="@color/main_dark"
-                app:layout_constraintEnd_toStartOf="@id/divider_vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/divider_horizontal" />
+                    <TextView
+                        android:id="@+id/label_duration_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="Duration"
+                        android:textColor="@color/main_dark"
+                        app:layout_constraintEnd_toStartOf="@id/divider_vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/divider_horizontal" />
 
-            <TextView
-                android:id="@+id/duration_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/inter_semibold"
-                android:text="30m20s"
-                android:textColor="@color/main_dark"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="@+id/label_duration_detail"
-                app:layout_constraintStart_toStartOf="@+id/label_duration_detail"
-                app:layout_constraintTop_toBottomOf="@+id/label_duration_detail" />
+                    <TextView
+                        android:id="@+id/duration_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/inter_semibold"
+                        android:text="30m20s"
+                        android:textColor="@color/main_dark"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="@+id/label_duration_detail"
+                        app:layout_constraintStart_toStartOf="@+id/label_duration_detail"
+                        app:layout_constraintTop_toBottomOf="@+id/label_duration_detail" />
 
-            <TextView
-                android:id="@+id/label_calories_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/inter_medium"
-                android:text="Calories Burned"
-                android:textColor="@color/main_dark"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/divider_vertical"
-                app:layout_constraintTop_toBottomOf="@+id/divider_horizontal" />
+                    <TextView
+                        android:id="@+id/label_calories_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="Calories Burned"
+                        android:textColor="@color/main_dark"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/divider_vertical"
+                        app:layout_constraintTop_toBottomOf="@+id/divider_horizontal" />
 
-            <TextView
-                android:id="@+id/calories_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/inter_semibold"
-                android:text="30m20s"
-                android:textColor="@color/main_dark"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="@+id/label_calories_detail"
-                app:layout_constraintStart_toStartOf="@+id/label_calories_detail"
-                app:layout_constraintTop_toBottomOf="@+id/label_calories_detail" />
+                    <TextView
+                        android:id="@+id/calories_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/inter_semibold"
+                        android:text="30m20s"
+                        android:textColor="@color/main_dark"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="@+id/label_calories_detail"
+                        app:layout_constraintStart_toStartOf="@+id/label_calories_detail"
+                        app:layout_constraintTop_toBottomOf="@+id/label_calories_detail" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </RelativeLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

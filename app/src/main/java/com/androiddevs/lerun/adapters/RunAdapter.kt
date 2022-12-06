@@ -1,21 +1,18 @@
 package com.androiddevs.lerun.adapters
 
-import android.transition.TransitionManager
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Slide
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.db.Run
+import com.androiddevs.lerun.utils.collapse
+import com.androiddevs.lerun.utils.expand
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.item_run.view.*
 import kotlinx.android.synthetic.main.item_run_expandable.view.*
 import kotlinx.android.synthetic.main.item_run_expandable.view.tvTitleRun
-import kotlinx.android.synthetic.main.new_item_run.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -48,19 +45,17 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
             val dateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
             tvDateExpand.text = dateFormat.format(calendar.time)
 
-            base_view.setOnClickListener {
-                val slide = android.transition.Slide(Gravity.TOP)
-                    .setDuration(600)
-                    .addTarget(R.id.stats_view_expandable)
+            var expanded = false
 
-                if (stats_view_expandable.visibility == View.VISIBLE) {
-                    TransitionManager.beginDelayedTransition(animation_parent, slide)
-                    stats_view_expandable.visibility = View.GONE
-                    image_button.setImageResource(R.drawable.ic_down)
+            root_view.setOnClickListener {
+                if (expanded) {
+                    stats_view_expandable.collapse()
+                    image_button.animate().rotation(0.0F).duration = 250
+                    expanded = false
                 } else {
-                    TransitionManager.beginDelayedTransition(animation_parent, slide)
-                    stats_view_expandable.visibility = View.VISIBLE
-                    image_button.setImageResource(R.drawable.ic_up)
+                    stats_view_expandable.expand()
+                    image_button.animate().rotation(180.0F).duration = 250
+                    expanded = true
                 }
             }
         }
@@ -68,7 +63,7 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
 
     override fun getItemCount(): Int = differ.currentList.size
 
-    val diffCallback = object : DiffUtil.ItemCallback<Run>() {
+    private val diffCallback = object : DiffUtil.ItemCallback<Run>() {
         override fun areItemsTheSame(oldItem: Run, newItem: Run): Boolean {
             return oldItem.id == newItem.id
         }
@@ -78,7 +73,7 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
         }
     }
 
-    val differ = AsyncListDiffer(this, diffCallback)
+    private val differ = AsyncListDiffer(this, diffCallback)
 
     fun submitList(list: List<Run>) = differ.submitList(list)
 }
