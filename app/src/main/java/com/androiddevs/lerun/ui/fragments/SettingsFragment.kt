@@ -22,7 +22,6 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-import org.w3c.dom.Text
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,11 +35,10 @@ class SettingsFragment : Fragment() {
     @Inject
     lateinit var sharedPref: SharedPreferences
 
-
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -49,7 +47,6 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         binding.btnEditProfile.setOnClickListener {
             showDialogEditProfile()
@@ -67,7 +64,7 @@ class SettingsFragment : Fragment() {
         val btnApply = view.findViewById<MaterialButton>(R.id.btn_save_dialog_profile)
         val btnCancel = view.findViewById<MaterialButton>(R.id.btn_save_cancel_profile)
 
-        //set current data
+        // set current data
         val nameSharedPref = sharedPref.getString(KEY_NAME, "")
         val weightSharedPref = sharedPref.getFloat(KEY_WEIGHT, 80f)
 
@@ -82,13 +79,11 @@ class SettingsFragment : Fragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
             }
 
             override fun afterTextChanged(p0: Editable?) {
                 validation.visibility = View.GONE
             }
-
         })
 
         weight.addTextChangedListener(object : TextWatcher {
@@ -99,13 +94,11 @@ class SettingsFragment : Fragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
             }
 
             override fun afterTextChanged(p0: Editable?) {
                 validation.visibility = View.GONE
             }
-
         })
 
         btnApply.setOnClickListener {
@@ -116,14 +109,14 @@ class SettingsFragment : Fragment() {
                 val weightText = weight.text.toString()
 
                 sharedPref.edit()
-                        .putString(KEY_NAME, nameText)
-                        .putFloat(KEY_WEIGHT, weightText.toFloat())
-                        .apply()
+                    .putString(KEY_NAME, nameText)
+                    .putFloat(KEY_WEIGHT, weightText.toFloat())
+                    .apply()
 
                 Snackbar.make(
-                        view,
-                        "Saved",
-                        Snackbar.LENGTH_LONG
+                    view,
+                    "Saved",
+                    Snackbar.LENGTH_LONG
                 ).show()
 
                 dialog.dismiss()
@@ -137,7 +130,6 @@ class SettingsFragment : Fragment() {
         dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         dialog.show()
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

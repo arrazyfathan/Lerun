@@ -19,7 +19,7 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
     private var onItemClickListener: ((Run) -> Unit)? = null
 
     fun setOnClickListener(listener: (Run) -> Unit) {
-        onItemClickListener= listener
+        onItemClickListener = listener
     }
 
     inner class LatestRunViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -40,7 +40,7 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
             // img
             Glide.with(this).load(run.img).into(ivRunImage)
 
-            //date
+            // date
             val calendar = Calendar.getInstance().apply {
                 timeInMillis = run.timestamp
             }
@@ -50,11 +50,11 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
             val title = run.title
             tvTitleRun.text = title
 
-            //distance
-            val distanceInKm = "${run.distanceInMeters / 1000f } Km"
+            // distance
+            val distanceInKm = "${run.distanceInMeters / 1000f} Km"
             tvDistance.text = distanceInKm
 
-            //time
+            // time
             tvTime.text = TrackingUtility.getFormattedStopWatchTime(run.timeInMillis)
 
             setOnClickListener {
@@ -62,7 +62,6 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
                     it(run)
                 }
             }
-
         }
     }
 
@@ -74,7 +73,6 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
         override fun areContentsTheSame(oldItem: Run, newItem: Run): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
         }
-
     }
 
     val differ = AsyncListDiffer(this, diffCallback)
@@ -82,5 +80,4 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
     fun submitLatestList(list: List<Run>) = differ.submitList(list)
 
     override fun getItemCount(): Int = differ.currentList.size.coerceAtMost(3)
-
 }

@@ -21,7 +21,6 @@ class CancelTrackingDialog : DialogFragment() {
             .setPositiveButton("Yes") { _, _ ->
                 yesListener?.let { yes ->
                     yes()
-
                 }
             }
             .setNegativeButton("No") { dialogInterface, _ ->
@@ -29,5 +28,4 @@ class CancelTrackingDialog : DialogFragment() {
             }
             .create()
     }
-
 }

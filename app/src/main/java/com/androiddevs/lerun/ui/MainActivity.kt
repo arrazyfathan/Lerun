@@ -1,9 +1,9 @@
 package com.androiddevs.lerun.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -16,8 +16,6 @@ import kotlinx.android.synthetic.main.new_activity_main.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         navHostFragment.findNavController()
             .addOnDestinationChangedListener { _, destination, _ ->
-                when(destination.id) {
+                when (destination.id) {
                     R.id.settingsFragment, R.id.runFragment, R.id.statisticsFragment -> {
                         bottomNavigationView.visibility = View.VISIBLE
                         container_nav_menu.visibility = View.VISIBLE
@@ -53,7 +51,6 @@ class MainActivity : AppCompatActivity() {
                         overlay.visibility = View.GONE
                     }
                 }
-
             }
     }
 
@@ -66,7 +63,5 @@ class MainActivity : AppCompatActivity() {
         if (intent?.action == ACTION_SHOW_TRACKING_FRAGMENT) {
             navHostFragment.findNavController().navigate(R.id.action_global_tackingFragment)
         }
-
     }
-
 }

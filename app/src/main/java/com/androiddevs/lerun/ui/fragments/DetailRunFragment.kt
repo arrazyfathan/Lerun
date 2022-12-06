@@ -1,12 +1,11 @@
 package com.androiddevs.lerun.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentDetailRunBinding
 import com.androiddevs.lerun.utils.TrackingUtility
 import com.bumptech.glide.Glide
@@ -22,7 +21,8 @@ class DetailRunFragment : Fragment() {
     val args: RunFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentDetailRunBinding.inflate(inflater, container, false)
@@ -34,8 +34,6 @@ class DetailRunFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         loadDetail()
-
-
     }
 
     private fun loadDetail() {
@@ -62,6 +60,5 @@ class DetailRunFragment : Fragment() {
 
         val speed = "${run.avgSpeedInKMH}km/h"
         binding.averageSpeedDetail.text = speed
-
     }
 }

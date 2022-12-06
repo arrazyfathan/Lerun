@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -38,6 +37,10 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_tracking.*
@@ -45,17 +48,14 @@ import kotlinx.android.synthetic.main.new_activity_main.*
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.round
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
-
 
 const val CANCEL_TRACKING_DIALOG_TAG = "CancelDialog"
 
 @AndroidEntryPoint
-class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
+class TrackingFragment :
+    Fragment(),
+    OnMapReadyCallback,
+    GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener {
 
     private var _binding: FragmentTrackingBinding? = null
@@ -73,7 +73,6 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
     private var currentTimeMillis = 0L
 
     private var menu: Menu? = null
-
 
     @set:Inject
     var weight = 80f
@@ -125,9 +124,7 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
 
         binding.btnFinishRun.setOnClickListener {
             showDialogFinish()
-
         }
-
     }
 
     private fun showDialogFinish() {
@@ -152,7 +149,7 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
             round((distanceInMeters / 1000f) / (currentTimeMillis / 1000f / 60 / 60) * 10) / 10f
         val caloriesBurned = ((distanceInMeters / 1000f) * weight).toInt()
 
-        //set data
+        // set data
         duration.text = TrackingUtility.getFormattedStopWatchTime(currentTimeMillis, true)
         distance.text = distanceInMeters.toString()
         calories.text = caloriesBurned.toString()
@@ -166,13 +163,11 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
             }
 
             override fun afterTextChanged(p0: Editable?) {
                 validation.visibility = View.GONE
             }
-
         })
 
         btnSave.setOnClickListener {
@@ -191,34 +186,40 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
             dialog.dismiss()
         }
 
-
         dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         dialog.show()
     }
 
-
     private fun subscribeToObservers() {
-        TrackingService.isTracking.observe(viewLifecycleOwner, Observer {
-            updateTracking(it)
-        })
-
-        TrackingService.pathPoint.observe(viewLifecycleOwner, Observer {
-            pathPoints = it
-            addLatestPolyline()
-            moveCameraToUser()
-        })
-
-        TrackingService.timeRunInMillis.observe(viewLifecycleOwner, Observer {
-            currentTimeMillis = it
-            val formattedTime = TrackingUtility.getFormattedStopWatchTime(currentTimeMillis, true)
-            binding.tvTimer.text = formattedTime
-
-            if (currentTimeMillis > 0L) {
-                binding.cardCancelRun!!.visibility = View.VISIBLE
+        TrackingService.isTracking.observe(
+            viewLifecycleOwner,
+            Observer {
+                updateTracking(it)
             }
-        })
-    }
+        )
 
+        TrackingService.pathPoint.observe(
+            viewLifecycleOwner,
+            Observer {
+                pathPoints = it
+                addLatestPolyline()
+                moveCameraToUser()
+            }
+        )
+
+        TrackingService.timeRunInMillis.observe(
+            viewLifecycleOwner,
+            Observer {
+                currentTimeMillis = it
+                val formattedTime = TrackingUtility.getFormattedStopWatchTime(currentTimeMillis, true)
+                binding.tvTimer.text = formattedTime
+
+                if (currentTimeMillis > 0L) {
+                    binding.cardCancelRun!!.visibility = View.VISIBLE
+                }
+            }
+        )
+    }
 
     private fun toggleRun() {
         if (isTracking) {
@@ -269,13 +270,21 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
         this.isTracking = isTracking
         if (!isTracking && currentTimeMillis > 0L) {
             binding.textStart?.text = "Start"
-            binding.icBtnStart?.setImageDrawable(ContextCompat.getDrawable(requireContext(),
-                R.drawable.ic_play))
+            binding.icBtnStart?.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_play
+                )
+            )
             binding.btnFinishRun.visibility = View.VISIBLE
         } else if (isTracking) {
             binding.textStart?.text = "Stop"
-            binding.icBtnStart?.setImageDrawable(ContextCompat.getDrawable(requireContext(),
-                R.drawable.ic_stop))
+            binding.icBtnStart?.setImageDrawable(
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_stop
+                )
+            )
             menu?.getItem(0)?.isVisible = true
             binding.btnFinishRun.visibility = View.GONE
         }
@@ -312,8 +321,6 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
 
     private fun endRunAndSaveToDatabase(title: String) {
         map?.snapshot { bitmap ->
-
-
 
             var distanceInMeters = 0
             for (polyline in pathPoints) {
@@ -415,10 +422,13 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
         map = googleMap
         map?.let { loadTheme(it) }
 
-        if (ActivityCompat.checkSelfPermission(requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+        if (ActivityCompat.checkSelfPermission(
                 requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
         ) {
             return
         }
@@ -437,14 +447,17 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                 }
             }
-
     }
 
     private fun loadTheme(googleMap: GoogleMap) {
         try {
             val isSuccess =
-                googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireActivity(),
-                    R.raw.style_json))
+                googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                        requireActivity(),
+                        R.raw.style_json
+                    )
+                )
 
             if (!isSuccess) {
                 Log.e("MAPS", "Failed")
@@ -459,6 +472,5 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
     }
 
     override fun onMyLocationClick(location: Location) {
-
     }
 }

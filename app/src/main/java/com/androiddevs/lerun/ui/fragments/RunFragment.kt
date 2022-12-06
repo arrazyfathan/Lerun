@@ -12,11 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.adapters.LatestRunAdapter
-import com.androiddevs.lerun.adapters.RunAdapter
 import com.androiddevs.lerun.databinding.FragmentRunBinding
 import com.androiddevs.lerun.ui.viewmodels.MainViewModel
 import com.androiddevs.lerun.ui.viewmodels.StatisticViewModel
@@ -29,7 +27,6 @@ import kotlinx.android.synthetic.main.fragment_run.*
 import kotlinx.android.synthetic.main.new_item_run.view.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.round
@@ -43,7 +40,7 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     // main view model
     private val viewModel: MainViewModel by viewModels()
 
-    //stats model
+    // stats model
     private val statsModel: StatisticViewModel by viewModels()
 
     private lateinit var latestRunAdapter: LatestRunAdapter
@@ -69,9 +66,7 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         requestPermissions()
         setupRecyclerView()
 
-
-
-        when(viewModel.sortType) {
+        when (viewModel.sortType) {
             SortType.DATE -> spFilter.setSelection(0)
             SortType.RUNNING_TIME -> spFilter.setSelection(1)
             SortType.DISTANCE -> spFilter.setSelection(2)
@@ -82,8 +77,13 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         spFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
-            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                when(pos) {
+            override fun onItemSelected(
+                adapterView: AdapterView<*>?,
+                view: View?,
+                pos: Int,
+                id: Long
+            ) {
+                when (pos) {
                     0 -> viewModel.sortRuns(SortType.DATE)
                     1 -> viewModel.sortRuns(SortType.RUNNING_TIME)
                     2 -> viewModel.sortRuns(SortType.DISTANCE)
@@ -93,7 +93,6 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             }
         }
 
-
         subscribeObservers()
 
         binding.btnSeeMore.setOnClickListener {
@@ -102,31 +101,31 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             )
         }
 
-        viewModel.runs.observe(viewLifecycleOwner, Observer { list ->
-            if (list.isEmpty()) {
-                binding.tvLabelLatest.visibility = View.GONE
-                binding.rvRuns.visibility = View.GONE
-                binding.btnSeeMore.visibility = View.INVISIBLE
-            } else {
-                binding.tvLabelLatest.visibility = View.VISIBLE
-                binding.rvRuns.visibility = View.VISIBLE
-                binding.btnSeeMore.visibility = View.VISIBLE
-                latestRunAdapter.submitLatestList(list)
+        viewModel.runs.observe(
+            viewLifecycleOwner,
+            Observer { list ->
+                if (list.isEmpty()) {
+                    binding.tvLabelLatest.visibility = View.GONE
+                    binding.rvRuns.visibility = View.GONE
+                    binding.btnSeeMore.visibility = View.INVISIBLE
+                } else {
+                    binding.tvLabelLatest.visibility = View.VISIBLE
+                    binding.rvRuns.visibility = View.VISIBLE
+                    binding.btnSeeMore.visibility = View.VISIBLE
+                    latestRunAdapter.submitLatestList(list)
+                }
             }
-
-        })
+        )
 
         latestRunAdapter.setOnClickListener {
             val bundle = Bundle().apply {
                 putSerializable("latestrun", it)
-
             }
             findNavController().navigate(
                 R.id.action_runFragment_to_detailRunFragment,
                 bundle
             )
         }
-
     }
 
     private fun loadName() {
@@ -135,37 +134,48 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     }
 
     private fun subscribeObservers() {
-        statsModel.totalCaloriesBurned.observe(viewLifecycleOwner, Observer { calories ->
-            calories?.let {
-                val totalCalories = "$calories kcal"
-                binding.totalCalories.text = totalCalories
+        statsModel.totalCaloriesBurned.observe(
+            viewLifecycleOwner,
+            Observer { calories ->
+                calories?.let {
+                    val totalCalories = "$calories kcal"
+                    binding.totalCalories.text = totalCalories
+                }
             }
+        )
 
-        })
-
-        statsModel.totalAverageSpeed.observe(viewLifecycleOwner, Observer { avgSpeed ->
-            avgSpeed?.let {
-                val totalAverageSpeed = "${round(avgSpeed * 10f) / 10} km/h"
-                binding.averageSpeed.text = totalAverageSpeed
+        statsModel.totalAverageSpeed.observe(
+            viewLifecycleOwner,
+            Observer { avgSpeed ->
+                avgSpeed?.let {
+                    val totalAverageSpeed = "${round(avgSpeed * 10f) / 10} km/h"
+                    binding.averageSpeed.text = totalAverageSpeed
+                }
             }
-        })
+        )
 
-        statsModel.totalDistance.observe(viewLifecycleOwner, Observer { distance ->
-            distance?.let {
-                val km = it / 1000f
-                val totalDistance = round(km * 10f) / 10
-                val totalDistanceString = "$totalDistance km"
+        statsModel.totalDistance.observe(
+            viewLifecycleOwner,
+            Observer { distance ->
+                distance?.let {
+                    val km = it / 1000f
+                    val totalDistance = round(km * 10f) / 10
+                    val totalDistanceString = "$totalDistance km"
 
-                binding.totalDistance.text = totalDistanceString
+                    binding.totalDistance.text = totalDistanceString
+                }
             }
-        })
+        )
 
-        statsModel.totalTimeRun.observe(viewLifecycleOwner, Observer { duration ->
-            duration?.let {
-                val totalTimeRun = TrackingUtility.formatDuration(duration)
-                binding.totalTimeRun.text = totalTimeRun
+        statsModel.totalTimeRun.observe(
+            viewLifecycleOwner,
+            Observer { duration ->
+                duration?.let {
+                    val totalTimeRun = TrackingUtility.formatDuration(duration)
+                    binding.totalTimeRun.text = totalTimeRun
+                }
             }
-        })
+        )
     }
 
     private fun getToday() {

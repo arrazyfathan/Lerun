@@ -47,7 +47,7 @@ class SetupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(!isFirstAppOpen) {
+        if (!isFirstAppOpen) {
             val navOptions = NavOptions.Builder()
                 .setPopUpTo(R.id.setupFragment, true)
                 .build()
@@ -60,19 +60,19 @@ class SetupFragment : Fragment() {
 
         binding.tvContinue.setOnClickListener {
             val success = writePersonalDataToSharedPref()
-            if(success) {
+            if (success) {
                 findNavController().navigate(R.id.action_setupFragment_to_runFragment)
             } else {
-                Snackbar.make(requireView(), "Please enter all the fields", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), "Please enter all the fields", Snackbar.LENGTH_SHORT)
+                    .show()
             }
-
         }
     }
 
     private fun writePersonalDataToSharedPref(): Boolean {
         val name = binding.etName.text.toString()
         val weight = binding.etWeight.text.toString()
-        if(name.isEmpty() || name.isBlank() || weight.isEmpty() || weight.isBlank()) {
+        if (name.isEmpty() || name.isBlank() || weight.isEmpty() || weight.isBlank()) {
             return false
         }
         sharedPref.edit()
@@ -87,6 +87,4 @@ class SetupFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
-
-
 }
