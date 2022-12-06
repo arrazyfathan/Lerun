@@ -3,6 +3,7 @@ package com.androiddevs.lerun.di
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.ui.MainActivity
@@ -14,7 +15,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ServiceComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ServiceScoped
-
 
 @Module
 @InstallIn(ServiceComponent::class)
@@ -30,15 +30,25 @@ object ServiceModule {
     @Provides
     fun provideMainActivityPendingIntent(
         @ApplicationContext app: Context
-    ) = PendingIntent.getActivity(
-        app,
-        0,
-        Intent(app, MainActivity::class.java).also {
-            it.action = Constants.ACTION_SHOW_TRACKING_FRAGMENT
-
-        },
-        PendingIntent.FLAG_UPDATE_CURRENT
-    )
+    ) = if (Build.VERSION.SDK_INT >= 31) {
+        PendingIntent.getActivity(
+            app,
+            0,
+            Intent(app, MainActivity::class.java).also {
+                it.action = Constants.ACTION_SHOW_TRACKING_FRAGMENT
+            },
+            PendingIntent.FLAG_IMMUTABLE
+        )
+    } else {
+        PendingIntent.getActivity(
+            app,
+            0,
+            Intent(app, MainActivity::class.java).also {
+                it.action = Constants.ACTION_SHOW_TRACKING_FRAGMENT
+            },
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
 
     @ServiceScoped
     @Provides
@@ -52,6 +62,4 @@ object ServiceModule {
         .setContentTitle("Lerun")
         .setContentText("00:00:00")
         .setContentIntent(pendingIntent)
-
-
 }

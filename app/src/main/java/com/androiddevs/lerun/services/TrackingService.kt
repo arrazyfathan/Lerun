@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
@@ -17,9 +18,7 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.androiddevs.lerun.R
-import com.androiddevs.lerun.ui.MainActivity
 import com.androiddevs.lerun.utils.Constants.ACTION_PAUSE_SERVICE
-import com.androiddevs.lerun.utils.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.androiddevs.lerun.utils.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.androiddevs.lerun.utils.Constants.ACTION_STOP_SERVICE
 import com.androiddevs.lerun.utils.Constants.FASTEST_LOCATION_INTERVAL
@@ -45,7 +44,6 @@ import javax.inject.Inject
 
 typealias Polyline = MutableList<LatLng>
 typealias Polylines = MutableList<Polyline>
-
 
 @AndroidEntryPoint
 class TrackingService : LifecycleService() {
@@ -82,10 +80,13 @@ class TrackingService : LifecycleService() {
         postInitialValues()
         fusedLocationProviderClient = FusedLocationProviderClient(this)
 
-        isTracking.observe(this, Observer {
-            updateLocationTracking(it)
-            updateNotificationTrackingState(it)
-        })
+        isTracking.observe(
+            this,
+            Observer {
+                updateLocationTracking(it)
+                updateNotificationTrackingState(it)
+            }
+        )
     }
 
     private fun killService() {
@@ -118,7 +119,6 @@ class TrackingService : LifecycleService() {
                     killService()
                 }
                 else -> {
-
                 }
             }
         }
@@ -141,7 +141,7 @@ class TrackingService : LifecycleService() {
                 // time different between now and timeStarted
                 lapTime = System.currentTimeMillis() - timeStarted
 
-                //post new lap time
+                // post new lap time
                 timeRunInMillis.postValue(timeRun + lapTime)
                 if (timeRunInMillis.value!! > lastSecondTimeStamp + 1000L) {
                     timeRunInSecond.postValue(timeRunInSecond.value!! + 1)
@@ -153,7 +153,6 @@ class TrackingService : LifecycleService() {
         }
     }
 
-
     private fun pauseService() {
         isTracking.postValue(false)
         isTimerEnabled = false
@@ -161,17 +160,30 @@ class TrackingService : LifecycleService() {
 
     private fun updateNotificationTrackingState(isTracking: Boolean) {
         val notificationActionText = if (isTracking) "Pause" else "Resume"
-        val pendingIntent = if (isTracking) {
-            val pauseIntent = Intent(this, TrackingService::class.java).apply {
-                action = ACTION_PAUSE_SERVICE
+        val pendingIntent = if (Build.VERSION.SDK_INT >= 31) {
+            if (isTracking) {
+                val pauseIntent = Intent(this, TrackingService::class.java).apply {
+                    action = ACTION_PAUSE_SERVICE
+                }
+                PendingIntent.getService(this, 1, pauseIntent, FLAG_IMMUTABLE)
+            } else {
+                val resumeIntent = Intent(this, TrackingService::class.java).apply {
+                    action = ACTION_START_OR_RESUME_SERVICE
+                }
+                PendingIntent.getService(this, 2, resumeIntent, FLAG_IMMUTABLE)
             }
-            PendingIntent.getService(this, 1, pauseIntent, FLAG_UPDATE_CURRENT)
-
         } else {
-            val resumeIntent = Intent(this, TrackingService::class.java).apply {
-                action = ACTION_START_OR_RESUME_SERVICE
+            if (isTracking) {
+                val pauseIntent = Intent(this, TrackingService::class.java).apply {
+                    action = ACTION_PAUSE_SERVICE
+                }
+                PendingIntent.getService(this, 1, pauseIntent, FLAG_UPDATE_CURRENT)
+            } else {
+                val resumeIntent = Intent(this, TrackingService::class.java).apply {
+                    action = ACTION_START_OR_RESUME_SERVICE
+                }
+                PendingIntent.getService(this, 2, resumeIntent, FLAG_UPDATE_CURRENT)
             }
-            PendingIntent.getService(this, 2, resumeIntent, FLAG_UPDATE_CURRENT)
         }
 
         val notificationManager =
@@ -218,7 +230,6 @@ class TrackingService : LifecycleService() {
                         addPathPoint(location)
                         Timber.d("New location : ${location.latitude}, ${location.longitude}")
                     }
-
                 }
             }
         }
@@ -260,14 +271,16 @@ class TrackingService : LifecycleService() {
 
         startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
 
-        timeRunInSecond.observe(this, Observer {
-            if (!servieKilled) {
-                val notification = currentNotificationBuilder
-                    .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
-                notificationManager.notify(NOTIFICATION_ID, notification.build())
+        timeRunInSecond.observe(
+            this,
+            Observer {
+                if (!servieKilled) {
+                    val notification = currentNotificationBuilder
+                        .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
+                    notificationManager.notify(NOTIFICATION_ID, notification.build())
+                }
             }
-        })
-
+        )
     }
 
     /*private fun getMainActivityPendingIntent() = PendingIntent.getActivity(
@@ -290,5 +303,4 @@ class TrackingService : LifecycleService() {
 
         notificationManager.createNotificationChannel(channel)
     }
-
 }

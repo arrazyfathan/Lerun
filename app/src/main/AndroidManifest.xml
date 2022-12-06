@@ -18,7 +18,8 @@
         <activity
             android:screenOrientation="portrait"
             android:name="com.androiddevs.lerun.ui.MainActivity"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

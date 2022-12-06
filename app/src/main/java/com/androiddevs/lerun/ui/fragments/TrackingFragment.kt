@@ -450,7 +450,7 @@ class TrackingFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationB
                 Log.e("MAPS", "Failed")
             }
         } catch (e: Exception) {
-            Log.e("MAPS", e.message)
+            e.message?.let { Log.e("MAPS", it) }
         }
     }
 
