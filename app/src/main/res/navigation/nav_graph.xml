@@ -13,8 +13,10 @@
     <action
         android:id="@+id/from_main_activity_to_tracking"
         app:destination="@+id/trackingFragment"
-        app:enterAnim="@anim/slide_up"
-        app:popExitAnim="@anim/slide_down" />
+        app:enterAnim="@anim/nav_graph_enter"
+        app:exitAnim="@anim/nav_graph_exit"
+        app:popEnterAnim="@anim/nav_graph_pop_enter"
+        app:popExitAnim="@anim/nav_graph_pop_exit"/>
 
     <fragment
         android:id="@+id/runFragment"
@@ -29,13 +31,17 @@
         <action
             android:id="@+id/action_runFragment_to_detailRunFragment"
             app:destination="@id/detailRunFragment"
-            app:enterAnim="@anim/slide_up"
-            app:popExitAnim="@anim/slide_down" />
+            app:enterAnim="@anim/nav_graph_enter"
+            app:exitAnim="@anim/nav_graph_exit"
+            app:popEnterAnim="@anim/nav_graph_pop_enter"
+            app:popExitAnim="@anim/nav_graph_pop_exit" />
         <action
             android:id="@+id/action_runFragment_to_allRunFragment"
             app:destination="@id/allRunFragment"
-            app:enterAnim="@anim/slide_up"
-            app:popExitAnim="@anim/slide_down" />
+            app:enterAnim="@anim/nav_graph_enter"
+            app:exitAnim="@anim/nav_graph_exit"
+            app:popEnterAnim="@anim/nav_graph_pop_enter"
+            app:popExitAnim="@anim/nav_graph_pop_exit" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
