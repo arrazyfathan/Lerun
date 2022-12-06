@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -8,13 +10,17 @@ plugins {
 }
 
 android {
-    compileSdkVersion(31)
+    compileSdk = 33
     buildToolsVersion = "29.0.3"
+
+    buildFeatures {
+        viewBinding = true
+    }
 
     defaultConfig {
         applicationId = "com.androiddevs.lerun"
-        minSdkVersion(21)
-        targetSdkVersion(31)
+        minSdk = 21
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -22,12 +28,9 @@ android {
     }
 
     buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+        release {
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
 
@@ -35,11 +38,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-    viewBinding {
-        isEnabled = true
     }
 }
 
