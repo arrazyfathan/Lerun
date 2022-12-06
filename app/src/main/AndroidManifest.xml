@@ -10,9 +10,9 @@
     <application
         android:name=".BaseApplication"
         android:allowBackup="true"
-        android:icon="@drawable/logo_rounded"
+        android:icon="@mipmap/ic_launcher_adaptive"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/logo_circle"
+        android:roundIcon="@mipmap/ic_launcher_adaptive_round"
         android:supportsRtl="true"
         android:theme="@style/splashScreenTheme">
         <activity
