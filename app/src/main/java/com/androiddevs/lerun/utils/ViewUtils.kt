@@ -3,6 +3,8 @@ package com.androiddevs.lerun.utils
 import android.animation.ValueAnimator
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.LinearInterpolator
 import androidx.core.view.marginTop
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -25,7 +27,8 @@ internal fun View.expand() {
                     layoutParams.setMargins(0, value, 0, 0)
                     this@expand.layoutParams = layoutParams
                 }
-                duration = 250
+                duration = 300
+                interpolator = DecelerateInterpolator()
             }
             .also {
                 withContext(Dispatchers.Main) {
@@ -47,7 +50,8 @@ internal fun View.collapse() {
                     layoutParams.setMargins(0, value, 0, 0)
                     this@collapse.layoutParams = layoutParams
                 }
-                duration = 250
+                duration = 300
+                interpolator = DecelerateInterpolator()
             }
             .also {
                 withContext(Dispatchers.Main) {

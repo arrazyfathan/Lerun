@@ -50,11 +50,11 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
             root_view.setOnClickListener {
                 if (expanded) {
                     stats_view_expandable.collapse()
-                    image_button.animate().rotation(0.0F).duration = 250
+                    image_button.animate().rotation(0.0F).duration = 300
                     expanded = false
                 } else {
                     stats_view_expandable.expand()
-                    image_button.animate().rotation(180.0F).duration = 250
+                    image_button.animate().rotation(180.0F).duration = 300
                     expanded = true
                 }
             }
