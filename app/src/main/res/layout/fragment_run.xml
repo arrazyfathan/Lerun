@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.amar.library.ui.StickyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_dark"
+    app:stickyHeader="@id/header_profile"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,52 +13,73 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/image_profile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            app:cardCornerRadius="12dp"
+            android:id="@+id/header_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/main_dark"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/tv_profile"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:background="@color/main_dark"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/profile_n" />
+                android:elevation="4dp"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp">
 
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/image_profile"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="24dp"
+                    app:cardCornerRadius="12dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/tv_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/profile_n" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/tv_date_today"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="24dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:textColor="@color/text_dark"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/image_profile"
+                    app:layout_constraintTop_toTopOf="@id/image_profile"
+                    tools:text="Good Morning" />
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/image_profile"
+                    app:layout_constraintTop_toBottomOf="@id/tv_date_today"
+                    tools:text="Samatha Williams" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:id="@+id/tv_date_today"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="24dp"
-            android:fontFamily="@font/inter_medium"
-            android:textColor="@color/text_dark"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/image_profile"
-            app:layout_constraintTop_toTopOf="@id/image_profile"
-            tools:text="Good Morning" />
-
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="24dp"
-            android:fontFamily="@font/inter_bold"
-            tools:text="Samatha Williams"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/image_profile"
-            app:layout_constraintTop_toBottomOf="@id/tv_date_today" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/banner"
@@ -70,7 +92,7 @@
             app:cardCornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_name">
+            app:layout_constraintTop_toBottomOf="@id/header_profile">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
@@ -97,8 +119,8 @@
                     android:text="Go Premium"
                     android:textAllCaps="false"
                     android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                    android:textSize="12sp"
                     android:textColor="@android:color/white"
+                    android:textSize="12sp"
                     app:cornerRadius="100dp"
                     app:layout_constraintStart_toStartOf="@+id/lets"
                     app:layout_constraintTop_toBottomOf="@+id/lets" />
@@ -405,10 +427,10 @@
             android:layout_marginBottom="24dp"
             android:fontFamily="@font/inter_extrabold"
             android:text="See More"
-            android:textSize="16sp"
             android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.AppCompat.Button"
             android:textColor="@color/main_dark"
+            android:textSize="16sp"
             app:backgroundTint="@color/ijo"
             app:cornerRadius="14dp"
             app:elevation="10dp"
@@ -420,4 +442,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.core.widget.NestedScrollView>
+</com.amar.library.ui.StickyScrollView>

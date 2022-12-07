@@ -45,7 +45,7 @@ android {
 
 dependencies {
     implementation(fileTree("src/main/libs") { include("*.jar") })
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10")
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.core:core-ktx:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
@@ -60,15 +60,15 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
 
     // Room
-    implementation("androidx.room:room-runtime:2.2.5")
-    kapt("androidx.room:room-compiler:2.2.5")
+    implementation("androidx.room:room-runtime:2.4.3")
+    kapt("androidx.room:room-compiler:2.4.3")
 
     // Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:2.2.5")
+    implementation("androidx.room:room-ktx:2.4.3")
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     // Coroutine Lifecycle Scopes
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
@@ -119,4 +119,7 @@ dependencies {
     // material dialog
     implementation("com.afollestad.material-dialogs:core:3.3.0")
     implementation("com.afollestad.material-dialogs:input:3.3.0")
+
+    // Sticky Header
+    implementation("com.github.amarjain07:StickyScrollView:1.0.3")
 }
