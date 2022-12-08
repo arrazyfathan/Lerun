@@ -21,6 +21,7 @@
     <color name="green_dark_accent">#445E0C</color>
     <color name="ijo">#bbf246</color>
     <color name="main_dark">#101010</color>
+    <color name="main_dark_transparent">#B2101010</color>
     <color name="secondary_dark">#212121</color>
     <color name="text_dark">#8C8C8C</color>
     <color name="blue_dark">#3068DF</color>

@@ -23,6 +23,8 @@ import com.androiddevs.lerun.utils.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.androiddevs.lerun.utils.SortType
 import com.androiddevs.lerun.utils.TrackingUtility
 import dagger.hilt.android.AndroidEntryPoint
+import eightbitlab.com.blurview.RenderEffectBlur
+import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.android.synthetic.main.fragment_run.*
 import kotlinx.android.synthetic.main.new_item_run.view.*
 import pub.devrel.easypermissions.AppSettingsDialog
@@ -61,6 +63,7 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupBlured()
         getToday()
         loadName()
         requestPermissions()
@@ -126,6 +129,13 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 bundle
             )
         }
+    }
+
+    private fun setupBlured() {
+        val radius = 25f
+        val renderScrip = RenderEffectBlur()
+        binding.headerProfile.setupWith(binding.containerView, renderScrip)
+            .setBlurRadius(radius)
     }
 
     private fun loadName() {
