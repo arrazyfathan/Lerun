@@ -133,7 +133,7 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     private fun setupBlured() {
         val radius = 25f
-        val renderScrip = RenderEffectBlur()
+        val renderScrip = RenderScriptBlur(requireContext())
         binding.headerProfile.setupWith(binding.containerView, renderScrip)
             .setBlurRadius(radius)
     }
