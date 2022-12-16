@@ -5,6 +5,7 @@ plugins {
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -124,4 +125,7 @@ dependencies {
     implementation("com.github.amarjain07:StickyScrollView:1.0.3")
 
     implementation("com.github.Dimezis:BlurView:version-2.0.3")
+
+    implementation(platform("com.google.firebase:firebase-bom:31.1.1"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "456169824609",
+    "project_id": "lerun-f3159",
+    "storage_bucket": "lerun-f3159.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456169824609:android:3da529d5c5076175762520",
+        "android_client_info": {
+          "package_name": "com.androiddevs.lerun"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "456169824609-5bchtnpcpqifsn4c5t30umo5jgi5132s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.androiddevs.lerun",
+            "certificate_hash": "96222cade622726262ff0dcbef4b8d0764c493ca"
+          }
+        },
+        {
+          "client_id": "456169824609-tf6iqoq54su7pjsfr8bfoesdhguh9omm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCthTkyCMn2EMfpugJEfy606fjEmhLmCkQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "456169824609-tf6iqoq54su7pjsfr8bfoesdhguh9omm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
