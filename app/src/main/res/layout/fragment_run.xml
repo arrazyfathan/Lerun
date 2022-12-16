@@ -34,17 +34,20 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp">
 
                     <TextView
                         android:id="@+id/lets"
-                        android:layout_width="wrap_content"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/inter_semibold"
-                        android:text="Try full access \nfor free now"
+                        tools:text="Try full access for free now"
                         android:textColor="@color/green_dark_accent"
                         android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 

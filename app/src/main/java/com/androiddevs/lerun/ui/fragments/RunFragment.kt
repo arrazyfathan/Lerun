@@ -22,6 +22,8 @@ import com.androiddevs.lerun.utils.Constants.KEY_NAME
 import com.androiddevs.lerun.utils.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.androiddevs.lerun.utils.SortType
 import com.androiddevs.lerun.utils.TrackingUtility
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -50,6 +52,10 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     @Inject
     lateinit var sharedPref: SharedPreferences
 
+    companion object {
+        const val REMOTE_CONFIG_KEY_BANNER = "title_banner"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,7 +63,13 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     ): View? {
         _binding = FragmentRunBinding.inflate(inflater, container, false)
         val view = binding.root
+        changeBannerTitle()
         return view
+    }
+
+    private fun changeBannerTitle() {
+        val titleFromRemoteConfig = Firebase.remoteConfig.getString(REMOTE_CONFIG_KEY_BANNER)
+        binding.lets.text = titleFromRemoteConfig
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -258,5 +270,10 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        changeBannerTitle()
     }
 }
