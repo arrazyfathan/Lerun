@@ -2,6 +2,7 @@ package com.androiddevs.lerun.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.utils.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -35,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         setTheme(R.style.AppTheme)
         setContentView(R.layout.new_activity_main)
         navigateTrackingFragmentIfNeeded(intent)
+        generateNewToken()
 
         /*setSupportActionBar(toolbar)*/
         bottomNavigationView.setupWithNavController(navHostFragment.findNavController())
@@ -64,6 +67,18 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+    }
+
+    private fun generateNewToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM refistration token failed", task.exception)
+                return@addOnCompleteListener
+            }
+            val token = task.result
+            // Log and toast
+            Log.d(TAG, token)
+        }
     }
 
     private fun setupRemoteConfig() {
