@@ -13,15 +13,13 @@ import com.androiddevs.lerun.databinding.FragmentAllRunBinding
 import com.androiddevs.lerun.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
 class AllRunFragment : Fragment() {
 
     private var _binding: FragmentAllRunBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var runAdapter: RunAdapter
-
-    // main view model
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(

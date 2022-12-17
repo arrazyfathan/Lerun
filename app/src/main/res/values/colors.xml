@@ -18,6 +18,7 @@
 
     <!-- Dark -->
     <color name="ijo_tua">#77A613</color>
+    <color name="white">#FFFFFF</color>
     <color name="green_dark_accent">#445E0C</color>
     <color name="ijo">#bbf246</color>
     <color name="main_dark">#101010</color>
