@@ -60,7 +60,6 @@ dependencies {
     implementation("com.google.android.material:material:1.2.0-alpha06")
 
     // Architectural Components
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
 
     // Room
     implementation("androidx.room:room-runtime:2.4.3")
@@ -74,8 +73,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     // Coroutine Lifecycle Scopes
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
 
     // Navigation Components
     implementation("androidx.navigation:navigation-fragment-ktx:2.2.2")
