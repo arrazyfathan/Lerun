@@ -1,3 +1,7 @@
+import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -8,6 +12,7 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
+    id("com.google.firebase.appdistribution")
 }
 
 android {
@@ -31,6 +36,16 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+
+        getByName("debug") {
+            val testerGroup = rootProject.file("testergroup.properties")
+            firebaseAppDistribution {
+                artifactType = "APK"
+                releaseNotesFile = "notes.txt"
+                testersFile = "tester.txt"
+                groupsFile = "groups.txt"
+            }
         }
     }
 
