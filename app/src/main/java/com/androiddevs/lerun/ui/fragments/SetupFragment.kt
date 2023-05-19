@@ -17,7 +17,6 @@ import com.androiddevs.lerun.utils.Constants.KEY_NAME
 import com.androiddevs.lerun.utils.Constants.KEY_WEIGHT
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,11 +36,10 @@ class SetupFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentSetupBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,7 +52,7 @@ class SetupFragment : Fragment() {
             findNavController().navigate(
                 R.id.action_setupFragment_to_runFragment,
                 savedInstanceState,
-                navOptions
+                navOptions,
             )
         }
 

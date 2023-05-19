@@ -13,7 +13,6 @@ import com.androiddevs.lerun.databinding.FragmentAllRunBinding
 import com.androiddevs.lerun.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class AllRunFragment : Fragment() {
 
@@ -25,7 +24,7 @@ class AllRunFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentAllRunBinding.inflate(inflater, container, false)
         return binding.root
@@ -33,9 +32,11 @@ class AllRunFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRecyclerView()
+        observe()
+    }
 
+    private fun observe() {
         viewModel.runs.observe(viewLifecycleOwner) { list ->
             runAdapter.submitList(list)
         }
@@ -45,5 +46,10 @@ class AllRunFragment : Fragment() {
         runAdapter = RunAdapter()
         adapter = runAdapter
         layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

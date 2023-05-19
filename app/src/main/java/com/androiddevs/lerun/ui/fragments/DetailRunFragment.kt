@@ -9,7 +9,6 @@ import androidx.navigation.fragment.navArgs
 import com.androiddevs.lerun.databinding.FragmentDetailRunBinding
 import com.androiddevs.lerun.utils.TrackingUtility
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.new_item_run.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,11 +22,10 @@ class DetailRunFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentDetailRunBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -2,14 +2,14 @@ package com.androiddevs.lerun.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.androiddevs.lerun.R
+import com.androiddevs.lerun.databinding.NewActivityMainBinding
 import com.androiddevs.lerun.utils.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
@@ -17,9 +17,6 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.bottomNavigationView
-import kotlinx.android.synthetic.main.activity_main.navHostFragment
-import kotlinx.android.synthetic.main.new_activity_main.*
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -27,43 +24,51 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var remoteConfig: FirebaseRemoteConfig
 
+    private lateinit var binding: NewActivityMainBinding
+    private lateinit var navController: NavController
+
     companion object {
         const val TAG = "MainActivity"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = NewActivityMainBinding.inflate(layoutInflater)
         setupRemoteConfig()
         setTheme(R.style.AppTheme)
-        setContentView(R.layout.new_activity_main)
+        setContentView(binding.root)
         navigateTrackingFragmentIfNeeded(intent)
         generateNewToken()
 
         /*setSupportActionBar(toolbar)*/
-        bottomNavigationView.setupWithNavController(navHostFragment.findNavController())
-        bottomNavigationView.setOnNavigationItemReselectedListener { /* No operation */ }
-        bottomNavigationView.background = null
-        bottomNavigationView.menu.getItem(1).isEnabled = false
-        bottomNavigationView.itemIconTintList = null
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+        navController = navHostFragment.navController
+        binding.bottomNavigationView.setupWithNavController(navController)
+        binding.bottomNavigationView.setOnNavigationItemReselectedListener { /* No operation */ }
+        binding.bottomNavigationView.background = null
+        binding.bottomNavigationView.menu.getItem(1).isEnabled = false
+        binding.bottomNavigationView.itemIconTintList = null
 
-        fabinside.setOnClickListener {
+        binding.fabinside.setOnClickListener {
             findNavController(R.id.navHostFragment).navigate(R.id.from_main_activity_to_tracking)
         }
 
-        navHostFragment.findNavController()
+        navController
             .addOnDestinationChangedListener { _, destination, _ ->
                 when (destination.id) {
                     R.id.settingsFragment, R.id.runFragment, R.id.statisticsFragment -> {
-                        bottomNavigationView.visibility = View.VISIBLE
-                        container_nav_menu.visibility = View.VISIBLE
-                        fabinside.visibility = View.VISIBLE
-                        overlay.visibility = View.VISIBLE
+                        binding.bottomNavigationView.visibility = View.VISIBLE
+                        binding.containerNavMenu.visibility = View.VISIBLE
+                        binding.fabinside.visibility = View.VISIBLE
+                        binding.overlay.visibility = View.VISIBLE
                     }
+
                     else -> {
-                        bottomNavigationView.visibility = View.GONE
-                        container_nav_menu.visibility = View.GONE
-                        fabinside.visibility = View.GONE
-                        overlay.visibility = View.GONE
+                        binding.bottomNavigationView.visibility = View.GONE
+                        binding.containerNavMenu.visibility = View.GONE
+                        binding.fabinside.visibility = View.GONE
+                        binding.overlay.visibility = View.GONE
                     }
                 }
             }
@@ -72,12 +77,12 @@ class MainActivity : AppCompatActivity() {
     private fun generateNewToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM refistration token failed", task.exception)
+                Timber.w("Fetching FCM refistration token failed ${task.exception}")
                 return@addOnCompleteListener
             }
             val token = task.result
             // Log and toast
-            Log.d(TAG, token)
+            Timber.d(token)
         }
     }
 
@@ -94,9 +99,9 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val updated = task.result
-                    Timber.d(TAG, "Config params updated: $updated")
+                    Timber.d("Config params updated: $updated")
                 } else {
-                    Timber.d(TAG, "Failed fetch config")
+                    Timber.d("Failed fetch config")
                 }
             }
     }
@@ -108,7 +113,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateTrackingFragmentIfNeeded(intent: Intent?) {
         if (intent?.action == ACTION_SHOW_TRACKING_FRAGMENT) {
-            navHostFragment.findNavController().navigate(R.id.action_global_tackingFragment)
+            navController.navigate(R.id.action_global_tackingFragment)
         }
     }
 }

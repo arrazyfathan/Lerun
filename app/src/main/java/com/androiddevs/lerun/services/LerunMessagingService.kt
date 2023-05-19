@@ -43,7 +43,7 @@ class LerunMessagingService : FirebaseMessagingService() {
             this,
             0 /* Request code */,
             intent,
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_IMMUTABLE,
         )
 
         val channelId = FIREBASE_CHANNEL_ID
@@ -64,7 +64,7 @@ class LerunMessagingService : FirebaseMessagingService() {
             val channel = NotificationChannel(
                 channelId,
                 "Channel human readable title",
-                NotificationManager.IMPORTANCE_HIGH
+                NotificationManager.IMPORTANCE_HIGH,
             )
             notificationManager.createNotificationChannel(channel)
         }

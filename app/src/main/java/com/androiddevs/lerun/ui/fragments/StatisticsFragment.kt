@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentStatisticsBinding
 import com.androiddevs.lerun.ui.viewmodels.StatisticViewModel
-import com.androiddevs.lerun.utils.CustomMarkerView
 import com.androiddevs.lerun.utils.TrackingUtility
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -32,7 +31,7 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentStatisticsBinding.inflate(inflater, container, false)
         return binding.root
@@ -80,7 +79,7 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
                     val totalTimeRun = TrackingUtility.getFormattedStopWatchTime(it)
                     binding.tvTotalTime.text = totalTimeRun
                 }
-            }
+            },
         )
 
         viewModel.totalDistance.observe(
@@ -93,7 +92,7 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
 
                     binding.tvTotalDistance.text = totalDistanceString
                 }
-            }
+            },
         )
 
         viewModel.totalAverageSpeed.observe(
@@ -104,7 +103,7 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
                     val averageSpeedString = "${averageSpeed}km/h"
                     binding.tvAverageSpeed.text = averageSpeedString
                 }
-            }
+            },
         )
 
         viewModel.totalCaloriesBurned.observe(
@@ -114,7 +113,7 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
                     val totalCalories = "${it}kcal"
                     binding.tvTotalCalories.text = totalCalories
                 }
-            }
+            },
         )
 
         viewModel.runsSortedByDate.observe(
@@ -131,11 +130,10 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
                     }
 
                     binding.barChart.data = BarData(barDataSet)
-                    binding.barChart.marker =
-                        CustomMarkerView(it.reversed(), requireContext(), R.layout.marker_view)
+                    // binding.barChart.marker = CustomMarkerView(it.reversed(), requireContext(), R.layout.marker_view)
                     binding.barChart.invalidate()
                 }
-            }
+            },
         )
     }
 

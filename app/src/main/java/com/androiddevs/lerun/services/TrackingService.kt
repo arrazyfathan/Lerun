@@ -85,7 +85,7 @@ class TrackingService : LifecycleService() {
             Observer {
                 updateLocationTracking(it)
                 updateNotificationTrackingState(it)
-            }
+            },
         )
     }
 
@@ -110,14 +110,17 @@ class TrackingService : LifecycleService() {
                         startTimer()
                     }
                 }
+
                 ACTION_PAUSE_SERVICE -> {
                     Timber.d("Paused Service")
                     pauseService()
                 }
+
                 ACTION_STOP_SERVICE -> {
                     Timber.d("Stopped Service")
                     killService()
                 }
+
                 else -> {
                 }
             }
@@ -213,7 +216,7 @@ class TrackingService : LifecycleService() {
                 fusedLocationProviderClient.requestLocationUpdates(
                     request,
                     locationCallback,
-                    Looper.getMainLooper()
+                    Looper.getMainLooper(),
                 )
             }
         } else {
@@ -279,7 +282,7 @@ class TrackingService : LifecycleService() {
                         .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
                     notificationManager.notify(NOTIFICATION_ID, notification.build())
                 }
-            }
+            },
         )
     }
 
@@ -298,7 +301,7 @@ class TrackingService : LifecycleService() {
         val channel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
             NOTIFICATION_CHANNEL_NAME,
-            IMPORTANCE_LOW
+            IMPORTANCE_LOW,
         )
 
         notificationManager.createNotificationChannel(channel)

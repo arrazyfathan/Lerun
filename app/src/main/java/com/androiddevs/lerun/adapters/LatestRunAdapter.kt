@@ -20,15 +20,16 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
         onItemClickListener = listener
     }
 
-    inner class LatestRunViewHolder(val binding: NewItemRunBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class LatestRunViewHolder(val binding: NewItemRunBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LatestRunViewHolder {
         return LatestRunViewHolder(
             NewItemRunBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
-            )
+                false,
+            ),
         )
     }
 

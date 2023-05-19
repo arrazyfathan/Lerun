@@ -23,13 +23,13 @@ object ServiceModule {
     @ServiceScoped
     @Provides
     fun provideFusedLocationProviderClient(
-        @ApplicationContext app: Context
+        @ApplicationContext app: Context,
     ) = FusedLocationProviderClient(app)
 
     @ServiceScoped
     @Provides
     fun provideMainActivityPendingIntent(
-        @ApplicationContext app: Context
+        @ApplicationContext app: Context,
     ) = if (Build.VERSION.SDK_INT >= 31) {
         PendingIntent.getActivity(
             app,
@@ -37,7 +37,7 @@ object ServiceModule {
             Intent(app, MainActivity::class.java).also {
                 it.action = Constants.ACTION_SHOW_TRACKING_FRAGMENT
             },
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_IMMUTABLE,
         )
     } else {
         PendingIntent.getActivity(
@@ -46,7 +46,7 @@ object ServiceModule {
             Intent(app, MainActivity::class.java).also {
                 it.action = Constants.ACTION_SHOW_TRACKING_FRAGMENT
             },
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT,
         )
     }
 
@@ -54,7 +54,7 @@ object ServiceModule {
     @Provides
     fun provideBaseNotificationBuilder(
         @ApplicationContext app: Context,
-        pendingIntent: PendingIntent
+        pendingIntent: PendingIntent,
     ) = NotificationCompat.Builder(app, Constants.NOTIFICATION_CHANNEL_ID)
         .setAutoCancel(false)
         .setOngoing(true)

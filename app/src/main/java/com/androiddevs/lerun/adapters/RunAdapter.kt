@@ -25,8 +25,8 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
             ItemRunExpandableBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
-            )
+                false,
+            ),
         )
     }
 
@@ -64,21 +64,21 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
                         animate().rotation(0.0F).duration = 300
                         changeTintColor(
                             color(itemView.context, R.color.main_dark),
-                            color(itemView.context, R.color.white)
+                            color(itemView.context, R.color.white),
                         )
                     }
                     binding.tvTitleRun.changeTextColor(
                         color(itemView.context, R.color.main_dark),
-                        color(itemView.context, R.color.white)
+                        color(itemView.context, R.color.white),
                     )
                     binding.tvDateExpand.changeTextColor(
                         color(itemView.context, R.color.main_dark),
-                        color(itemView.context, R.color.dark_accent_text)
+                        color(itemView.context, R.color.dark_accent_text),
                     )
                     val colorExpanded = color(itemView.context, R.color.ijo)
                     binding.rootView.changeBackgroundColor(
                         colorExpanded,
-                        color(itemView.context, R.color.secondary_dark)
+                        color(itemView.context, R.color.secondary_dark),
                     )
                     expanded = false
                 } else {
@@ -87,22 +87,22 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
                         animate().rotation(180.0F).duration = 300
                         changeTintColor(
                             color(itemView.context, R.color.white),
-                            color(itemView.context, R.color.main_dark)
+                            color(itemView.context, R.color.main_dark),
                         )
                     }
                     binding.tvTitleRun.changeTextColor(
                         color(itemView.context, R.color.white),
-                        color(itemView.context, R.color.main_dark)
+                        color(itemView.context, R.color.main_dark),
                     )
                     binding.tvDateExpand.changeTextColor(
                         color(itemView.context, R.color.dark_accent_text),
-                        color(itemView.context, R.color.main_dark)
+                        color(itemView.context, R.color.main_dark),
                     )
                     val colorCollapse =
                         color(itemView.context, R.color.secondary_dark)
                     binding.rootView.changeBackgroundColor(
                         colorCollapse,
-                        color(itemView.context, R.color.ijo)
+                        color(itemView.context, R.color.ijo),
                     )
                     expanded = true
                 }

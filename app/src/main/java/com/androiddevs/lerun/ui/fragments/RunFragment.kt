@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androiddevs.lerun.R
@@ -25,10 +24,7 @@ import com.androiddevs.lerun.utils.TrackingUtility
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import dagger.hilt.android.AndroidEntryPoint
-import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
-import kotlinx.android.synthetic.main.fragment_run.*
-import kotlinx.android.synthetic.main.new_item_run.view.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.*
@@ -40,13 +36,8 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     private var _binding: FragmentRunBinding? = null
     private val binding get() = _binding!!
-
-    // main view model
     private val viewModel: MainViewModel by viewModels()
-
-    // stats model
     private val statsModel: StatisticViewModel by viewModels()
-
     private lateinit var latestRunAdapter: LatestRunAdapter
 
     @Inject
@@ -59,12 +50,11 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentRunBinding.inflate(inflater, container, false)
-        val view = binding.root
         changeBannerTitle()
-        return view
+        return binding.root
     }
 
     private fun changeBannerTitle() {
@@ -82,21 +72,21 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         setupRecyclerView()
 
         when (viewModel.sortType) {
-            SortType.DATE -> spFilter.setSelection(0)
-            SortType.RUNNING_TIME -> spFilter.setSelection(1)
-            SortType.DISTANCE -> spFilter.setSelection(2)
-            SortType.AVG_SPEED -> spFilter.setSelection(3)
-            SortType.CALORIES_BURNED -> spFilter.setSelection(4)
+            SortType.DATE -> binding.spFilter.setSelection(0)
+            SortType.RUNNING_TIME -> binding.spFilter.setSelection(1)
+            SortType.DISTANCE -> binding.spFilter.setSelection(2)
+            SortType.AVG_SPEED -> binding.spFilter.setSelection(3)
+            SortType.CALORIES_BURNED -> binding.spFilter.setSelection(4)
         }
 
-        spFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
             override fun onItemSelected(
                 adapterView: AdapterView<*>?,
                 view: View?,
                 pos: Int,
-                id: Long
+                id: Long,
             ) {
                 when (pos) {
                     0 -> viewModel.sortRuns(SortType.DATE)
@@ -112,25 +102,22 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
         binding.btnSeeMore.setOnClickListener {
             findNavController().navigate(
-                R.id.action_runFragment_to_allRunFragment
+                R.id.action_runFragment_to_allRunFragment,
             )
         }
 
-        viewModel.runs.observe(
-            viewLifecycleOwner,
-            Observer { list ->
-                if (list.isEmpty()) {
-                    binding.tvLabelLatest.visibility = View.GONE
-                    binding.rvRuns.visibility = View.GONE
-                    binding.btnSeeMore.visibility = View.INVISIBLE
-                } else {
-                    binding.tvLabelLatest.visibility = View.VISIBLE
-                    binding.rvRuns.visibility = View.VISIBLE
-                    binding.btnSeeMore.visibility = View.VISIBLE
-                    latestRunAdapter.submitLatestList(list)
-                }
+        viewModel.runs.observe(viewLifecycleOwner) { list ->
+            if (list.isEmpty()) {
+                binding.tvLabelLatest.visibility = View.GONE
+                binding.rvRuns.visibility = View.GONE
+                binding.btnSeeMore.visibility = View.INVISIBLE
+            } else {
+                binding.tvLabelLatest.visibility = View.VISIBLE
+                binding.rvRuns.visibility = View.VISIBLE
+                binding.btnSeeMore.visibility = View.VISIBLE
+                latestRunAdapter.submitLatestList(list)
             }
-        )
+        }
 
         latestRunAdapter.setOnClickListener {
             val bundle = Bundle().apply {
@@ -138,11 +125,12 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
             }
             findNavController().navigate(
                 R.id.action_runFragment_to_detailRunFragment,
-                bundle
+                bundle,
             )
         }
     }
 
+    @Suppress("DEPRECATION")
     private fun setupBlured() {
         val radius = 25f
         val renderScrip = RenderScriptBlur(requireContext())
@@ -158,62 +146,61 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     private fun subscribeObservers() {
         statsModel.totalCaloriesBurned.observe(
             viewLifecycleOwner,
-            Observer { calories ->
-                calories?.let {
-                    val totalCalories = "$calories kcal"
-                    binding.totalCalories.text = totalCalories
-                }
+        ) { calories ->
+            calories?.let {
+                val totalCalories = "$calories kcal"
+                binding.totalCalories.text = totalCalories
             }
-        )
+        }
 
         statsModel.totalAverageSpeed.observe(
             viewLifecycleOwner,
-            Observer { avgSpeed ->
-                avgSpeed?.let {
-                    val totalAverageSpeed = "${round(avgSpeed * 10f) / 10} km/h"
-                    binding.averageSpeed.text = totalAverageSpeed
-                }
+        ) { avgSpeed ->
+            avgSpeed?.let {
+                val totalAverageSpeed = "${round(avgSpeed * 10f) / 10} km/h"
+                binding.averageSpeed.text = totalAverageSpeed
             }
-        )
+        }
 
         statsModel.totalDistance.observe(
             viewLifecycleOwner,
-            Observer { distance ->
-                distance?.let {
-                    val km = it / 1000f
-                    val totalDistance = round(km * 10f) / 10
-                    val totalDistanceString = "$totalDistance km"
+        ) { distance ->
+            distance?.let {
+                val km = it / 1000f
+                val totalDistance = round(km * 10f) / 10
+                val totalDistanceString = "$totalDistance km"
 
-                    binding.totalDistance.text = totalDistanceString
-                }
+                binding.totalDistance.text = totalDistanceString
             }
-        )
+        }
 
         statsModel.totalTimeRun.observe(
             viewLifecycleOwner,
-            Observer { duration ->
-                duration?.let {
-                    val totalTimeRun = TrackingUtility.formatDuration(duration)
-                    binding.totalTimeRun.text = totalTimeRun
-                }
+        ) { duration ->
+            duration?.let {
+                val totalTimeRun = TrackingUtility.formatDuration(duration)
+                binding.totalTimeRun.text = totalTimeRun
             }
-        )
+        }
     }
 
     private fun getToday() {
         val calendar = Calendar.getInstance()
         when (calendar.get(Calendar.HOUR_OF_DAY)) {
             in 0..11 -> {
-                binding.tvDateToday.text = "Good Morning"
+                binding.tvDateToday.text = getString(R.string.good_morning)
             }
+
             in 12..15 -> {
-                binding.tvDateToday.text = "Good Afternoon"
+                binding.tvDateToday.text = getString(R.string.good_afternoon)
             }
+
             in 16..20 -> {
-                binding.tvDateToday.text = "Good Evening"
+                binding.tvDateToday.text = getString(R.string.good_evening)
             }
+
             in 21..23 -> {
-                binding.tvDateToday.text = "Good Night"
+                binding.tvDateToday.text = getString(R.string.good_night)
             }
         }
     }
@@ -234,7 +221,7 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 "You need to accept location permissions to use this apps",
                 REQUEST_CODE_LOCATION_PERMISSION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
             )
         } else {
             EasyPermissions.requestPermissions(
@@ -243,7 +230,7 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 REQUEST_CODE_LOCATION_PERMISSION,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
             )
         }
     }
@@ -266,7 +253,7 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
