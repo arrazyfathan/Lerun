@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="120dp"
+                android:layout_marginTop="162dp"
                 android:layout_marginEnd="24dp"
                 app:cardBackgroundColor="@color/ijo"
                 app:cardCornerRadius="20dp"
@@ -122,7 +122,7 @@
                         android:layout_height="30dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_calories_burned"
-                        android:tint="@color/ijo" />
+                        app:tint="@color/ijo" />
 
                     <TextView
                         android:id="@+id/totalCalories"
@@ -174,7 +174,7 @@
                         android:layout_height="30dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_average_speed"
-                        android:tint="@color/ijo" />
+                        app:tint="@color/ijo" />
 
                     <TextView
                         android:id="@+id/averageSpeed"
@@ -227,7 +227,7 @@
                         android:layout_height="30dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_route_distance"
-                        android:tint="@color/ijo" />
+                        app:tint="@color/ijo" />
 
                     <TextView
                         android:id="@+id/totalDistance"
@@ -278,7 +278,7 @@
                         android:layout_height="30dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_timer"
-                        android:tint="@color/ijo" />
+                        app:tint="@color/ijo" />
 
                     <TextView
                         android:id="@+id/totalTimeRun"
@@ -378,6 +378,39 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rvRuns" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnSeeMore"
+                android:layout_marginTop="50dp"
+                android:gravity="center"
+                android:layout_marginBottom="50dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="Build With ❤️"
+                    android:textAlignment="center"
+                    android:textColor="@color/dark_accent_text"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="Ar Razy Fathan Rabbani"
+                    android:layout_marginTop="4dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/dark_accent_text"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <eightbitlab.com.blurview.BlurView
@@ -394,7 +427,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:elevation="4dp"
-                android:paddingTop="16dp"
+                android:paddingTop="48dp"
                 android:paddingBottom="16dp">
 
                 <com.google.android.material.card.MaterialCardView

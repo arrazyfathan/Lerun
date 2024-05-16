@@ -3,6 +3,7 @@ package com.androiddevs.lerun.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         binding = NewActivityMainBinding.inflate(layoutInflater)
         setupRemoteConfig()
         setTheme(R.style.AppTheme)
@@ -106,7 +108,7 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         navigateTrackingFragmentIfNeeded(intent)
     }

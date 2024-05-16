@@ -14,12 +14,12 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.androiddevs.lerun"
         minSdk = 21
-        targetSdk = 31
+        targetSdk = 34
         versionCode = 1
         versionName = "1.2"
 
@@ -64,9 +64,9 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.constrainLayout)
-    testImplementation("junit:junit:4.12")
-    androidTestImplementation("androidx.test.ext:junit:1.1.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 
     // Material Design
     implementation(libs.material)
@@ -93,20 +93,20 @@ dependencies {
     implementation(libs.bundles.location)
 
     // Dagger Core
-    implementation("com.google.dagger:dagger:2.25.4")
-    kapt("com.google.dagger:dagger-compiler:2.25.2")
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
 
     // Dagger Android
-    api("com.google.dagger:dagger-android:2.23.2")
-    api("com.google.dagger:dagger-android-support:2.23.2")
-    kapt("com.google.dagger:dagger-android-processor:2.23.2")
+    api(libs.dagger.android)
+    api(libs.dagger.android.support)
+    kapt(libs.dagger.android.processor)
 
     // Activity KTX for viewModels()
-    implementation("androidx.activity:activity-ktx:1.1.0")
+    implementation(libs.androidx.activity.ktx)
 
     // Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.28-alpha")
-    kapt("com.google.dagger:hilt-android-compiler:2.28-alpha")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01")
     kapt("androidx.hilt:hilt-compiler:1.0.0-alpha01")
