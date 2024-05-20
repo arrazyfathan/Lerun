@@ -48,6 +48,7 @@
                 android:id="@+id/bottomNavigationView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:itemActiveIndicatorStyle="@style/Theme.BottomNavigationView.ActiveIndicator"
                 android:background="@android:color/transparent"
                 app:elevation="20dp"
                 app:labelVisibilityMode="unlabeled"

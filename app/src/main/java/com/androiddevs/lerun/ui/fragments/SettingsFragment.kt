@@ -9,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.androiddevs.lerun.R
@@ -45,6 +48,14 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
+            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top + 16
+            }
+
+            WindowInsetsCompat.CONSUMED
+        }
 
         binding.btnEditProfile.setOnClickListener {
             showDialogEditProfile()

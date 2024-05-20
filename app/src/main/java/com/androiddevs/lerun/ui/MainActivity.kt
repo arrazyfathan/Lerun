@@ -1,9 +1,13 @@
 package com.androiddevs.lerun.ui
 
+import android.Manifest
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -27,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: NewActivityMainBinding
     private lateinit var navController: NavController
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     companion object {
         const val TAG = "MainActivity"
@@ -41,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         navigateTrackingFragmentIfNeeded(intent)
         generateNewToken()
+        requestPermissions()
 
         /*setSupportActionBar(toolbar)*/
         val navHostFragment =
@@ -116,6 +122,14 @@ class MainActivity : AppCompatActivity() {
     private fun navigateTrackingFragmentIfNeeded(intent: Intent?) {
         if (intent?.action == ACTION_SHOW_TRACKING_FRAGMENT) {
             navController.navigate(R.id.action_global_tackingFragment)
+        }
+    }
+
+    private fun requestPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher =
+                registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 }
