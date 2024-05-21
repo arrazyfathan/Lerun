@@ -2,11 +2,11 @@ import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
     id("kotlin-parcelize")
     id("kotlin-kapt")
+    id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs.kotlin")
-    id("dagger.hilt.android.plugin")
+    id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
@@ -15,6 +15,7 @@ plugins {
 
 android {
     compileSdk = 34
+    namespace = "com.androiddevs.lerun"
 
     defaultConfig {
         applicationId = "com.androiddevs.lerun"
@@ -60,7 +61,7 @@ android {
 
 dependencies {
     implementation(fileTree("src/main/libs") { include("*.jar") })
-    implementation(libs.kotlin)
+    // implementation(libs.kotlin)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.constrainLayout)
@@ -71,13 +72,14 @@ dependencies {
     // Material Design
     implementation(libs.material)
 
-    // Architectural Components
     // Room
-    implementation(libs.bundles.room)
-    kapt(libs.room.compiler)
+    implementation("androidx.room:room-ktx:2.6.0")
+    kapt("androidx.room:room-compiler:2.6.0")
+    implementation("androidx.room:room-paging:2.6.0")
 
     // Coroutines
-    implementation(libs.bundles.corouitines)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 
     // Coroutine Lifecycle Scopes
     implementation(libs.bundles.androidx.lifecycle)
@@ -90,26 +92,16 @@ dependencies {
     kapt(libs.glide.compiler)
 
     // Google Maps Location Services
-    implementation(libs.bundles.location)
+    implementation(libs.google.play.service.maps)
+    implementation(libs.google.play.service.location)
 
-    // Dagger Core
-    implementation(libs.dagger)
-    kapt(libs.dagger.compiler)
-
-    // Dagger Android
-    api(libs.dagger.android)
-    api(libs.dagger.android.support)
-    kapt(libs.dagger.android.processor)
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-compiler:2.50")
+    kapt("androidx.hilt:hilt-compiler:1.1.0")
 
     // Activity KTX for viewModels()
     implementation(libs.androidx.activity.ktx)
-
-    // Dagger - Hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-
-    implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01")
-    kapt("androidx.hilt:hilt-compiler:1.0.0-alpha01")
 
     // Easy Permissions
     implementation("pub.devrel:easypermissions:3.0.0")
@@ -137,4 +129,8 @@ dependencies {
     implementation("com.google.firebase:firebase-perf-ktx")
     implementation("com.google.firebase:firebase-config-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
+}
+
+kapt {
+    correctErrorTypes = true
 }

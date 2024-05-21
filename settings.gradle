@@ -19,5 +19,3 @@ dependencyResolutionManagement {
 rootProject.name='Lerun'
 include ':app'
 
-enableFeaturePreview("VERSION_CATALOGS")
-

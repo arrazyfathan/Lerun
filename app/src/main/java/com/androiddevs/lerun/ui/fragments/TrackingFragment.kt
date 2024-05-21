@@ -417,7 +417,7 @@ class TrackingFragment :
         binding.mapView.onSaveInstanceState(outState)
     }
 
-    override fun onMapReady(googleMap: GoogleMap?) {
+    override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map?.let { loadTheme(it) }
 

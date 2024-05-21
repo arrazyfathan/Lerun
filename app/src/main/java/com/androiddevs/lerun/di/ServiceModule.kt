@@ -9,6 +9,7 @@ import com.androiddevs.lerun.R
 import com.androiddevs.lerun.ui.MainActivity
 import com.androiddevs.lerun.utils.Constants
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +25,7 @@ object ServiceModule {
     @Provides
     fun provideFusedLocationProviderClient(
         @ApplicationContext app: Context,
-    ) = FusedLocationProviderClient(app)
+    ) = LocationServices.getFusedLocationProviderClient(app)
 
     @ServiceScoped
     @Provides
