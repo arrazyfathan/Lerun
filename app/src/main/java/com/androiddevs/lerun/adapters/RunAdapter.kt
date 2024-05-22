@@ -8,12 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.ItemRunExpandableBinding
 import com.androiddevs.lerun.db.Run
-import com.androiddevs.lerun.utils.* // ktlint-disable no-wildcard-imports
+import com.androiddevs.lerun.utils.TrackingUtility
+import com.androiddevs.lerun.utils.changeBackgroundColor
+import com.androiddevs.lerun.utils.changeTextColor
+import com.androiddevs.lerun.utils.changeTintColor
 import com.androiddevs.lerun.utils.collapse
+import com.androiddevs.lerun.utils.color
 import com.androiddevs.lerun.utils.expand
 import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
 

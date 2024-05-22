@@ -10,7 +10,8 @@ import com.androiddevs.lerun.databinding.FragmentDetailRunBinding
 import com.androiddevs.lerun.utils.TrackingUtility
 import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class DetailRunFragment : Fragment() {
 

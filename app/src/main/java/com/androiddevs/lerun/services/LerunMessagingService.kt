@@ -41,7 +41,7 @@ class LerunMessagingService : FirebaseMessagingService() {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(
             this,
-            0 /* Request code */,
+            0, /* Request code */
             intent,
             PendingIntent.FLAG_IMMUTABLE,
         )

@@ -6,7 +6,6 @@ import android.location.Location
 import android.os.Build
 import com.androiddevs.lerun.services.Polyline
 import pub.devrel.easypermissions.EasyPermissions
-import java.sql.Time
 import java.util.concurrent.TimeUnit
 
 object TrackingUtility {
@@ -57,7 +56,7 @@ object TrackingUtility {
         millisecond -= TimeUnit.MINUTES.toMillis(minutes)
         val seconds = TimeUnit.MILLISECONDS.toSeconds(millisecond)
         return if (hours < 1) {
-            "${if (minutes < 10) "" else ""}${minutes}m " +  "${if (seconds < 10) "0" else ""}${seconds}s"
+            "${if (minutes < 10) "" else ""}${minutes}m " + "${if (seconds < 10) "0" else ""}${seconds}s"
         } else {
             "${if (hours < 10) "" else ""}${hours}h" + "${if (minutes < 10) "0" else ""}${minutes}m"
 
@@ -71,11 +70,13 @@ object TrackingUtility {
             val pos2 = polyline[i + 1]
 
             val result = FloatArray(1)
-            Location.distanceBetween(pos1.latitude,
+            Location.distanceBetween(
+                pos1.latitude,
                 pos1.longitude,
                 pos2.latitude,
                 pos2.longitude,
-                result)
+                result
+            )
 
             distance += result[0]
         }

@@ -8,7 +8,6 @@ import androidx.core.app.NotificationCompat
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.ui.MainActivity
 import com.androiddevs.lerun.utils.Constants
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
