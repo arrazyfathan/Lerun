@@ -14,6 +14,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -47,7 +50,6 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.math.round
 
-const val CANCEL_TRACKING_DIALOG_TAG = "CancelDialog"
 
 @AndroidEntryPoint
 class TrackingFragment :
@@ -55,6 +57,10 @@ class TrackingFragment :
     OnMapReadyCallback,
     GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener {
+
+    companion object {
+        const val CANCEL_TRACKING_DIALOG_TAG = "CancelDialog"
+    }
 
     private var _binding: FragmentTrackingBinding? = null
     private val binding get() = _binding!!
@@ -79,10 +85,10 @@ class TrackingFragment :
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentTrackingBinding.inflate(inflater, container, false)
         val view = binding.root
-        setHasOptionsMenu(true)
+        setMenuVisibility(true)
         return view
     }
 
@@ -189,35 +195,26 @@ class TrackingFragment :
     }
 
     private fun subscribeToObservers() {
-        TrackingService.isTracking.observe(
-            viewLifecycleOwner,
-            Observer {
-                updateTracking(it)
-            },
-        )
+        TrackingService.isTracking.observe(viewLifecycleOwner) {
+            updateTracking(it)
+        }
 
-        TrackingService.pathPoint.observe(
-            viewLifecycleOwner,
-            Observer {
-                pathPoints = it
-                addLatestPolyline()
-                moveCameraToUser()
-            },
-        )
+        TrackingService.pathPoint.observe(viewLifecycleOwner) {
+            pathPoints = it
+            addLatestPolyline()
+            moveCameraToUser()
+        }
 
-        TrackingService.timeRunInMillis.observe(
-            viewLifecycleOwner,
-            Observer {
-                currentTimeMillis = it
-                val formattedTime =
-                    TrackingUtility.getFormattedStopWatchTime(currentTimeMillis, true)
-                binding.tvTimer.text = formattedTime
+        TrackingService.timeRunInMillis.observe(viewLifecycleOwner) {
+            currentTimeMillis = it
+            val formattedTime =
+                TrackingUtility.getFormattedStopWatchTime(currentTimeMillis, true)
+            binding.tvTimer.text = formattedTime
 
-                if (currentTimeMillis > 0L) {
-                    binding.cardCancelRun!!.visibility = View.VISIBLE
-                }
-            },
-        )
+            if (currentTimeMillis > 0L) {
+                binding.cardCancelRun!!.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun toggleRun() {

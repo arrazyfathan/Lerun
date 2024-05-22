@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupRemoteConfig() {
         remoteConfig = Firebase.remoteConfig
         val configSetting = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 3600 * 12
+            minimumFetchIntervalInSeconds = 60
         }
 
         remoteConfig.setConfigSettingsAsync(configSetting)
