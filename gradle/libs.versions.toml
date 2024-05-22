@@ -27,13 +27,6 @@ androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", vers
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
-dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
-dagger-android = { module = "com.google.dagger:dagger-android", version.ref = "daggerAndroid" }
-dagger-android-processor = { module = "com.google.dagger:dagger-android-processor", version.ref = "daggerAndroid" }
-dagger-android-support = { module = "com.google.dagger:dagger-android-support", version.ref = "daggerAndroid" }
-dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }
-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidCompiler" }
-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 junit = { module = "junit:junit", version.ref = "junit" }
 kotlin = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk7", version.ref = "kotlin" }
 androidx-constrainLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constrainLayout" }
@@ -58,9 +51,5 @@ room = ["room.runtime", "room.ktx"]
 corouitines = ["coroutines.android", "coroutines.core"]
 androidx-lifecycle = ["lifecycle.runtime", "lifecycle.viewmodel"]
 androidx-navigation = ["navigation.fragment", "navigation.ui"]
-location = ["google.play.service.location", "google.play.service.maps"]
-
-[plugins]
-jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 

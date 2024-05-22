@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = NewActivityMainBinding.inflate(layoutInflater)
         setupRemoteConfig()
-        setTheme(R.style.AppTheme)
+        setTheme(R.style.Base_Theme_Lerun)
         setContentView(binding.root)
         navigateTrackingFragmentIfNeeded(intent)
         generateNewToken()

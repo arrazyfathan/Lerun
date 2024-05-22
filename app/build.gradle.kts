@@ -19,7 +19,7 @@ android {
 
     defaultConfig {
         applicationId = "com.androiddevs.lerun"
-        minSdk = 21
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.2"

@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="Base.Theme.Lerun" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Original AppCompat attributes. -->
         <item name="colorPrimary">@color/main_dark</item>
         <item name="colorSecondary">@color/secondary_dark</item>
@@ -67,7 +67,7 @@
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
-    <style name="splashScreenTheme" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="splashScreenTheme" parent="Base.Theme.Lerun">
         <item name="android:windowBackground">@drawable/splash_image</item>
         <item name="android:statusBarColor">@color/main_dark</item>
     </style>
