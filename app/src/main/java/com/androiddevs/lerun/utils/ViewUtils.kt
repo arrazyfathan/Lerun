@@ -2,6 +2,7 @@ package com.androiddevs.lerun.utils
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
+import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
 import android.view.View
@@ -9,8 +10,10 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.marginTop
+import androidx.fragment.app.Fragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -99,4 +102,9 @@ fun colorAnimator(fromColor: Int, toColor: Int): ValueAnimator {
     valueAnimator.duration = 300
     valueAnimator.interpolator = DecelerateInterpolator()
     return valueAnimator
+}
+
+context(Fragment)
+fun String.toast() {
+    Toast.makeText(requireContext(), this, Toast.LENGTH_SHORT).show()
 }

@@ -34,6 +34,7 @@ import com.androiddevs.lerun.utils.Constants.ACTION_STOP_SERVICE
 import com.androiddevs.lerun.utils.Constants.MAP_CAMERA_ZOOM
 import com.androiddevs.lerun.utils.Constants.POLYLINE_WIDTH
 import com.androiddevs.lerun.utils.TrackingUtility
+import com.androiddevs.lerun.utils.toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -442,7 +443,7 @@ class TrackingFragment :
                     val myLocation = LatLng(location.latitude, location.longitude)
                     map?.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16f))
                 } catch (e: Exception) {
-                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                    e.message?.toast()
                 }
             }
     }
