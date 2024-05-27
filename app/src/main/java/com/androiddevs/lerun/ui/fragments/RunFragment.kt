@@ -8,9 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -24,6 +21,7 @@ import com.androiddevs.lerun.utils.Constants.KEY_NAME
 import com.androiddevs.lerun.utils.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.androiddevs.lerun.utils.SortType
 import com.androiddevs.lerun.utils.TrackingUtility
+import com.androiddevs.lerun.utils.viewBinding
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,10 +33,9 @@ import javax.inject.Inject
 import kotlin.math.round
 
 @AndroidEntryPoint
-class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
+class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionCallbacks {
 
-    private var _binding: FragmentRunBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBinding(FragmentRunBinding::bind)
     private val viewModel: MainViewModel by viewModels()
     private val statsModel: StatisticViewModel by viewModels()
     private lateinit var latestRunAdapter: LatestRunAdapter
@@ -50,16 +47,6 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         const val REMOTE_CONFIG_KEY_BANNER = "title_banner"
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        _binding = FragmentRunBinding.inflate(inflater, container, false)
-        changeBannerTitle()
-        return binding.root
-    }
-
     private fun changeBannerTitle() {
         val titleFromRemoteConfig = Firebase.remoteConfig.getString(REMOTE_CONFIG_KEY_BANNER)
         binding.lets.text = titleFromRemoteConfig
@@ -67,17 +54,8 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
-            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                // topMargin = insets.top
-            }
-
-            WindowInsetsCompat.CONSUMED
-        }
-
-        setupBlured()
+        changeBannerTitle()
+        setBlurred()
         getToday()
         loadName()
         requestPermissions()
@@ -142,8 +120,8 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         }
     }
 
-    @Suppress("DEPRECATION")
-    private fun setupBlured() {
+
+    private fun setBlurred() {
         val radius = 25f
         val renderScrip = RenderScriptBlur(requireContext())
         binding.headerProfile.setupWith(binding.containerView, renderScrip)
@@ -245,11 +223,6 @@ class RunFragment : Fragment(), EasyPermissions.PermissionCallbacks {
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION,
             )
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {}

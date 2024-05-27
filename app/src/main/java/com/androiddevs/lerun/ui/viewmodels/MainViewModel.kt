@@ -63,7 +63,6 @@ class MainViewModel @Inject constructor(
         this.sortType = sortType
     }
 
-    // insert current run into database
     fun insertRun(run: Run) = viewModelScope.launch {
         mainRepository.insertRun(run)
     }
