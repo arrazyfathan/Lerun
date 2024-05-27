@@ -65,7 +65,7 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
         }
     }
 
-    val diffCallback = object : DiffUtil.ItemCallback<Run>() {
+    private val diffCallback = object : DiffUtil.ItemCallback<Run>() {
         override fun areItemsTheSame(oldItem: Run, newItem: Run): Boolean {
             return oldItem.id == newItem.id
         }
