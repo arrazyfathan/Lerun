@@ -1,6 +1,6 @@
 package com.androiddevs.lerun.services
 
-import android.annotation.SuppressLint
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
@@ -9,14 +9,15 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Looper
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.utils.Constants.ACTION_PAUSE_SERVICE
 import com.androiddevs.lerun.utils.Constants.ACTION_START_OR_RESUME_SERVICE
@@ -31,9 +32,9 @@ import com.androiddevs.lerun.utils.TrackingUtility
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -49,8 +50,8 @@ typealias Polylines = MutableList<Polyline>
 @AndroidEntryPoint
 class TrackingService : LifecycleService() {
 
-    var isFirstRun = true
-    var servieKilled = false
+    private var isFirstRun = true
+    private var serviceKilled = false
 
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -60,7 +61,7 @@ class TrackingService : LifecycleService() {
     @Inject
     lateinit var baseNotificationBuilder: NotificationCompat.Builder
 
-    lateinit var currentNotificationBuilder: NotificationCompat.Builder
+    private lateinit var currentNotificationBuilder: NotificationCompat.Builder
 
     companion object {
         val isTracking = MutableLiveData<Boolean>()
@@ -83,19 +84,19 @@ class TrackingService : LifecycleService() {
 
         isTracking.observe(
             this,
-            Observer {
-                updateLocationTracking(it)
-                updateNotificationTrackingState(it)
-            },
-        )
+        ) {
+            updateLocationTracking(it)
+            updateNotificationTrackingState(it)
+        }
     }
 
     private fun killService() {
-        servieKilled = true
+        serviceKilled = true
         isFirstRun = true
         pauseService()
         postInitialValues()
-        stopForeground(true)
+        // stopForeground(true)
+        stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
     }
 
@@ -198,21 +199,33 @@ class TrackingService : LifecycleService() {
             set(currentNotificationBuilder, ArrayList<NotificationCompat.Action>())
         }
 
-        if (!servieKilled) {
+        if (!serviceKilled) {
             currentNotificationBuilder = baseNotificationBuilder
                 .addAction(R.drawable.ic_pause_black_24dp, notificationActionText, pendingIntent)
             notificationManager.notify(NOTIFICATION_ID, currentNotificationBuilder.build())
         }
     }
 
-    @SuppressLint("MissingPermission")
+
     private fun updateLocationTracking(isTracking: Boolean) {
         if (isTracking) {
             if (TrackingUtility.hasLocationPermissions(this)) {
-                val request = LocationRequest().apply {
-                    interval = LOCATION_UPDATE_INTERVAL
-                    fastestInterval = FASTEST_LOCATION_INTERVAL
-                    priority = PRIORITY_HIGH_ACCURACY
+                val request = LocationRequest.Builder(
+                    Priority.PRIORITY_HIGH_ACCURACY,
+                    LOCATION_UPDATE_INTERVAL
+                )
+                    .setMinUpdateIntervalMillis(FASTEST_LOCATION_INTERVAL)
+                    .build()
+
+                if (ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    return
                 }
                 fusedLocationProviderClient.requestLocationUpdates(
                     request,
@@ -229,7 +242,7 @@ class TrackingService : LifecycleService() {
         override fun onLocationResult(result: LocationResult) {
             super.onLocationResult(result)
             if (isTracking.value!!) {
-                result?.locations?.let { locations ->
+                result.locations.let { locations ->
                     for (location in locations) {
                         addPathPoint(location)
                         Timber.d("New location : ${location.latitude}, ${location.longitude}")
@@ -269,14 +282,13 @@ class TrackingService : LifecycleService() {
 
         timeRunInSecond.observe(
             this,
-            Observer {
-                if (!servieKilled) {
-                    val notification = currentNotificationBuilder
-                        .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
-                    notificationManager.notify(NOTIFICATION_ID, notification.build())
-                }
-            },
-        )
+        ) {
+            if (!serviceKilled) {
+                val notification = currentNotificationBuilder
+                    .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
+                notificationManager.notify(NOTIFICATION_ID, notification.build())
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -11,6 +11,7 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
     id("com.google.firebase.appdistribution")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -25,6 +26,7 @@ android {
         versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables { useSupportLibrary = true }
     }
 
     buildTypes {
@@ -52,19 +54,22 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = "1.8"
         freeCompilerArgs += listOf(
             "-Xcontext-receivers",
         )
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
+
+    packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
 }
 
 dependencies {
     implementation(fileTree("src/main/libs") { include("*.jar") })
-    // implementation(libs.kotlin)
+
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.constrainLayout)
@@ -132,6 +137,19 @@ dependencies {
     implementation("com.google.firebase:firebase-perf-ktx")
     implementation("com.google.firebase:firebase-config-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx")
+
+    // Compose
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(libs.navigation.compose)
+}
+
+composeCompiler {
+    enableStrongSkippingMode = true
 }
 
 kapt {

@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
-        binding.bottomNavigationView.setOnNavigationItemReselectedListener { /* No operation */ }
+        binding.bottomNavigationView.setOnItemReselectedListener {}
         binding.bottomNavigationView.background = null
         binding.bottomNavigationView.menu.getItem(1).isEnabled = false
         binding.bottomNavigationView.itemIconTintList = null
