@@ -3,7 +3,7 @@ import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 plugins {
     id("com.android.application")
     id("kotlin-parcelize")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.android")
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.dagger.hilt.android")
@@ -82,7 +82,7 @@ dependencies {
 
     // Room
     implementation("androidx.room:room-ktx:2.6.0")
-    kapt("androidx.room:room-compiler:2.6.0")
+    ksp("androidx.room:room-compiler:2.6.0")
     implementation("androidx.room:room-paging:2.6.0")
 
     // Coroutines
@@ -97,7 +97,7 @@ dependencies {
 
     // Glide
     implementation(libs.glide)
-    kapt(libs.glide.compiler)
+    ksp(libs.glide.compiler)
 
     // Google Maps Location Services
     implementation(libs.google.play.service.maps)
@@ -105,8 +105,8 @@ dependencies {
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.50")
-    kapt("com.google.dagger:hilt-compiler:2.50")
-    kapt("androidx.hilt:hilt-compiler:1.1.0")
+    ksp("com.google.dagger:hilt-compiler:2.50")
+    ksp("androidx.hilt:hilt-compiler:1.1.0")
 
     // Activity KTX for viewModels()
     implementation(libs.androidx.activity.ktx)
@@ -150,8 +150,4 @@ dependencies {
 
 composeCompiler {
     enableStrongSkippingMode = true
-}
-
-kapt {
-    correctErrorTypes = true
 }
