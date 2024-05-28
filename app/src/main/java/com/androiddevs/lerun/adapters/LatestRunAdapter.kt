@@ -1,18 +1,17 @@
 package com.androiddevs.lerun.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.androiddevs.lerun.R
+import com.androiddevs.lerun.databinding.NewItemRunBinding
 import com.androiddevs.lerun.db.Run
 import com.androiddevs.lerun.utils.TrackingUtility
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.new_item_run.view.*
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHolder>() {
 
@@ -22,42 +21,43 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
         onItemClickListener = listener
     }
 
-    inner class LatestRunViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class LatestRunViewHolder(val binding: NewItemRunBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LatestRunViewHolder {
         return LatestRunViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.new_item_run,
+            NewItemRunBinding.inflate(
+                LayoutInflater.from(parent.context),
                 parent,
-                false
-            )
+                false,
+            ),
         )
     }
 
     override fun onBindViewHolder(holder: LatestRunViewHolder, position: Int) {
         val run = differ.currentList[position]
-        holder.itemView.apply {
+        with(holder) {
             // img
-            Glide.with(this).load(run.img).into(ivRunImage)
+            Glide.with(holder.itemView.context).load(run.img).into(binding.ivRunImage)
 
             // date
             val calendar = Calendar.getInstance().apply {
                 timeInMillis = run.timestamp
             }
             val dateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
-            tvDate.text = dateFormat.format(calendar.time)
+            binding.tvDate.text = dateFormat.format(calendar.time)
 
             val title = run.title
-            tvTitleRun.text = title
+            binding.tvTitleRun.text = title
 
             // distance
             val distanceInKm = "${run.distanceInMeters / 1000f} Km"
-            tvDistance.text = distanceInKm
+            binding.tvDistance.text = distanceInKm
 
             // time
-            tvTime.text = TrackingUtility.getFormattedStopWatchTime(run.timeInMillis)
+            binding.tvTime.text = TrackingUtility.getFormattedStopWatchTime(run.timeInMillis)
 
-            setOnClickListener {
+            itemView.setOnClickListener {
                 onItemClickListener?.let {
                     it(run)
                 }
@@ -65,7 +65,7 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
         }
     }
 
-    val diffCallback = object : DiffUtil.ItemCallback<Run>() {
+    private val diffCallback = object : DiffUtil.ItemCallback<Run>() {
         override fun areItemsTheSame(oldItem: Run, newItem: Run): Boolean {
             return oldItem.id == newItem.id
         }

@@ -8,16 +8,19 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentTrackingBinding
@@ -31,25 +34,25 @@ import com.androiddevs.lerun.utils.Constants.ACTION_STOP_SERVICE
 import com.androiddevs.lerun.utils.Constants.MAP_CAMERA_ZOOM
 import com.androiddevs.lerun.utils.Constants.POLYLINE_WIDTH
 import com.androiddevs.lerun.utils.TrackingUtility
+import com.androiddevs.lerun.utils.toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_tracking.*
-import kotlinx.android.synthetic.main.new_activity_main.*
-import java.util.*
+import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.round
 
-const val CANCEL_TRACKING_DIALOG_TAG = "CancelDialog"
 
 @AndroidEntryPoint
 class TrackingFragment :
@@ -57,6 +60,10 @@ class TrackingFragment :
     OnMapReadyCallback,
     GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener {
+
+    companion object {
+        const val CANCEL_TRACKING_DIALOG_TAG = "CancelDialog"
+    }
 
     private var _binding: FragmentTrackingBinding? = null
     private val binding get() = _binding!!
@@ -80,11 +87,11 @@ class TrackingFragment :
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        savedInstanceState: Bundle?,
+    ): View {
         _binding = FragmentTrackingBinding.inflate(inflater, container, false)
         val view = binding.root
-        setHasOptionsMenu(true)
+        setMenuVisibility(true)
         return view
     }
 
@@ -97,7 +104,7 @@ class TrackingFragment :
 
         if (savedInstanceState != null) {
             val cancelTrackingDialog = parentFragmentManager.findFragmentByTag(
-                CANCEL_TRACKING_DIALOG_TAG
+                CANCEL_TRACKING_DIALOG_TAG,
             ) as CancelTrackingDialog?
 
             cancelTrackingDialog?.setYesListener {
@@ -191,34 +198,26 @@ class TrackingFragment :
     }
 
     private fun subscribeToObservers() {
-        TrackingService.isTracking.observe(
-            viewLifecycleOwner,
-            Observer {
-                updateTracking(it)
-            }
-        )
+        TrackingService.isTracking.observe(viewLifecycleOwner) {
+            updateTracking(it)
+        }
 
-        TrackingService.pathPoint.observe(
-            viewLifecycleOwner,
-            Observer {
-                pathPoints = it
-                addLatestPolyline()
-                moveCameraToUser()
-            }
-        )
+        TrackingService.pathPoint.observe(viewLifecycleOwner) {
+            pathPoints = it
+            addLatestPolyline()
+            moveCameraToUser()
+        }
 
-        TrackingService.timeRunInMillis.observe(
-            viewLifecycleOwner,
-            Observer {
-                currentTimeMillis = it
-                val formattedTime = TrackingUtility.getFormattedStopWatchTime(currentTimeMillis, true)
-                binding.tvTimer.text = formattedTime
+        TrackingService.timeRunInMillis.observe(viewLifecycleOwner) {
+            currentTimeMillis = it
+            val formattedTime =
+                TrackingUtility.getFormattedStopWatchTime(currentTimeMillis, true)
+            binding.tvTimer.text = formattedTime
 
-                if (currentTimeMillis > 0L) {
-                    binding.cardCancelRun!!.visibility = View.VISIBLE
-                }
+            if (currentTimeMillis > 0L) {
+                binding.cardCancelRun!!.visibility = View.VISIBLE
             }
-        )
+        }
     }
 
     private fun toggleRun() {
@@ -273,8 +272,8 @@ class TrackingFragment :
             binding.icBtnStart?.setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),
-                    R.drawable.ic_play
-                )
+                    R.drawable.ic_play,
+                ),
             )
             binding.btnFinishRun.visibility = View.VISIBLE
         } else if (isTracking) {
@@ -282,8 +281,8 @@ class TrackingFragment :
             binding.icBtnStart?.setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),
-                    R.drawable.ic_stop
-                )
+                    R.drawable.ic_stop,
+                ),
             )
             menu?.getItem(0)?.isVisible = true
             binding.btnFinishRun.visibility = View.GONE
@@ -295,8 +294,8 @@ class TrackingFragment :
             map?.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     pathPoints.last().last(),
-                    MAP_CAMERA_ZOOM
-                )
+                    MAP_CAMERA_ZOOM,
+                ),
             )
         }
     }
@@ -312,10 +311,10 @@ class TrackingFragment :
         map?.moveCamera(
             CameraUpdateFactory.newLatLngBounds(
                 bounds.build(),
-                mapView.width,
-                mapView.height,
-                (mapView.height * 0.05f).toInt()
-            )
+                binding.mapView.width,
+                binding.mapView.height,
+                (binding.mapView.height * 0.05f).toInt(),
+            ),
         )
     }
 
@@ -339,14 +338,14 @@ class TrackingFragment :
                 averageSpeed,
                 distanceInMeters,
                 currentTimeMillis,
-                caloriesBurned
+                caloriesBurned,
             )
             viewModel.insertRun(run)
 
             Snackbar.make(
-                requireActivity().rootView,
+                requireActivity().findViewById(R.id.rootView),
                 "Run saved successfully",
-                Snackbar.LENGTH_LONG
+                Snackbar.LENGTH_LONG,
             ).show()
 
             stopRun()
@@ -418,17 +417,17 @@ class TrackingFragment :
         binding.mapView.onSaveInstanceState(outState)
     }
 
-    override fun onMapReady(googleMap: GoogleMap?) {
+    override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map?.let { loadTheme(it) }
 
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+            ) != PackageManager.PERMISSION_GRANTED
         ) {
             return
         }
@@ -444,7 +443,7 @@ class TrackingFragment :
                     val myLocation = LatLng(location.latitude, location.longitude)
                     map?.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16f))
                 } catch (e: Exception) {
-                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                    e.message?.toast()
                 }
             }
     }
@@ -455,8 +454,8 @@ class TrackingFragment :
                 googleMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                         requireActivity(),
-                        R.raw.style_json
-                    )
+                        R.raw.style_json,
+                    ),
                 )
 
             if (!isSuccess) {

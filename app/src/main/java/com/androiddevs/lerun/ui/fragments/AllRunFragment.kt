@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androiddevs.lerun.adapters.RunAdapter
 import com.androiddevs.lerun.databinding.FragmentAllRunBinding
@@ -18,16 +17,13 @@ class AllRunFragment : Fragment() {
 
     private var _binding: FragmentAllRunBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var runAdapter: RunAdapter
-
-    // main view model
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentAllRunBinding.inflate(inflater, container, false)
         return binding.root
@@ -35,9 +31,11 @@ class AllRunFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRecyclerView()
+        observe()
+    }
 
+    private fun observe() {
         viewModel.runs.observe(viewLifecycleOwner) { list ->
             runAdapter.submitList(list)
         }
@@ -47,5 +45,10 @@ class AllRunFragment : Fragment() {
         runAdapter = RunAdapter()
         adapter = runAdapter
         layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

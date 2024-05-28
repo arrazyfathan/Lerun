@@ -18,5 +18,9 @@
     <string name="run_deatail_label">Run Detail</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="google_maps_key">Your API Keys</string>
+    <string name="google_maps_key">AIzaSyCW8UKiFCeuL_UMbsUXoL_IT7JJn8Q8Pjk</string>
+    <string name="good_morning">Good Morning</string>
+    <string name="good_afternoon">Good Afternoon</string>
+    <string name="good_evening">Good Evening</string>
+    <string name="good_night">Good Night</string>
 </resources>

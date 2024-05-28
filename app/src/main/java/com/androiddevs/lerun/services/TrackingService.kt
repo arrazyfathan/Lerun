@@ -33,6 +33,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -78,14 +79,14 @@ class TrackingService : LifecycleService() {
         super.onCreate()
         currentNotificationBuilder = baseNotificationBuilder
         postInitialValues()
-        fusedLocationProviderClient = FusedLocationProviderClient(this)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         isTracking.observe(
             this,
             Observer {
                 updateLocationTracking(it)
                 updateNotificationTrackingState(it)
-            }
+            },
         )
     }
 
@@ -110,14 +111,17 @@ class TrackingService : LifecycleService() {
                         startTimer()
                     }
                 }
+
                 ACTION_PAUSE_SERVICE -> {
                     Timber.d("Paused Service")
                     pauseService()
                 }
+
                 ACTION_STOP_SERVICE -> {
                     Timber.d("Stopped Service")
                     killService()
                 }
+
                 else -> {
                 }
             }
@@ -213,7 +217,7 @@ class TrackingService : LifecycleService() {
                 fusedLocationProviderClient.requestLocationUpdates(
                     request,
                     locationCallback,
-                    Looper.getMainLooper()
+                    Looper.getMainLooper(),
                 )
             }
         } else {
@@ -221,8 +225,8 @@ class TrackingService : LifecycleService() {
         }
     }
 
-    val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(result: LocationResult?) {
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(result: LocationResult) {
             super.onLocationResult(result)
             if (isTracking.value!!) {
                 result?.locations?.let { locations ->
@@ -261,14 +265,6 @@ class TrackingService : LifecycleService() {
             createNotificationChannel(notificationManager)
         }
 
-        /*val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-            .setAutoCancel(false)
-            .setOngoing(true)
-            .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
-            .setContentTitle("Lerun")
-            .setContentText("00:00:00")
-            .setContentIntent(getMainActivityPendingIntent())*/
-
         startForeground(NOTIFICATION_ID, baseNotificationBuilder.build())
 
         timeRunInSecond.observe(
@@ -279,26 +275,16 @@ class TrackingService : LifecycleService() {
                         .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
                     notificationManager.notify(NOTIFICATION_ID, notification.build())
                 }
-            }
+            },
         )
     }
-
-    /*private fun getMainActivityPendingIntent() = PendingIntent.getActivity(
-        this,
-        0,
-        Intent(this, MainActivity::class.java).also {
-            it.action = ACTION_SHOW_TRACKING_FRAGMENT
-
-        },
-        FLAG_UPDATE_CURRENT
-    )*/
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(notificationManager: NotificationManager) {
         val channel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
             NOTIFICATION_CHANNEL_NAME,
-            IMPORTANCE_LOW
+            IMPORTANCE_LOW,
         )
 
         notificationManager.createNotificationChannel(channel)

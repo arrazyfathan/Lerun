@@ -1,10 +1,13 @@
 package com.androiddevs.lerun.ui.viewmodels
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.androiddevs.lerun.repositories.MainRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class StatisticViewModel @ViewModelInject constructor(
+
+@HiltViewModel
+class StatisticViewModel @Inject constructor(
     val repository: MainRepository
 ) : ViewModel() {
 

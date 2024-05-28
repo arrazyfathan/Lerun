@@ -1,9 +1,5 @@
 package com.androiddevs.lerun.utils
 
-import android.graphics.Color
-import androidx.core.content.ContextCompat
-import com.androiddevs.lerun.R
-
 object Constants {
 
     // name db

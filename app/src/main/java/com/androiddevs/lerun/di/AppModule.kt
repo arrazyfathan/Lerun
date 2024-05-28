@@ -13,22 +13,22 @@ import com.androiddevs.lerun.utils.Constants.SHARED_PREFERENCES_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 object AppModule {
 
     @Singleton
     @Provides
     fun provideRunningDatabase(
-        @ApplicationContext app: Context
+        @ApplicationContext app: Context,
     ) = Room.databaseBuilder(
         app,
         RunningDatabase::class.java,
-        RUNNING_DATABASE_NAME
+        RUNNING_DATABASE_NAME,
     ).build()
 
     @Singleton
