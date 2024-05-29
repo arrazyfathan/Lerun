@@ -20,7 +20,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
     @Singleton
     @Provides
     fun provideRunningDatabase(
@@ -37,8 +36,9 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideSharedPreferences(@ApplicationContext app: Context) =
-        app.getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE)
+    fun provideSharedPreferences(
+        @ApplicationContext app: Context,
+    ) = app.getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE)
 
     @Singleton
     @Provides
@@ -50,6 +50,5 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideFirstTimeToggle(sharedPref: SharedPreferences) =
-        sharedPref.getBoolean(KEY_FIRST_TIME_TOGGLE, true)
+    fun provideFirstTimeToggle(sharedPref: SharedPreferences) = sharedPref.getBoolean(KEY_FIRST_TIME_TOGGLE, true)
 }

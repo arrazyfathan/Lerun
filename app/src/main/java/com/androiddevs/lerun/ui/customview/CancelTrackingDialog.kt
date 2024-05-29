@@ -7,7 +7,6 @@ import com.androiddevs.lerun.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class CancelTrackingDialog : DialogFragment() {
-
     private var yesListener: (() -> Unit)? = null
 
     fun setYesListener(listener: () -> Unit) {

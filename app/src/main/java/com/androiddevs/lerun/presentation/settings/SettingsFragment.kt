@@ -28,7 +28,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
-
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
@@ -46,7 +45,10 @@ class SettingsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars())
@@ -80,35 +82,59 @@ class SettingsFragment : Fragment() {
         name.setText(nameSharedPref)
         weight.setText(weightSharedPref.toString())
 
-        name.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (p0.isNullOrEmpty() || p0.isBlank()) {
-                    validation.visibility = View.VISIBLE
+        name.addTextChangedListener(
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    p0: CharSequence?,
+                    p1: Int,
+                    p2: Int,
+                    p3: Int,
+                ) {
+                    if (p0.isNullOrEmpty() || p0.isBlank()) {
+                        validation.visibility = View.VISIBLE
+                    }
                 }
-            }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                validation.visibility = View.GONE
-            }
-        })
-
-        weight.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (p0.isNullOrEmpty() || p0.isBlank()) {
-                    validation.visibility = View.VISIBLE
+                override fun onTextChanged(
+                    p0: CharSequence?,
+                    p1: Int,
+                    p2: Int,
+                    p3: Int,
+                ) {
                 }
-            }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
+                override fun afterTextChanged(p0: Editable?) {
+                    validation.visibility = View.GONE
+                }
+            },
+        )
 
-            override fun afterTextChanged(p0: Editable?) {
-                validation.visibility = View.GONE
-            }
-        })
+        weight.addTextChangedListener(
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    p0: CharSequence?,
+                    p1: Int,
+                    p2: Int,
+                    p3: Int,
+                ) {
+                    if (p0.isNullOrEmpty() || p0.isBlank()) {
+                        validation.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onTextChanged(
+                    p0: CharSequence?,
+                    p1: Int,
+                    p2: Int,
+                    p3: Int,
+                ) {
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    validation.visibility = View.GONE
+                }
+            },
+        )
 
         btnApply.setOnClickListener {
             if (name.text.isBlank() || name.text.isNullOrEmpty() || weight.text.isBlank() || weight.text.isNullOrEmpty()) {

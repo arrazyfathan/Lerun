@@ -21,7 +21,6 @@ import kotlin.math.round
 
 @AndroidEntryPoint
 class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
-
     private val viewModel: StatisticViewModel by viewModels()
 
     private var _binding: FragmentStatisticsBinding? = null
@@ -36,7 +35,10 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         subscribeObservers()
@@ -119,14 +121,16 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
             viewLifecycleOwner,
             Observer {
                 it?.let {
-                    val allAverageSpeed = it.indices.map { i ->
-                        BarEntry(i.toFloat(), it[i].avgSpeedInKMH)
-                    }
+                    val allAverageSpeed =
+                        it.indices.map { i ->
+                            BarEntry(i.toFloat(), it[i].avgSpeedInKMH)
+                        }
 
-                    val barDataSet = BarDataSet(allAverageSpeed, "Average Speed Over Time").apply {
-                        valueTextColor = Color.WHITE
-                        color = ContextCompat.getColor(requireContext(), R.color.colorAccent)
-                    }
+                    val barDataSet =
+                        BarDataSet(allAverageSpeed, "Average Speed Over Time").apply {
+                            valueTextColor = Color.WHITE
+                            color = ContextCompat.getColor(requireContext(), R.color.colorAccent)
+                        }
 
                     binding.barChart.data = BarData(barDataSet)
                     // binding.barChart.marker = CustomMarkerView(it.reversed(), requireContext(), R.layout.marker_view)

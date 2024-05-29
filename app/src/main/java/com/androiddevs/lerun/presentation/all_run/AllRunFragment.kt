@@ -14,7 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AllRunFragment : Fragment() {
-
     private var _binding: FragmentAllRunBinding? = null
     private val binding get() = _binding!!
     private lateinit var runAdapter: RunAdapter
@@ -29,7 +28,10 @@ class AllRunFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         observe()
@@ -41,11 +43,12 @@ class AllRunFragment : Fragment() {
         }
     }
 
-    private fun setupRecyclerView() = binding.rvAllRuns.apply {
-        runAdapter = RunAdapter()
-        adapter = runAdapter
-        layoutManager = LinearLayoutManager(requireContext())
-    }
+    private fun setupRecyclerView() =
+        binding.rvAllRuns.apply {
+            runAdapter = RunAdapter()
+            adapter = runAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
 
     override fun onDestroy() {
         super.onDestroy()

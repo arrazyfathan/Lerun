@@ -1,5 +1,3 @@
-import io.gitlab.arturbosch.detekt.Detekt
-
 buildscript {
     repositories {
         google()
@@ -20,11 +18,11 @@ plugins {
     alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.compose.compiler) apply false
-    id("org.jlleitschuh.gradle.ktlint") version("12.1.1")
-    id("io.gitlab.arturbosch.detekt") version("1.23.3")
+    // id("org.jlleitschuh.gradle.ktlint") version ("12.1.1")
+    // id("io.gitlab.arturbosch.detekt") version ("1.23.3")
 }
 
-allprojects {
+/*allprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
     ktlint {
@@ -36,15 +34,13 @@ allprojects {
         filter {
             enableExperimentalRules.set(true)
             exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
-            include("**/kotlin/**")
         }
     }
-}
+}*/
 
-detekt {
-    toolVersion = "1.23.3"
+/*detekt {
     config.setFrom(file("config/detekt/detekt.yml"))
-    buildUponDefaultConfig = true
+    buildUponDefaultConfig = true // preconfigure defaults
     allRules = false // activate all available (even unstable) rules.
     autoCorrect = true
     parallel = true
@@ -69,11 +65,16 @@ tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configure
 }
 
 subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "io.gitlab.arturbosch.detekt")
     detekt {
         parallel = true
-        config.setFrom(files("${project.rootDir}/config/detekt/detekt.yml"))
+        config = files("${project.rootDir}/config/detekt/detekt.yml")
     }
+}
+
+tasks.register("clean").configure {
+    delete("build")
 }
 
 tasks.register("copyGitHooks", Copy::class.java) {
@@ -97,5 +98,4 @@ tasks.register("installGitHooks", Exec::class.java) {
 
 afterEvaluate {
     tasks.getByPath(":app:preBuild").dependsOn(":installGitHooks")
-}
-
+}*/

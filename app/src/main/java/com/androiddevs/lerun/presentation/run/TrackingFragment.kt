@@ -22,11 +22,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.androiddevs.lerun.R
-import com.androiddevs.lerun.databinding.FragmentTrackingBinding
 import com.androiddevs.lerun.data.local.db.Run
+import com.androiddevs.lerun.databinding.FragmentTrackingBinding
+import com.androiddevs.lerun.presentation.home.MainViewModel
 import com.androiddevs.lerun.services.Polyline
 import com.androiddevs.lerun.services.TrackingService
-import com.androiddevs.lerun.presentation.home.MainViewModel
 import com.androiddevs.lerun.ui.customview.CancelTrackingDialog
 import com.androiddevs.lerun.utils.Constants.ACTION_PAUSE_SERVICE
 import com.androiddevs.lerun.utils.Constants.ACTION_START_OR_RESUME_SERVICE
@@ -53,14 +53,12 @@ import java.util.Calendar
 import javax.inject.Inject
 import kotlin.math.round
 
-
 @AndroidEntryPoint
 class TrackingFragment :
     Fragment(),
     OnMapReadyCallback,
     GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener {
-
     companion object {
         const val CANCEL_TRACKING_DIALOG_TAG = "CancelDialog"
     }
@@ -95,7 +93,10 @@ class TrackingFragment :
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
 
@@ -103,9 +104,10 @@ class TrackingFragment :
             LocationServices.getFusedLocationProviderClient(requireActivity())
 
         if (savedInstanceState != null) {
-            val cancelTrackingDialog = parentFragmentManager.findFragmentByTag(
-                CANCEL_TRACKING_DIALOG_TAG,
-            ) as CancelTrackingDialog?
+            val cancelTrackingDialog =
+                parentFragmentManager.findFragmentByTag(
+                    CANCEL_TRACKING_DIALOG_TAG,
+                ) as CancelTrackingDialog?
 
             cancelTrackingDialog?.setYesListener {
                 stopRun()
@@ -162,20 +164,32 @@ class TrackingFragment :
         calories.text = caloriesBurned.toString()
         speed.text = averageSpeed.toString()
 
-        tvName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (p0.isNullOrEmpty() || p0.isBlank()) {
-                    validation.visibility = View.VISIBLE
+        tvName.addTextChangedListener(
+            object : TextWatcher {
+                override fun beforeTextChanged(
+                    p0: CharSequence?,
+                    p1: Int,
+                    p2: Int,
+                    p3: Int,
+                ) {
+                    if (p0.isNullOrEmpty() || p0.isBlank()) {
+                        validation.visibility = View.VISIBLE
+                    }
                 }
-            }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
+                override fun onTextChanged(
+                    p0: CharSequence?,
+                    p1: Int,
+                    p2: Int,
+                    p3: Int,
+                ) {
+                }
 
-            override fun afterTextChanged(p0: Editable?) {
-                validation.visibility = View.GONE
-            }
-        })
+                override fun afterTextChanged(p0: Editable?) {
+                    validation.visibility = View.GONE
+                }
+            },
+        )
 
         btnSave.setOnClickListener {
             if (tvName.text.isBlank() || tvName.text.isNullOrEmpty()) {
@@ -229,7 +243,10 @@ class TrackingFragment :
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    override fun onCreateOptionsMenu(
+        menu: Menu,
+        inflater: MenuInflater,
+    ) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.toolbar_tracking_menu, menu)
         this.menu = menu
@@ -331,15 +348,16 @@ class TrackingFragment :
             val dateTimeStamp = Calendar.getInstance().timeInMillis
             val caloriesBurned = ((distanceInMeters / 1000f) * weight).toInt()
 
-            val run = Run(
-                bitmap,
-                title,
-                dateTimeStamp,
-                averageSpeed,
-                distanceInMeters,
-                currentTimeMillis,
-                caloriesBurned,
-            )
+            val run =
+                Run(
+                    bitmap,
+                    title,
+                    dateTimeStamp,
+                    averageSpeed,
+                    distanceInMeters,
+                    currentTimeMillis,
+                    caloriesBurned,
+                )
             viewModel.insertRun(run)
 
             Snackbar.make(
@@ -354,10 +372,11 @@ class TrackingFragment :
 
     private fun addAllPolylines() {
         for (polyline in pathPoints) {
-            val polylineOptions = PolylineOptions()
-                .color(ContextCompat.getColor(requireContext(), R.color.ijo))
-                .width(POLYLINE_WIDTH)
-                .addAll(polyline)
+            val polylineOptions =
+                PolylineOptions()
+                    .color(ContextCompat.getColor(requireContext(), R.color.ijo))
+                    .width(POLYLINE_WIDTH)
+                    .addAll(polyline)
             map?.addPolyline(polylineOptions)
         }
     }
@@ -367,11 +386,12 @@ class TrackingFragment :
             val preLastLatLng = pathPoints.last()[pathPoints.last().size - 2]
             val lastLatLng = pathPoints.last().last()
 
-            val polylineOption = PolylineOptions()
-                .color(ContextCompat.getColor(requireContext(), R.color.ijo))
-                .width(POLYLINE_WIDTH)
-                .add(preLastLatLng)
-                .add(lastLatLng)
+            val polylineOption =
+                PolylineOptions()
+                    .color(ContextCompat.getColor(requireContext(), R.color.ijo))
+                    .width(POLYLINE_WIDTH)
+                    .add(preLastLatLng)
+                    .add(lastLatLng)
             map?.addPolyline(polylineOption)
         }
     }

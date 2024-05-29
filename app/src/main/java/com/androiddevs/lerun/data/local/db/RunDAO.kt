@@ -9,7 +9,6 @@ import androidx.room.Query
 
 @Dao
 interface RunDAO {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRun(run: Run)
 

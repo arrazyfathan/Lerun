@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androiddevs.lerun.R
-import com.androiddevs.lerun.databinding.ItemRunExpandableBinding
 import com.androiddevs.lerun.data.local.db.Run
+import com.androiddevs.lerun.databinding.ItemRunExpandableBinding
 import com.androiddevs.lerun.utils.TrackingUtility
 import com.androiddevs.lerun.utils.changeBackgroundColor
 import com.androiddevs.lerun.utils.changeTextColor
@@ -21,11 +21,13 @@ import java.util.Calendar
 import java.util.Locale
 
 class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
-
     inner class RunViewHolder(val binding: ItemRunExpandableBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RunViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): RunViewHolder {
         return RunViewHolder(
             ItemRunExpandableBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -35,16 +37,20 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
         )
     }
 
-    override fun onBindViewHolder(holder: RunViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: RunViewHolder,
+        position: Int,
+    ) {
         val run = differ.currentList[position]
         with(holder) {
             Glide.with(holder.itemView.context).load(run.img).into(binding.ivRunImageExpand)
 
             binding.tvTitleRun.text = run.title
 
-            val calendar = Calendar.getInstance().apply {
-                timeInMillis = run.timestamp
-            }
+            val calendar =
+                Calendar.getInstance().apply {
+                    timeInMillis = run.timestamp
+                }
             val dateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
             binding.tvDateExpand.text = dateFormat.format(calendar.time)
 
@@ -117,15 +123,22 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
 
     override fun getItemCount(): Int = differ.currentList.size
 
-    private val diffCallback = object : DiffUtil.ItemCallback<Run>() {
-        override fun areItemsTheSame(oldItem: Run, newItem: Run): Boolean {
-            return oldItem.id == newItem.id
-        }
+    private val diffCallback =
+        object : DiffUtil.ItemCallback<Run>() {
+            override fun areItemsTheSame(
+                oldItem: Run,
+                newItem: Run,
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
 
-        override fun areContentsTheSame(oldItem: Run, newItem: Run): Boolean {
-            return oldItem.hashCode() == newItem.hashCode()
+            override fun areContentsTheSame(
+                oldItem: Run,
+                newItem: Run,
+            ): Boolean {
+                return oldItem.hashCode() == newItem.hashCode()
+            }
         }
-    }
 
     private val differ = AsyncListDiffer(this, diffCallback)
 

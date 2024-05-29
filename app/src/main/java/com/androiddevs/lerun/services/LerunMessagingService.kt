@@ -18,7 +18,6 @@ import com.google.firebase.messaging.RemoteMessage
  */
 
 class LerunMessagingService : FirebaseMessagingService() {
-
     companion object {
         private const val TAG = "LerunMessagingService"
         private const val FIREBASE_CHANNEL_ID = "firebase_channel_id"
@@ -39,33 +38,36 @@ class LerunMessagingService : FirebaseMessagingService() {
     private fun sendNotification(messageBody: String) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            0, /* Request code */
-            intent,
-            PendingIntent.FLAG_IMMUTABLE,
-        )
+        val pendingIntent =
+            PendingIntent.getActivity(
+                this,
+                0, // Request code
+                intent,
+                PendingIntent.FLAG_IMMUTABLE,
+            )
 
         val channelId = FIREBASE_CHANNEL_ID
         // ngtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_run)
-            .setContentTitle("Lerun")
-            .setContentText(messageBody)
-            .setAutoCancel(true)
-            // .setSound(defaultSoundUri)
-            .setContentIntent(pendingIntent)
+        val notificationBuilder =
+            NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.ic_run)
+                .setContentTitle("Lerun")
+                .setContentText(messageBody)
+                .setAutoCancel(true)
+                // .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent)
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Channel human readable title",
-                NotificationManager.IMPORTANCE_HIGH,
-            )
+            val channel =
+                NotificationChannel(
+                    channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_HIGH,
+                )
             notificationManager.createNotificationChannel(channel)
         }
 

@@ -31,7 +31,6 @@ import kotlin.math.round
 
 @AndroidEntryPoint
 class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionCallbacks {
-
     private val binding by viewBinding(FragmentRunBinding::bind)
     private val viewModel: MainViewModel by viewModels()
     private val statsModel: StatisticViewModel by viewModels()
@@ -49,7 +48,10 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
         binding.lets.text = titleFromRemoteConfig
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         changeBannerTitle()
         setBlurred()
@@ -66,24 +68,25 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
             SortType.CALORIES_BURNED -> binding.spFilter.setSelection(4)
         }
 
-        binding.spFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
+        binding.spFilter.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
 
-            override fun onItemSelected(
-                adapterView: AdapterView<*>?,
-                view: View?,
-                pos: Int,
-                id: Long,
-            ) {
-                when (pos) {
-                    0 -> viewModel.sortRuns(SortType.DATE)
-                    1 -> viewModel.sortRuns(SortType.RUNNING_TIME)
-                    2 -> viewModel.sortRuns(SortType.DISTANCE)
-                    3 -> viewModel.sortRuns(SortType.AVG_SPEED)
-                    4 -> viewModel.sortRuns(SortType.CALORIES_BURNED)
+                override fun onItemSelected(
+                    adapterView: AdapterView<*>?,
+                    view: View?,
+                    pos: Int,
+                    id: Long,
+                ) {
+                    when (pos) {
+                        0 -> viewModel.sortRuns(SortType.DATE)
+                        1 -> viewModel.sortRuns(SortType.RUNNING_TIME)
+                        2 -> viewModel.sortRuns(SortType.DISTANCE)
+                        3 -> viewModel.sortRuns(SortType.AVG_SPEED)
+                        4 -> viewModel.sortRuns(SortType.CALORIES_BURNED)
+                    }
                 }
             }
-        }
 
         subscribeObservers()
 
@@ -107,16 +110,16 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
         }
 
         latestRunAdapter.setOnClickListener {
-            val bundle = Bundle().apply {
-                putSerializable("latestrun", it)
-            }
+            val bundle =
+                Bundle().apply {
+                    putSerializable("latestrun", it)
+                }
             findNavController().navigate(
                 R.id.action_runFragment_to_detailRunFragment,
                 bundle,
             )
         }
     }
-
 
     private fun setBlurred() {
         val radius = 25f
@@ -192,11 +195,12 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
         }
     }
 
-    private fun setupRecyclerView() = binding.rvRuns.apply {
-        latestRunAdapter = LatestRunAdapter()
-        adapter = latestRunAdapter
-        layoutManager = LinearLayoutManager(requireContext())
-    }
+    private fun setupRecyclerView() =
+        binding.rvRuns.apply {
+            latestRunAdapter = LatestRunAdapter()
+            adapter = latestRunAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
 
     private fun requestPermissions() {
         if (TrackingUtility.hasLocationPermissions(requireContext())) {
@@ -222,9 +226,15 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
         }
     }
 
-    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {}
+    override fun onPermissionsGranted(
+        requestCode: Int,
+        perms: MutableList<String>,
+    ) {}
 
-    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+    override fun onPermissionsDenied(
+        requestCode: Int,
+        perms: MutableList<String>,
+    ) {
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             AppSettingsDialog.Builder(this).build().show()
         } else {

@@ -15,37 +15,41 @@ import java.util.Calendar
 import java.util.Locale
 
 class DetailRunFragment : Fragment(R.layout.fragment_detail_run) {
-
     private val binding by viewBinding(FragmentDetailRunBinding::bind)
 
     private val args: RunFragmentArgs by navArgs()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
         loadDetail()
     }
 
-    private fun loadDetail() = with(binding) {
-        val run = args.latestrun
-        titleRun.text = run.title
+    private fun loadDetail() =
+        with(binding) {
+            val run = args.latestrun
+            titleRun.text = run.title
 
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis = run.timestamp
+            val calendar =
+                Calendar.getInstance().apply {
+                    timeInMillis = run.timestamp
+                }
+            val dateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
+            dateRun.text = dateFormat.format(calendar.time)
+
+            Glide.with(requireActivity()).load(run.img).into(snapshotImage)
+
+            val distanceInKm = "${run.distanceInMeters / 1000f} Km"
+            distanceDetail.text = distanceInKm
+
+            durationDetail.text = TrackingUtility.getFormattedStopWatchTime(run.timeInMillis)
+
+            val calories = "${run.caloriesBurned}kcal"
+            caloriesDetail.text = calories
+
+            val speed = "${run.avgSpeedInKMH}km/h"
+            averageSpeedDetail.text = speed
         }
-        val dateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
-        dateRun.text = dateFormat.format(calendar.time)
-
-        Glide.with(requireActivity()).load(run.img).into(snapshotImage)
-
-        val distanceInKm = "${run.distanceInMeters / 1000f} Km"
-        distanceDetail.text = distanceInKm
-
-        durationDetail.text = TrackingUtility.getFormattedStopWatchTime(run.timeInMillis)
-
-        val calories = "${run.caloriesBurned}kcal"
-        caloriesDetail.text = calories
-
-        val speed = "${run.avgSpeedInKMH}km/h"
-        averageSpeedDetail.text = speed
-    }
 }

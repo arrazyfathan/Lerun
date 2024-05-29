@@ -49,7 +49,6 @@ typealias Polylines = MutableList<Polyline>
 
 @AndroidEntryPoint
 class TrackingService : LifecycleService() {
-
     private var isFirstRun = true
     private var serviceKilled = false
 
@@ -100,7 +99,11 @@ class TrackingService : LifecycleService() {
         stopSelf()
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onStartCommand(
+        intent: Intent?,
+        flags: Int,
+        startId: Int,
+    ): Int {
         intent?.let {
             when (it.action) {
                 ACTION_START_OR_RESUME_SERVICE -> {
@@ -165,31 +168,36 @@ class TrackingService : LifecycleService() {
 
     private fun updateNotificationTrackingState(isTracking: Boolean) {
         val notificationActionText = if (isTracking) "Pause" else "Resume"
-        val pendingIntent = if (Build.VERSION.SDK_INT >= 31) {
-            if (isTracking) {
-                val pauseIntent = Intent(this, TrackingService::class.java).apply {
-                    action = ACTION_PAUSE_SERVICE
+        val pendingIntent =
+            if (Build.VERSION.SDK_INT >= 31) {
+                if (isTracking) {
+                    val pauseIntent =
+                        Intent(this, TrackingService::class.java).apply {
+                            action = ACTION_PAUSE_SERVICE
+                        }
+                    PendingIntent.getService(this, 1, pauseIntent, FLAG_IMMUTABLE)
+                } else {
+                    val resumeIntent =
+                        Intent(this, TrackingService::class.java).apply {
+                            action = ACTION_START_OR_RESUME_SERVICE
+                        }
+                    PendingIntent.getService(this, 2, resumeIntent, FLAG_IMMUTABLE)
                 }
-                PendingIntent.getService(this, 1, pauseIntent, FLAG_IMMUTABLE)
             } else {
-                val resumeIntent = Intent(this, TrackingService::class.java).apply {
-                    action = ACTION_START_OR_RESUME_SERVICE
+                if (isTracking) {
+                    val pauseIntent =
+                        Intent(this, TrackingService::class.java).apply {
+                            action = ACTION_PAUSE_SERVICE
+                        }
+                    PendingIntent.getService(this, 1, pauseIntent, FLAG_UPDATE_CURRENT)
+                } else {
+                    val resumeIntent =
+                        Intent(this, TrackingService::class.java).apply {
+                            action = ACTION_START_OR_RESUME_SERVICE
+                        }
+                    PendingIntent.getService(this, 2, resumeIntent, FLAG_UPDATE_CURRENT)
                 }
-                PendingIntent.getService(this, 2, resumeIntent, FLAG_IMMUTABLE)
             }
-        } else {
-            if (isTracking) {
-                val pauseIntent = Intent(this, TrackingService::class.java).apply {
-                    action = ACTION_PAUSE_SERVICE
-                }
-                PendingIntent.getService(this, 1, pauseIntent, FLAG_UPDATE_CURRENT)
-            } else {
-                val resumeIntent = Intent(this, TrackingService::class.java).apply {
-                    action = ACTION_START_OR_RESUME_SERVICE
-                }
-                PendingIntent.getService(this, 2, resumeIntent, FLAG_UPDATE_CURRENT)
-            }
-        }
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -200,29 +208,30 @@ class TrackingService : LifecycleService() {
         }
 
         if (!serviceKilled) {
-            currentNotificationBuilder = baseNotificationBuilder
-                .addAction(R.drawable.ic_pause_black_24dp, notificationActionText, pendingIntent)
+            currentNotificationBuilder =
+                baseNotificationBuilder
+                    .addAction(R.drawable.ic_pause_black_24dp, notificationActionText, pendingIntent)
             notificationManager.notify(NOTIFICATION_ID, currentNotificationBuilder.build())
         }
     }
 
-
     private fun updateLocationTracking(isTracking: Boolean) {
         if (isTracking) {
             if (TrackingUtility.hasLocationPermissions(this)) {
-                val request = LocationRequest.Builder(
-                    Priority.PRIORITY_HIGH_ACCURACY,
-                    LOCATION_UPDATE_INTERVAL
-                )
-                    .setMinUpdateIntervalMillis(FASTEST_LOCATION_INTERVAL)
-                    .build()
+                val request =
+                    LocationRequest.Builder(
+                        Priority.PRIORITY_HIGH_ACCURACY,
+                        LOCATION_UPDATE_INTERVAL,
+                    )
+                        .setMinUpdateIntervalMillis(FASTEST_LOCATION_INTERVAL)
+                        .build()
 
                 if (ActivityCompat.checkSelfPermission(
                         this,
-                        Manifest.permission.ACCESS_FINE_LOCATION
+                        Manifest.permission.ACCESS_FINE_LOCATION,
                     ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                         this,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
                     return
@@ -238,19 +247,20 @@ class TrackingService : LifecycleService() {
         }
     }
 
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(result: LocationResult) {
-            super.onLocationResult(result)
-            if (isTracking.value!!) {
-                result.locations.let { locations ->
-                    for (location in locations) {
-                        addPathPoint(location)
-                        Timber.d("New location : ${location.latitude}, ${location.longitude}")
+    private val locationCallback =
+        object : LocationCallback() {
+            override fun onLocationResult(result: LocationResult) {
+                super.onLocationResult(result)
+                if (isTracking.value!!) {
+                    result.locations.let { locations ->
+                        for (location in locations) {
+                            addPathPoint(location)
+                            Timber.d("New location : ${location.latitude}, ${location.longitude}")
+                        }
                     }
                 }
             }
         }
-    }
 
     private fun addPathPoint(location: Location?) {
         location?.let {
@@ -262,10 +272,11 @@ class TrackingService : LifecycleService() {
         }
     }
 
-    private fun addEmptyPolyline() = pathPoint.value?.apply {
-        add(mutableListOf())
-        pathPoint.postValue(this)
-    } ?: pathPoint.postValue(mutableListOf(mutableListOf()))
+    private fun addEmptyPolyline() =
+        pathPoint.value?.apply {
+            add(mutableListOf())
+            pathPoint.postValue(this)
+        } ?: pathPoint.postValue(mutableListOf(mutableListOf()))
 
     private fun startForegroundService() {
         startTimer()
@@ -284,8 +295,9 @@ class TrackingService : LifecycleService() {
             this,
         ) {
             if (!serviceKilled) {
-                val notification = currentNotificationBuilder
-                    .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
+                val notification =
+                    currentNotificationBuilder
+                        .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
                 notificationManager.notify(NOTIFICATION_ID, notification.build())
             }
         }
@@ -293,11 +305,12 @@ class TrackingService : LifecycleService() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(notificationManager: NotificationManager) {
-        val channel = NotificationChannel(
-            NOTIFICATION_CHANNEL_ID,
-            NOTIFICATION_CHANNEL_NAME,
-            IMPORTANCE_LOW,
-        )
+        val channel =
+            NotificationChannel(
+                NOTIFICATION_CHANNEL_ID,
+                NOTIFICATION_CHANNEL_NAME,
+                IMPORTANCE_LOW,
+            )
 
         notificationManager.createNotificationChannel(channel)
     }

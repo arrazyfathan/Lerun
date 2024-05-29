@@ -26,7 +26,6 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     private lateinit var remoteConfig: FirebaseRemoteConfig
 
     private lateinit var binding: NewActivityMainBinding
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         generateNewToken()
         requestPermissions()
 
-        /*setSupportActionBar(toolbar)*/
+        // setSupportActionBar(toolbar)
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -96,9 +95,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRemoteConfig() {
         remoteConfig = Firebase.remoteConfig
-        val configSetting = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 60
-        }
+        val configSetting =
+            remoteConfigSettings {
+                minimumFetchIntervalInSeconds = 60
+            }
 
         remoteConfig.setConfigSettingsAsync(configSetting)
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)

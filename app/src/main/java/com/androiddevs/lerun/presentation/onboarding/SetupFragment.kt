@@ -21,7 +21,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class SetupFragment : Fragment() {
-
     private var _binding: FragmentSetupBinding? = null
     private val binding get() = _binding!!
 
@@ -42,13 +41,17 @@ class SetupFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         if (!isFirstAppOpen) {
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(R.id.setupFragment, true)
-                .build()
+            val navOptions =
+                NavOptions.Builder()
+                    .setPopUpTo(R.id.setupFragment, true)
+                    .build()
             findNavController().navigate(
                 R.id.action_setupFragment_to_runFragment,
                 savedInstanceState,
