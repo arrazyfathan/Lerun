@@ -1,12 +1,12 @@
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.android.application)
     id("kotlin-parcelize")
-    id("com.google.devtools.ksp")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.android)
     id("androidx.navigation.safeargs.kotlin")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.hilt.android)
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
@@ -81,13 +81,13 @@ dependencies {
     implementation(libs.material)
 
     // Room
-    implementation("androidx.room:room-ktx:2.6.0")
-    ksp("androidx.room:room-compiler:2.6.0")
-    implementation("androidx.room:room-paging:2.6.0")
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.paging)
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
     // Coroutine Lifecycle Scopes
     implementation(libs.bundles.androidx.lifecycle)
@@ -104,39 +104,39 @@ dependencies {
     implementation(libs.google.play.service.location)
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.50")
-    ksp("com.google.dagger:hilt-compiler:2.50")
-    ksp("androidx.hilt:hilt-compiler:1.1.0")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
 
     // Activity KTX for viewModels()
     implementation(libs.androidx.activity.ktx)
 
     // Easy Permissions
-    implementation("pub.devrel:easypermissions:3.0.0")
+    implementation(libs.easypermissions)
 
     // Timber
     implementation(libs.timber)
 
     // MPAndroidChart
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation(libs.mpandroidchart)
 
-    implementation("android.arch.lifecycle:extensions:1.1.1")
+    implementation(libs.androidx.lifecycle.service)
 
     // material dialog
-    implementation("com.afollestad.material-dialogs:core:3.3.0")
-    implementation("com.afollestad.material-dialogs:input:3.3.0")
+    implementation(libs.core)
+    implementation(libs.input)
 
     // Sticky Header
-    implementation("com.github.amarjain07:StickyScrollView:1.0.3")
+    implementation(libs.stickyscrollview)
 
-    implementation("com.github.Dimezis:BlurView:version-2.0.3")
+    implementation(libs.blurview)
 
-    implementation(platform("com.google.firebase:firebase-bom:31.1.1"))
-    implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-perf-ktx")
-    implementation("com.google.firebase:firebase-config-ktx")
-    implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.perf.ktx)
+    implementation(libs.firebase.config.ktx)
+    implementation(libs.firebase.messaging.ktx)
 
     // Compose
     implementation(libs.androidx.activity.compose)
@@ -146,6 +146,11 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.navigation.compose)
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
 
 composeCompiler {

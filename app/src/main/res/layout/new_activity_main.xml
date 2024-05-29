@@ -69,7 +69,7 @@
             android:clickable="true"
             android:contentDescription="@string/floating"
             android:focusable="true"
-            app:cardBackgroundColor="@color/ijo_tua"
+            app:cardBackgroundColor="@color/ijo"
             app:cardCornerRadius="100dp"
             app:cardElevation="10dp"
             app:strokeWidth="0dp">
@@ -78,7 +78,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_add_black" />
+                android:src="@drawable/ic_add_black"
+                app:tint="@android:color/black" />
 
         </com.google.android.material.card.MaterialCardView>
 
