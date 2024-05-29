@@ -1,4 +1,4 @@
-package com.androiddevs.lerun.ui.fragments
+package com.androiddevs.lerun.presentation.onboarding
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -11,7 +11,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentSetupBinding
-import com.androiddevs.lerun.ui.viewmodels.MainViewModel
+import com.androiddevs.lerun.presentation.home.MainViewModel
 import com.androiddevs.lerun.utils.Constants.KEY_FIRST_TIME_TOGGLE
 import com.androiddevs.lerun.utils.Constants.KEY_NAME
 import com.androiddevs.lerun.utils.Constants.KEY_WEIGHT

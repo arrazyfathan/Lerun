@@ -1,4 +1,4 @@
-package com.androiddevs.lerun.ui
+package com.androiddevs.lerun.presentation.home
 
 import android.Manifest
 import android.content.Intent

@@ -1,4 +1,4 @@
-package com.androiddevs.lerun.ui.fragments
+package com.androiddevs.lerun.presentation.all_run
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androiddevs.lerun.adapters.RunAdapter
 import com.androiddevs.lerun.databinding.FragmentAllRunBinding
-import com.androiddevs.lerun.ui.viewmodels.MainViewModel
+import com.androiddevs.lerun.presentation.home.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

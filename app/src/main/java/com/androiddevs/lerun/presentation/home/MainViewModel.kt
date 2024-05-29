@@ -1,10 +1,10 @@
-package com.androiddevs.lerun.ui.viewmodels
+package com.androiddevs.lerun.presentation.home
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.androiddevs.lerun.db.Run
-import com.androiddevs.lerun.repositories.MainRepository
+import com.androiddevs.lerun.data.local.db.Run
+import com.androiddevs.lerun.domain.repositories.MainRepository
 import com.androiddevs.lerun.utils.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

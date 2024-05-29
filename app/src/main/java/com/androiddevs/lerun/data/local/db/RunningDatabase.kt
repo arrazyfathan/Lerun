@@ -1,4 +1,4 @@
-package com.androiddevs.lerun.db
+package com.androiddevs.lerun.data.local.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.androiddevs.lerun.R
-import com.androiddevs.lerun.ui.MainActivity
+import com.androiddevs.lerun.presentation.home.MainActivity
 import com.androiddevs.lerun.utils.Constants
 import com.google.android.gms.location.LocationServices
 import dagger.Module

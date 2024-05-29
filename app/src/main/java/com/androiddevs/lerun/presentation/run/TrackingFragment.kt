@@ -1,4 +1,4 @@
-package com.androiddevs.lerun.ui.fragments
+package com.androiddevs.lerun.presentation.run
 
 import android.Manifest
 import android.content.Intent
@@ -16,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -24,10 +23,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentTrackingBinding
-import com.androiddevs.lerun.db.Run
+import com.androiddevs.lerun.data.local.db.Run
 import com.androiddevs.lerun.services.Polyline
 import com.androiddevs.lerun.services.TrackingService
-import com.androiddevs.lerun.ui.viewmodels.MainViewModel
+import com.androiddevs.lerun.presentation.home.MainViewModel
+import com.androiddevs.lerun.ui.customview.CancelTrackingDialog
 import com.androiddevs.lerun.utils.Constants.ACTION_PAUSE_SERVICE
 import com.androiddevs.lerun.utils.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.androiddevs.lerun.utils.Constants.ACTION_STOP_SERVICE

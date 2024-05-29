@@ -1,4 +1,4 @@
-package com.androiddevs.lerun.ui.fragments
+package com.androiddevs.lerun.ui.customview
 
 import android.app.Dialog
 import android.os.Bundle

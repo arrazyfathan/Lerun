@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".ui.fragments.DetailRunFragment">
+        tools:context=".presentation.detail_run.DetailRunFragment">
 
         <TextView
             android:id="@+id/title_run"

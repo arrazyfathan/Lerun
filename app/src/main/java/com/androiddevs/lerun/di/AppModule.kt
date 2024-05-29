@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import androidx.room.Room
-import com.androiddevs.lerun.db.RunningDatabase
+import com.androiddevs.lerun.data.local.db.RunningDatabase
 import com.androiddevs.lerun.utils.Constants.KEY_FIRST_TIME_TOGGLE
 import com.androiddevs.lerun.utils.Constants.KEY_NAME
 import com.androiddevs.lerun.utils.Constants.KEY_WEIGHT

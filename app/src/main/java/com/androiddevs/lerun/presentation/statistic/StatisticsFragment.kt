@@ -1,4 +1,4 @@
-package com.androiddevs.lerun.ui.fragments
+package com.androiddevs.lerun.presentation.statistic
 
 import android.graphics.Color
 import android.os.Bundle
@@ -11,7 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentStatisticsBinding
-import com.androiddevs.lerun.ui.viewmodels.StatisticViewModel
 import com.androiddevs.lerun.utils.TrackingUtility
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androiddevs.lerun.databinding.NewItemRunBinding
-import com.androiddevs.lerun.db.Run
+import com.androiddevs.lerun.data.local.db.Run
 import com.androiddevs.lerun.utils.TrackingUtility
 import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat

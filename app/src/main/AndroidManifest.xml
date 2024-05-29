@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/splashScreenTheme">
         <activity
-            android:name="com.androiddevs.lerun.ui.MainActivity"
+            android:name="com.androiddevs.lerun.presentation.home.MainActivity"
             android:exported="true"
             android:theme="@style/Base.Theme.Lerun"
             android:launchMode="singleTask"

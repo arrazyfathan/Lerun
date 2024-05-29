@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.ItemRunExpandableBinding
-import com.androiddevs.lerun.db.Run
+import com.androiddevs.lerun.data.local.db.Run
 import com.androiddevs.lerun.utils.TrackingUtility
 import com.androiddevs.lerun.utils.changeBackgroundColor
 import com.androiddevs.lerun.utils.changeTextColor

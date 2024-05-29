@@ -9,7 +9,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.androiddevs.lerun.R
-import com.androiddevs.lerun.ui.MainActivity
+import com.androiddevs.lerun.presentation.home.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 

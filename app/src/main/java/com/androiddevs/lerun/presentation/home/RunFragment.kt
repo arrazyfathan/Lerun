@@ -1,12 +1,10 @@
-package com.androiddevs.lerun.ui.fragments
+package com.androiddevs.lerun.presentation.home
 
 import android.Manifest
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,8 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.adapters.LatestRunAdapter
 import com.androiddevs.lerun.databinding.FragmentRunBinding
-import com.androiddevs.lerun.ui.viewmodels.MainViewModel
-import com.androiddevs.lerun.ui.viewmodels.StatisticViewModel
+import com.androiddevs.lerun.presentation.statistic.StatisticViewModel
 import com.androiddevs.lerun.utils.Constants.KEY_NAME
 import com.androiddevs.lerun.utils.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.androiddevs.lerun.utils.SortType
