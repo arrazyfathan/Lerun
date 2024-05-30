@@ -1,7 +1,6 @@
 package com.androiddevs.lerun.presentation.home
 
 import android.Manifest
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -14,7 +13,6 @@ import com.androiddevs.lerun.R
 import com.androiddevs.lerun.adapters.LatestRunAdapter
 import com.androiddevs.lerun.databinding.FragmentRunBinding
 import com.androiddevs.lerun.presentation.statistic.StatisticViewModel
-import com.androiddevs.lerun.utils.Constants.KEY_NAME
 import com.androiddevs.lerun.utils.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.androiddevs.lerun.utils.SortType
 import com.androiddevs.lerun.utils.TrackingUtility
@@ -26,7 +24,6 @@ import eightbitlab.com.blurview.RenderScriptBlur
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.Calendar
-import javax.inject.Inject
 import kotlin.math.round
 
 @AndroidEntryPoint
@@ -35,9 +32,6 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
     private val viewModel: MainViewModel by viewModels()
     private val statsModel: StatisticViewModel by viewModels()
     private lateinit var latestRunAdapter: LatestRunAdapter
-
-    @Inject
-    lateinit var sharedPref: SharedPreferences
 
     companion object {
         const val REMOTE_CONFIG_KEY_BANNER = "title_banner"
@@ -129,7 +123,7 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
     }
 
     private fun loadName() {
-        val name = sharedPref.getString(KEY_NAME, "")
+        val name = "Default name"
         binding.tvName.text = name
     }
 

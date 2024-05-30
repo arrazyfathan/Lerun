@@ -4,7 +4,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.androiddevs.lerun.data.local.db.Run
-import com.androiddevs.lerun.domain.repositories.MainRepository
+import com.androiddevs.lerun.domain.UserSettingStorage
+import com.androiddevs.lerun.domain.repository.MainRepository
 import com.androiddevs.lerun.utils.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,6 +16,7 @@ class MainViewModel
     @Inject
     constructor(
         private val mainRepository: MainRepository,
+        private val userSettingStorage: UserSettingStorage
     ) : ViewModel() {
         private val runsSortedByDate = mainRepository.getAllRunsSortedByDate()
         private val runsSortedByDistance = mainRepository.getAllRunsSortedByDistance()
@@ -53,6 +55,11 @@ class MainViewModel
                 }
             }
         }
+
+    fun isUserFilledUserProfile(): Boolean {
+        return (userSettingStorage.getUserWeight() != 0 && !userSettingStorage.getUsername()
+            .isNullOrBlank())
+    }
 
         fun sortRuns(sortType: SortType) =
             when (sortType) {

@@ -1,6 +1,5 @@
 package com.androiddevs.lerun.presentation.settings
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,14 +16,10 @@ import androidx.fragment.app.viewModels
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentSettingsBinding
 import com.androiddevs.lerun.presentation.home.MainViewModel
-import com.androiddevs.lerun.utils.Constants.KEY_NAME
-import com.androiddevs.lerun.utils.Constants.KEY_WEIGHT
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
@@ -32,9 +27,6 @@ class SettingsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by viewModels()
-
-    @Inject
-    lateinit var sharedPref: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,8 +68,8 @@ class SettingsFragment : Fragment() {
         val btnCancel = view.findViewById<MaterialButton>(R.id.btn_save_cancel_profile)
 
         // set current data
-        val nameSharedPref = sharedPref.getString(KEY_NAME, "")
-        val weightSharedPref = sharedPref.getFloat(KEY_WEIGHT, 80f)
+        val nameSharedPref = "Default Name"
+        val weightSharedPref = "Default Weight"
 
         name.setText(nameSharedPref)
         weight.setText(weightSharedPref.toString())
@@ -137,7 +129,7 @@ class SettingsFragment : Fragment() {
         )
 
         btnApply.setOnClickListener {
-            if (name.text.isBlank() || name.text.isNullOrEmpty() || weight.text.isBlank() || weight.text.isNullOrEmpty()) {
+            /*if (name.text.isBlank() || name.text.isNullOrEmpty() || weight.text.isBlank() || weight.text.isNullOrEmpty()) {
                 validation.visibility = View.VISIBLE
             } else {
                 val nameText = name.text.toString()
@@ -155,7 +147,7 @@ class SettingsFragment : Fragment() {
                 ).show()
 
                 dialog.dismiss()
-            }
+            }*/
         }
 
         btnCancel.setOnClickListener {

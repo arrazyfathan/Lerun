@@ -108,6 +108,7 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     ksp(libs.androidx.hilt.compiler)
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // Activity KTX for viewModels()
     implementation(libs.androidx.activity.ktx)
@@ -147,6 +148,13 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.navigation.compose)
+    // implementation(libs.androidx.compose.foundation)
+    implementation("androidx.compose.foundation:foundation:1.7.0-beta01")
+    implementation("androidx.compose.foundation:foundation-android:1.7.0-beta01")
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    implementation(libs.androidx.security.crypto.ktx)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)

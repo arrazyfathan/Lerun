@@ -1,7 +1,7 @@
 package com.androiddevs.lerun.presentation.statistic
 
 import androidx.lifecycle.ViewModel
-import com.androiddevs.lerun.domain.repositories.MainRepository
+import com.androiddevs.lerun.domain.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

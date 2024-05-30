@@ -1,4 +1,4 @@
-package com.androiddevs.lerun.domain.repositories
+package com.androiddevs.lerun.domain.repository
 
 import com.androiddevs.lerun.data.local.db.Run
 import com.androiddevs.lerun.data.local.db.RunDAO

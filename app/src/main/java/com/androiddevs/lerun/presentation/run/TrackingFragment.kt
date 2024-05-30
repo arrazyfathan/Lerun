@@ -50,7 +50,6 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
-import javax.inject.Inject
 import kotlin.math.round
 
 @AndroidEntryPoint
@@ -78,9 +77,6 @@ class TrackingFragment :
     private var currentTimeMillis = 0L
 
     private var menu: Menu? = null
-
-    @set:Inject
-    var weight = 80f
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -156,7 +152,7 @@ class TrackingFragment :
         }
         val averageSpeed =
             round((distanceInMeters / 1000f) / (currentTimeMillis / 1000f / 60 / 60) * 10) / 10f
-        val caloriesBurned = ((distanceInMeters / 1000f) * weight).toInt()
+        val caloriesBurned = ((distanceInMeters / 1000f) * 80).toInt()
 
         // set data
         duration.text = TrackingUtility.getFormattedStopWatchTime(currentTimeMillis, true)
@@ -346,7 +342,7 @@ class TrackingFragment :
             val averageSpeed =
                 round((distanceInMeters / 1000f) / (currentTimeMillis / 1000f / 60 / 60) * 10) / 10f
             val dateTimeStamp = Calendar.getInstance().timeInMillis
-            val caloriesBurned = ((distanceInMeters / 1000f) * weight).toInt()
+            val caloriesBurned = ((distanceInMeters / 1000f) * 80).toInt()
 
             val run =
                 Run(

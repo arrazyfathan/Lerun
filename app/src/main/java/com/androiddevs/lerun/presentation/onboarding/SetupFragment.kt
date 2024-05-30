@@ -1,45 +1,24 @@
 package com.androiddevs.lerun.presentation.onboarding
 
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentSetupBinding
-import com.androiddevs.lerun.presentation.home.MainViewModel
-import com.androiddevs.lerun.utils.Constants.KEY_FIRST_TIME_TOGGLE
-import com.androiddevs.lerun.utils.Constants.KEY_NAME
-import com.androiddevs.lerun.utils.Constants.KEY_WEIGHT
+import com.androiddevs.lerun.utils.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class SetupFragment : Fragment() {
-    private var _binding: FragmentSetupBinding? = null
-    private val binding get() = _binding!!
+class SetupFragment : Fragment(R.layout.fragment_setup) {
 
-    private val viewModel: MainViewModel by viewModels()
 
-    @Inject
-    lateinit var sharedPref: SharedPreferences
+    private val binding by viewBinding(FragmentSetupBinding::bind)
 
-    @set:Inject
-    var isFirstAppOpen = true
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        _binding = FragmentSetupBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val viewModel: OnboardingViewModel by viewModels()
 
     override fun onViewCreated(
         view: View,
@@ -47,7 +26,7 @@ class SetupFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (!isFirstAppOpen) {
+        if (viewModel.isUserFilledUserProfile()) {
             val navOptions =
                 NavOptions.Builder()
                     .setPopUpTo(R.id.setupFragment, true)
@@ -76,16 +55,8 @@ class SetupFragment : Fragment() {
         if (name.isEmpty() || name.isBlank() || weight.isEmpty() || weight.isBlank()) {
             return false
         }
-        sharedPref.edit()
-            .putString(KEY_NAME, name)
-            .putFloat(KEY_WEIGHT, weight.toFloat())
-            .putBoolean(KEY_FIRST_TIME_TOGGLE, false)
-            .apply()
-        return true
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+        viewModel.setUserProfile(name, weight)
+        return true
     }
 }
