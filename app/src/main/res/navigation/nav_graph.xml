@@ -8,15 +8,19 @@
     <action
         android:id="@+id/action_global_tackingFragment"
         app:destination="@+id/trackingFragment"
-        app:launchSingleTop="true" />
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:launchSingleTop="true"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
     <action
         android:id="@+id/from_main_activity_to_tracking"
         app:destination="@+id/trackingFragment"
-        app:enterAnim="@anim/nav_graph_enter"
-        app:exitAnim="@anim/nav_graph_exit"
-        app:popEnterAnim="@anim/nav_graph_pop_enter"
-        app:popExitAnim="@anim/nav_graph_pop_exit"/>
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
     <fragment
         android:id="@+id/runFragment"
@@ -24,24 +28,28 @@
         android:label="RunFragment">
         <action
             android:id="@+id/action_runFragment_to_trackingFragment"
-            app:destination="@id/trackingFragment" />
+            app:destination="@id/trackingFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
             android:name="latestrun"
             app:argType="com.androiddevs.lerun.data.local.db.Run" />
         <action
             android:id="@+id/action_runFragment_to_detailRunFragment"
             app:destination="@id/detailRunFragment"
-            app:enterAnim="@anim/nav_graph_enter"
-            app:exitAnim="@anim/nav_graph_exit"
-            app:popEnterAnim="@anim/nav_graph_pop_enter"
-            app:popExitAnim="@anim/nav_graph_pop_exit" />
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_runFragment_to_allRunFragment"
             app:destination="@id/allRunFragment"
-            app:enterAnim="@anim/nav_graph_enter"
-            app:exitAnim="@anim/nav_graph_exit"
-            app:popEnterAnim="@anim/nav_graph_pop_enter"
-            app:popExitAnim="@anim/nav_graph_pop_exit" />
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -54,8 +62,10 @@
         <action
             android:id="@+id/action_trackingFragment_to_runFragment"
             app:destination="@id/runFragment"
-            app:enterAnim="@anim/slide_up"
-            app:popExitAnim="@anim/slide_down" />
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
@@ -67,7 +77,11 @@
         android:label="SetupFragment">
         <action
             android:id="@+id/action_setupFragment_to_runFragment"
-            app:destination="@id/runFragment" />
+            app:destination="@id/runFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/detailRunFragment"
