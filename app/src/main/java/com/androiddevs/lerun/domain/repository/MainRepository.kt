@@ -13,6 +13,8 @@ class MainRepository
 
         fun getAllRunsSortedByDate() = runDao.getAllRunsSortedByDate()
 
+        fun getAllRunsSortedByDateAsc() = runDao.getAllRunsSortedByDateAscending()
+
         fun getAllRunsSortedByDistance() = runDao.getAllRunsSortedByDistance()
 
         fun getAllRunsSortedByTimeInMillis() = runDao.getAllRunsSortedByTimeInMillis()

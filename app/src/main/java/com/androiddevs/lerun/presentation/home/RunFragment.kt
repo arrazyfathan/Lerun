@@ -56,6 +56,7 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
 
         when (viewModel.sortType) {
             SortType.DATE -> binding.spFilter.setSelection(0)
+            SortType.DATE_ASC -> binding.spFilter.setSelection(5)
             SortType.RUNNING_TIME -> binding.spFilter.setSelection(1)
             SortType.DISTANCE -> binding.spFilter.setSelection(2)
             SortType.AVG_SPEED -> binding.spFilter.setSelection(3)
@@ -78,6 +79,7 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
                         2 -> viewModel.sortRuns(SortType.DISTANCE)
                         3 -> viewModel.sortRuns(SortType.AVG_SPEED)
                         4 -> viewModel.sortRuns(SortType.CALORIES_BURNED)
+                        5 -> viewModel.sortRuns(SortType.DATE_ASC)
                     }
                 }
             }
@@ -123,7 +125,7 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
     }
 
     private fun loadName() {
-        val name = "Default name"
+        val name = viewModel.getProfileName()
         binding.tvName.text = name
     }
 

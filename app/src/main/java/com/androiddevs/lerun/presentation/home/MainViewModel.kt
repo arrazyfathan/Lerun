@@ -13,67 +13,84 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel
-    @Inject
-    constructor(
-        private val mainRepository: MainRepository,
-        private val userSettingStorage: UserSettingStorage
-    ) : ViewModel() {
-        private val runsSortedByDate = mainRepository.getAllRunsSortedByDate()
-        private val runsSortedByDistance = mainRepository.getAllRunsSortedByDistance()
-        private val runsSortedByCaloriesBurned = mainRepository.getAllRunsSortedByCaloriesBurned()
-        private val runsSortedByTimeInMillis = mainRepository.getAllRunsSortedByTimeInMillis()
-        private val runsSortedByAvgSpeed = mainRepository.getAllRunsSortedByAvgSpeed()
+@Inject
+constructor(
+    private val mainRepository: MainRepository,
+    private val userSettingStorage: UserSettingStorage
+) : ViewModel() {
+    private val runsSortedByDate = mainRepository.getAllRunsSortedByDate()
+    private val runsSortedByDateAsc = mainRepository.getAllRunsSortedByDateAsc()
+    private val runsSortedByDistance = mainRepository.getAllRunsSortedByDistance()
+    private val runsSortedByCaloriesBurned = mainRepository.getAllRunsSortedByCaloriesBurned()
+    private val runsSortedByTimeInMillis = mainRepository.getAllRunsSortedByTimeInMillis()
+    private val runsSortedByAvgSpeed = mainRepository.getAllRunsSortedByAvgSpeed()
 
-        val runs = MediatorLiveData<List<Run>>()
+    val runs = MediatorLiveData<List<Run>>()
 
-        var sortType = SortType.DATE
+    fun getProfileName() = userSettingStorage.getUsername()
+    fun getProfileWeight() = userSettingStorage.getUserWeight()
 
-        init {
-            runs.addSource(runsSortedByDate) { result ->
-                if (sortType == SortType.DATE) {
-                    result?.let { runs.value = it }
-                }
-            }
-            runs.addSource(runsSortedByAvgSpeed) { result ->
-                if (sortType == SortType.AVG_SPEED) {
-                    result?.let { runs.value = it }
-                }
-            }
-            runs.addSource(runsSortedByCaloriesBurned) { result ->
-                if (sortType == SortType.CALORIES_BURNED) {
-                    result?.let { runs.value = it }
-                }
-            }
-            runs.addSource(runsSortedByDistance) { result ->
-                if (sortType == SortType.DISTANCE) {
-                    result?.let { runs.value = it }
-                }
-            }
-            runs.addSource(runsSortedByTimeInMillis) { result ->
-                if (sortType == SortType.RUNNING_TIME) {
-                    result?.let { runs.value = it }
-                }
+    var sortType = SortType.DATE
+
+    init {
+        runs.addSource(runsSortedByDate) { result ->
+            if (sortType == SortType.DATE) {
+                result?.let { runs.value = it }
             }
         }
+        runs.addSource(runsSortedByAvgSpeed) { result ->
+            if (sortType == SortType.AVG_SPEED) {
+                result?.let { runs.value = it }
+            }
+        }
+        runs.addSource(runsSortedByCaloriesBurned) { result ->
+            if (sortType == SortType.CALORIES_BURNED) {
+                result?.let { runs.value = it }
+            }
+        }
+        runs.addSource(runsSortedByDistance) { result ->
+            if (sortType == SortType.DISTANCE) {
+                result?.let { runs.value = it }
+            }
+        }
+        runs.addSource(runsSortedByTimeInMillis) { result ->
+            if (sortType == SortType.RUNNING_TIME) {
+                result?.let { runs.value = it }
+            }
+        }
+        runs.addSource(runsSortedByDateAsc) { result ->
+            if (sortType == SortType.DATE_ASC) {
+                result?.let { runs.value = it }
+            }
+        }
+    }
 
     fun isUserFilledUserProfile(): Boolean {
         return (userSettingStorage.getUserWeight() != 0 && !userSettingStorage.getUsername()
             .isNullOrBlank())
     }
 
-        fun sortRuns(sortType: SortType) =
-            when (sortType) {
-                SortType.DATE -> runsSortedByDate.value?.let { runs.value = it }
-                SortType.RUNNING_TIME -> runsSortedByTimeInMillis.value?.let { runs.value = it }
-                SortType.AVG_SPEED -> runsSortedByAvgSpeed.value?.let { runs.value = it }
-                SortType.DISTANCE -> runsSortedByDistance.value?.let { runs.value = it }
-                SortType.CALORIES_BURNED -> runsSortedByCaloriesBurned.value?.let { runs.value = it }
-            }.also {
-                this.sortType = sortType
-            }
+    fun sortRuns(sortType: SortType) =
+        when (sortType) {
+            SortType.DATE -> runsSortedByDate.value?.let { runs.value = it }
+            SortType.RUNNING_TIME -> runsSortedByTimeInMillis.value?.let { runs.value = it }
+            SortType.AVG_SPEED -> runsSortedByAvgSpeed.value?.let { runs.value = it }
+            SortType.DISTANCE -> runsSortedByDistance.value?.let { runs.value = it }
+            SortType.CALORIES_BURNED -> runsSortedByCaloriesBurned.value?.let { runs.value = it }
+            SortType.DATE_ASC -> runsSortedByDateAsc.value?.let { runs.value = it }
+        }.also {
+            this.sortType = sortType
+        }
 
-        fun insertRun(run: Run) =
-            viewModelScope.launch {
-                mainRepository.insertRun(run)
-            }
+    fun insertRun(run: Run) =
+        viewModelScope.launch {
+            mainRepository.insertRun(run)
+        }
+
+    fun setUserProfile(name: String, weight: String) {
+        viewModelScope.launch {
+            userSettingStorage.setUserName(name)
+            userSettingStorage.setUserWeight(weight.toInt())
+        }
     }
+}

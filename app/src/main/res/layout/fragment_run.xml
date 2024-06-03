@@ -317,7 +317,7 @@
                 android:entries="@array/filter_options"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/card_time" />
 
@@ -328,7 +328,7 @@
                 android:layout_marginTop="20dp"
                 android:text="Sort by:"
                 android:textSize="16sp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/spFilter"
                 app:layout_constraintEnd_toStartOf="@+id/spFilter"
                 app:layout_constraintTop_toBottomOf="@id/card_time" />

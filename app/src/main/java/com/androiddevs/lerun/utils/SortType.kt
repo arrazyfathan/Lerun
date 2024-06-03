@@ -6,4 +6,5 @@ enum class SortType {
     AVG_SPEED,
     DISTANCE,
     CALORIES_BURNED,
+    DATE_ASC,
 }

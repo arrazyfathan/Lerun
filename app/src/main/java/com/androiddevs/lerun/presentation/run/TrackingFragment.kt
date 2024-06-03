@@ -49,6 +49,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.util.Calendar
 import kotlin.math.round
 
@@ -152,7 +153,7 @@ class TrackingFragment :
         }
         val averageSpeed =
             round((distanceInMeters / 1000f) / (currentTimeMillis / 1000f / 60 / 60) * 10) / 10f
-        val caloriesBurned = ((distanceInMeters / 1000f) * 80).toInt()
+        val caloriesBurned = ((distanceInMeters / 1000f) * viewModel.getProfileWeight().toFloat()).toInt()
 
         // set data
         duration.text = TrackingUtility.getFormattedStopWatchTime(currentTimeMillis, true)
@@ -273,7 +274,7 @@ class TrackingFragment :
     }
 
     private fun stopRun() {
-        binding.tvTimer.text = "00:00:00:00"
+        binding.tvTimer.text = getString(R.string.default_timer)
         sendCommandToService(ACTION_STOP_SERVICE)
         findNavController().navigate(R.id.action_trackingFragment_to_runFragment)
     }
@@ -281,7 +282,7 @@ class TrackingFragment :
     private fun updateTracking(isTracking: Boolean) {
         this.isTracking = isTracking
         if (!isTracking && currentTimeMillis > 0L) {
-            binding.textStart?.text = "Start"
+            binding.textStart?.text = getString(R.string.start_label)
             binding.icBtnStart?.setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),
@@ -290,7 +291,7 @@ class TrackingFragment :
             )
             binding.btnFinishRun.visibility = View.VISIBLE
         } else if (isTracking) {
-            binding.textStart?.text = "Stop"
+            binding.textStart?.text = getString(R.string.stop_label)
             binding.icBtnStart?.setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),
@@ -342,7 +343,7 @@ class TrackingFragment :
             val averageSpeed =
                 round((distanceInMeters / 1000f) / (currentTimeMillis / 1000f / 60 / 60) * 10) / 10f
             val dateTimeStamp = Calendar.getInstance().timeInMillis
-            val caloriesBurned = ((distanceInMeters / 1000f) * 80).toInt()
+            val caloriesBurned = ((distanceInMeters / 1000f) * viewModel.getProfileWeight().toFloat()).toInt()
 
             val run =
                 Run(
@@ -475,10 +476,10 @@ class TrackingFragment :
                 )
 
             if (!isSuccess) {
-                Log.e("MAPS", "Failed")
+                Timber.tag("MAPS").e("Failed")
             }
         } catch (e: Exception) {
-            e.message?.let { Log.e("MAPS", it) }
+            e.message?.let { Timber.tag("MAPS").e(it) }
         }
     }
 

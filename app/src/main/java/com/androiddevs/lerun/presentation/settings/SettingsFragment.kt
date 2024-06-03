@@ -16,26 +16,20 @@ import androidx.fragment.app.viewModels
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentSettingsBinding
 import com.androiddevs.lerun.presentation.home.MainViewModel
+import com.androiddevs.lerun.utils.viewBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SettingsFragment : Fragment() {
-    private var _binding: FragmentSettingsBinding? = null
-    private val binding get() = _binding!!
+class SettingsFragment : Fragment(R.layout.fragment_settings) {
+
+    private val binding by viewBinding(FragmentSettingsBinding::bind)
 
     private val viewModel: MainViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(
         view: View,
@@ -68,8 +62,8 @@ class SettingsFragment : Fragment() {
         val btnCancel = view.findViewById<MaterialButton>(R.id.btn_save_cancel_profile)
 
         // set current data
-        val nameSharedPref = "Default Name"
-        val weightSharedPref = "Default Weight"
+        val nameSharedPref = viewModel.getProfileName()
+        val weightSharedPref = viewModel.getProfileWeight()
 
         name.setText(nameSharedPref)
         weight.setText(weightSharedPref.toString())
@@ -129,16 +123,13 @@ class SettingsFragment : Fragment() {
         )
 
         btnApply.setOnClickListener {
-            /*if (name.text.isBlank() || name.text.isNullOrEmpty() || weight.text.isBlank() || weight.text.isNullOrEmpty()) {
+            if (name.text.isBlank() || name.text.isNullOrEmpty() || weight.text.isBlank() || weight.text.isNullOrEmpty()) {
                 validation.visibility = View.VISIBLE
             } else {
                 val nameText = name.text.toString()
                 val weightText = weight.text.toString()
 
-                sharedPref.edit()
-                    .putString(KEY_NAME, nameText)
-                    .putFloat(KEY_WEIGHT, weightText.toFloat())
-                    .apply()
+                viewModel.setUserProfile(nameText, weightText)
 
                 Snackbar.make(
                     view,
@@ -147,7 +138,7 @@ class SettingsFragment : Fragment() {
                 ).show()
 
                 dialog.dismiss()
-            }*/
+            }
         }
 
         btnCancel.setOnClickListener {
@@ -156,10 +147,5 @@ class SettingsFragment : Fragment() {
 
         dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         dialog.show()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }
