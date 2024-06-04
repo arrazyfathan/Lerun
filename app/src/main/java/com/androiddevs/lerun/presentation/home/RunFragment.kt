@@ -21,7 +21,9 @@ import com.androiddevs.lerun.utils.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.androiddevs.lerun.utils.LabelChartFormatter
 import com.androiddevs.lerun.utils.SortType
 import com.androiddevs.lerun.utils.TrackingUtility
+import com.androiddevs.lerun.utils.gone
 import com.androiddevs.lerun.utils.viewBinding
+import com.androiddevs.lerun.utils.visible
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -211,6 +213,7 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
         }
 
         viewModel.runsSortedByDateAsc.observe(viewLifecycleOwner) { runs ->
+            if (runs.isNullOrEmpty()) binding.chart.gone() else binding.chart.visible()
             runs?.let { data ->
                 val allAvgSpeed = data.indices.map { i -> BarEntry(i.toFloat(), runs[i].avgSpeedInKMH) }
                 val barDataSet = LineDataSet(allAvgSpeed, "Average Speed Overtime").apply {

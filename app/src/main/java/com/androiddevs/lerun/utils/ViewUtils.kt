@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
+import androidx.transition.Visibility
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -121,4 +122,13 @@ fun colorAnimator(
 context(Fragment)
 fun String.toast() {
     Toast.makeText(requireContext(), this, Toast.LENGTH_SHORT).show()
+}
+
+fun View.gone() {
+    this.visibility = View.GONE
+}
+
+
+fun View.visible() {
+    this.visibility = View.VISIBLE
 }

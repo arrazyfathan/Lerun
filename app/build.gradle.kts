@@ -12,6 +12,7 @@ plugins {
     id("com.google.firebase.firebase-perf")
     id("com.google.firebase.appdistribution")
     alias(libs.plugins.compose.compiler)
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
@@ -29,13 +30,24 @@ android {
         vectorDrawables { useSupportLibrary = true }
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = "KeyLerun"
+            keyPassword = "release@lerun"
+            storeFile = file("key_lerun.jks")
+            storePassword = "release@lerun"
+        }
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            signingConfig = signingConfigs.getByName("release")
         }
 
         getByName("debug") {
@@ -63,6 +75,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        buildConfig = true
     }
 
     packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
@@ -153,6 +166,8 @@ dependencies {
     implementation("androidx.compose.foundation:foundation-android:1.7.0-beta01")
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    implementation(libs.play.services.oss.licenses)
 
     implementation(libs.androidx.security.crypto.ktx)
 

@@ -1,5 +1,6 @@
 package com.androiddevs.lerun.presentation.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,10 +14,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.androiddevs.lerun.BuildConfig
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentSettingsBinding
 import com.androiddevs.lerun.presentation.home.MainViewModel
 import com.androiddevs.lerun.utils.viewBinding
+import com.google.android.gms.oss.licenses.OssLicensesActivity
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
@@ -27,7 +31,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private val binding by viewBinding(FragmentSettingsBinding::bind)
-
     private val viewModel: MainViewModel by viewModels()
 
 
@@ -44,10 +47,19 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
             WindowInsetsCompat.CONSUMED
         }
+        setupView()
+    }
 
+    private fun setupView() {
         binding.btnEditProfile.setOnClickListener {
             showDialogEditProfile()
         }
+
+        binding.btnLicenses.setOnClickListener {
+            startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
+        }
+
+        binding.versionInfo.text = getString(R.string.version_name, BuildConfig.VERSION_NAME)
     }
 
     private fun showDialogEditProfile() {
