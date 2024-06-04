@@ -30,4 +30,7 @@
     <color name="blue_accent">#62F3F6</color>
     <color name="dark_accent_text">#737377</color>
 
+    <!-- Dark -->
+    <color name="main_light">#FFFFFF</color>
+
 </resources>

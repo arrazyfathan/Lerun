@@ -1,10 +1,5 @@
 <resources>
 
-    <style name="TextViewStyle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textColor">@android:color/white</item>
-
-    </style>
-
     <style name="CustomCardViewStyle" parent="@style/Widget.MaterialComponents.CardView">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
     </style>
@@ -29,11 +24,6 @@
 
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/colorAccent</item>
-    </style>
-
-    <style name="splashScreenTheme" parent="Base.Theme.Lerun">
-        <item name="android:windowBackground">@drawable/splash_image</item>
-        <item name="android:statusBarColor">@color/main_dark</item>
     </style>
 
     <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
