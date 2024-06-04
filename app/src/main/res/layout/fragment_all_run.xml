@@ -21,6 +21,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Spinner
+        android:id="@+id/spFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/filter_options"
+        android:visibility="visible"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/label_all_runs"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/label_all_runs" />
+
+    <TextView
+        android:id="@+id/tvFilterBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sort by:"
+        android:textSize="16sp"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="@id/spFilter"
+        app:layout_constraintBottom_toBottomOf="@+id/spFilter"
+        app:layout_constraintEnd_toStartOf="@+id/spFilter" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_all_runs"
         android:layout_width="match_parent"

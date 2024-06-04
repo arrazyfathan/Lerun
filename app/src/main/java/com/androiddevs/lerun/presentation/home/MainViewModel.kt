@@ -18,8 +18,8 @@ constructor(
     private val mainRepository: MainRepository,
     private val userSettingStorage: UserSettingStorage
 ) : ViewModel() {
-    private val runsSortedByDate = mainRepository.getAllRunsSortedByDate()
-    private val runsSortedByDateAsc = mainRepository.getAllRunsSortedByDateAsc()
+    val runsSortedByDate = mainRepository.getAllRunsSortedByDate()
+    val runsSortedByDateAsc = mainRepository.getAllRunsSortedByDateAsc()
     private val runsSortedByDistance = mainRepository.getAllRunsSortedByDistance()
     private val runsSortedByCaloriesBurned = mainRepository.getAllRunsSortedByCaloriesBurned()
     private val runsSortedByTimeInMillis = mainRepository.getAllRunsSortedByTimeInMillis()

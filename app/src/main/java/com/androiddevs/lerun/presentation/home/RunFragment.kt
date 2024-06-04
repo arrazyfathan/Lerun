@@ -1,10 +1,13 @@
 package com.androiddevs.lerun.presentation.home
 
 import android.Manifest
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,10 +16,19 @@ import com.androiddevs.lerun.R
 import com.androiddevs.lerun.adapters.LatestRunAdapter
 import com.androiddevs.lerun.databinding.FragmentRunBinding
 import com.androiddevs.lerun.presentation.statistic.StatisticViewModel
+import com.androiddevs.lerun.ui.customview.CustomMarkerView
 import com.androiddevs.lerun.utils.Constants.REQUEST_CODE_LOCATION_PERMISSION
+import com.androiddevs.lerun.utils.LabelChartFormatter
 import com.androiddevs.lerun.utils.SortType
 import com.androiddevs.lerun.utils.TrackingUtility
 import com.androiddevs.lerun.utils.viewBinding
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.model.GradientColor
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,6 +65,7 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
         loadName()
         requestPermissions()
         setupRecyclerView()
+        setupView()
 
         when (viewModel.sortType) {
             SortType.DATE -> binding.spFilter.setSelection(0)
@@ -117,6 +130,34 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
         }
     }
 
+    private fun setupView() {
+        binding.chart.xAxis.apply {
+            position = XAxis.XAxisPosition.BOTTOM
+            setDrawLabels(false)
+            axisLineColor = ContextCompat.getColor(requireContext(), R.color.dark_accent_text)
+            textColor = ContextCompat.getColor(requireContext(), R.color.dark_accent_text)
+            setDrawGridLines(false)
+        }
+
+        binding.chart.axisLeft.apply {
+            axisLineColor = ContextCompat.getColor(requireContext(), R.color.dark_accent_text)
+            textColor = ContextCompat.getColor(requireContext(), R.color.dark_accent_text)
+            setDrawGridLines(false)
+        }
+
+        binding.chart.axisRight.apply {
+            axisLineColor = ContextCompat.getColor(requireContext(), R.color.dark_accent_text)
+            textColor = ContextCompat.getColor(requireContext(), R.color.dark_accent_text)
+            setDrawGridLines(false)
+        }
+
+        binding.chart.apply {
+            description.text = "Avg Speed Over Time"
+            description.textColor = Color.WHITE
+            legend.isEnabled = false
+        }
+    }
+
     private fun setBlurred() {
         val radius = 25f
         val renderScrip = RenderScriptBlur(requireContext())
@@ -166,6 +207,27 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
             duration?.let {
                 val totalTimeRun = TrackingUtility.formatDuration(duration)
                 binding.totalTimeRun.text = totalTimeRun
+            }
+        }
+
+        viewModel.runsSortedByDateAsc.observe(viewLifecycleOwner) { runs ->
+            runs?.let { data ->
+                val allAvgSpeed = data.indices.map { i -> BarEntry(i.toFloat(), runs[i].avgSpeedInKMH) }
+                val barDataSet = LineDataSet(allAvgSpeed, "Average Speed Overtime").apply {
+                    valueTextColor = Color.WHITE
+                    valueTextSize = 8f
+                    lineWidth = 2f
+                    valueFormatter = LabelChartFormatter()
+                    color = ContextCompat.getColor(requireContext(), R.color.ijo)
+                    mode = LineDataSet.Mode.CUBIC_BEZIER
+                    setCircleColor(ContextCompat.getColor(requireContext(), R.color.ijo))
+                    setDrawCircleHole(false)
+                    setDrawFilled(true)
+                    fillDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.gradient_green)
+                }
+                binding.chart.data = LineData(barDataSet)
+                binding.chart.marker = CustomMarkerView(runs, requireContext(), R.layout.marker_view)
+                binding.chart.invalidate()
             }
         }
     }

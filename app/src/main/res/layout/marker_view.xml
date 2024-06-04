@@ -16,40 +16,45 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="DATE"
-            android:textSize="20sp"
-            android:gravity="center"/>
+            android:fontFamily="@font/inter_regular"
+            android:textSize="10sp"
+            android:gravity="start"/>
 
         <TextView
             android:id="@+id/tvDuration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="DURATION"
-            android:textSize="20sp"
-            android:gravity="center"/>
+            android:fontFamily="@font/inter_regular"
+            android:textSize="10sp"
+            android:gravity="start"/>
 
         <TextView
             android:id="@+id/tvAvgSpeed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_regular"
             android:text="AVG SPEED"
-            android:textSize="20sp"
-            android:gravity="center"/>
+            android:textSize="10sp"
+            android:gravity="start"/>
 
         <TextView
             android:id="@+id/tvDistance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_regular"
             android:text="DISTANCE"
-            android:textSize="20sp"
-            android:gravity="center"/>
+            android:textSize="10sp"
+            android:gravity="start"/>
 
         <TextView
             android:id="@+id/tvCaloriesBurned"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_regular"
             android:text="CALORIES BURNED"
-            android:textSize="20sp"
-            android:gravity="center"/>
+            android:textSize="10sp"
+            android:gravity="start"/>
 
     </LinearLayout>
 
