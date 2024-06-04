@@ -1,32 +1,23 @@
 package com.androiddevs.lerun.presentation.all_run
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.androiddevs.lerun.R
 import com.androiddevs.lerun.adapters.RunAdapter
 import com.androiddevs.lerun.databinding.FragmentAllRunBinding
 import com.androiddevs.lerun.presentation.home.MainViewModel
+import com.androiddevs.lerun.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AllRunFragment : Fragment() {
-    private var _binding: FragmentAllRunBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var runAdapter: RunAdapter
-    private val viewModel: MainViewModel by viewModels()
+class AllRunFragment : Fragment(R.layout.fragment_all_run) {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        _binding = FragmentAllRunBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val binding by viewBinding(FragmentAllRunBinding::bind)
+    private val runAdapter by lazy { RunAdapter() }
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onViewCreated(
         view: View,
@@ -45,13 +36,7 @@ class AllRunFragment : Fragment() {
 
     private fun setupRecyclerView() =
         binding.rvAllRuns.apply {
-            runAdapter = RunAdapter()
             adapter = runAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
 }
