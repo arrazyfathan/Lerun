@@ -33,6 +33,10 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideImageDao(db: RunningDatabase) = db.getUserImageDao()
+
+    @Singleton
+    @Provides
     fun provideEncryptedSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         return EncryptedSharedPreferences(
             context,

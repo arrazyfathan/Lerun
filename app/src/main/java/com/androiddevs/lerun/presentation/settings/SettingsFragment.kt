@@ -4,11 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
@@ -19,19 +19,20 @@ import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentSettingsBinding
 import com.androiddevs.lerun.presentation.home.MainViewModel
 import com.androiddevs.lerun.utils.viewBinding
-import com.google.android.gms.oss.licenses.OssLicensesActivity
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private val binding by viewBinding(FragmentSettingsBinding::bind)
     private val viewModel: MainViewModel by viewModels()
+    private val settingViewModel: SettingViewModel by viewModels()
 
 
     override fun onViewCreated(
@@ -48,6 +49,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             WindowInsetsCompat.CONSUMED
         }
         setupView()
+        observe()
+    }
+
+    private fun observe() {
+        settingViewModel.userImage().observe(viewLifecycleOwner) { userImage ->
+            Timber.tag("photos").d(userImage.toString())
+        }
     }
 
     private fun setupView() {
@@ -60,6 +68,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
 
         binding.versionInfo.text = getString(R.string.version_name, BuildConfig.VERSION_NAME)
+
+        binding.tvProfile.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.profile_n))
+        binding.username.text = settingViewModel.getUsername()
     }
 
     private fun showDialogEditProfile() {
