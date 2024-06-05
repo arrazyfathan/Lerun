@@ -2,7 +2,6 @@ package com.androiddevs.lerun.presentation.home
 
 import android.Manifest
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -26,12 +25,9 @@ import com.androiddevs.lerun.utils.gone
 import com.androiddevs.lerun.utils.viewBinding
 import com.androiddevs.lerun.utils.visible
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.model.GradientColor
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import dagger.hilt.android.AndroidEntryPoint
