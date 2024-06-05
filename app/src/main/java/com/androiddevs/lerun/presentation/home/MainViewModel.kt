@@ -1,10 +1,13 @@
 package com.androiddevs.lerun.presentation.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.androiddevs.lerun.data.local.db.Run
 import com.androiddevs.lerun.domain.UserSettingStorage
+import com.androiddevs.lerun.domain.model.UserImage
+import com.androiddevs.lerun.domain.repository.ImageRepository
 import com.androiddevs.lerun.domain.repository.MainRepository
 import com.androiddevs.lerun.utils.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +19,8 @@ class MainViewModel
 @Inject
 constructor(
     private val mainRepository: MainRepository,
-    private val userSettingStorage: UserSettingStorage
+    private val userSettingStorage: UserSettingStorage,
+    private val imageRepository: ImageRepository
 ) : ViewModel() {
     val runsSortedByDate = mainRepository.getAllRunsSortedByDate()
     val runsSortedByDateAsc = mainRepository.getAllRunsSortedByDateAsc()
@@ -29,6 +33,10 @@ constructor(
 
     fun getProfileName() = userSettingStorage.getUsername()
     fun getProfileWeight() = userSettingStorage.getUserWeight()
+
+    fun userImage(): LiveData<UserImage?> {
+        return imageRepository.getImage(userSettingStorage.getUsername()!!)
+    }
 
     var sortType = SortType.DATE
 

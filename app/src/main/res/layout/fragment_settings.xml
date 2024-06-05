@@ -9,6 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         android:fontFamily="@font/inter_semibold"
         android:text="@string/settings_label"
         android:textSize="24sp" />
@@ -37,6 +38,7 @@
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/inter_semibold"
         android:text="Username"
@@ -48,7 +50,9 @@
         android:layout_height="70dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
+        app:strokeWidth="0dp"
         android:focusable="true"
+        app:cardBackgroundColor="@color/secondary_dark"
         app:cardCornerRadius="8dp">
 
         <LinearLayout
@@ -86,6 +90,8 @@
         android:layout_height="70dp"
         android:layout_marginTop="8dp"
         android:clickable="true"
+        app:cardBackgroundColor="@color/secondary_dark"
+        app:strokeWidth="0dp"
         android:focusable="true"
         app:cardCornerRadius="8dp">
 
@@ -120,6 +126,8 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
+        app:strokeWidth="0dp"
+        app:cardBackgroundColor="@color/secondary_dark"
         android:layout_height="70dp"
         android:layout_marginTop="8dp"
         app:cardCornerRadius="8dp">

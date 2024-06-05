@@ -1,9 +1,12 @@
 package com.androiddevs.lerun.utils
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.util.Base64
 import java.io.ByteArrayOutputStream
+
 
 object BitmapConverter {
     fun converterBitmapToString(bitmap: Bitmap): String {
@@ -21,5 +24,12 @@ object BitmapConverter {
             e.printStackTrace()
             null
         }
+    }
+
+    fun convertImageUriToBase64(uri: Uri, context: Context): String {
+        val imageStream = context.contentResolver.openInputStream(uri)
+        val selectedImage = BitmapFactory.decodeStream(imageStream)
+        val encodedImage = converterBitmapToString(selectedImage)
+        return encodedImage
     }
 }

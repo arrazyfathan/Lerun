@@ -17,6 +17,7 @@ import com.androiddevs.lerun.adapters.LatestRunAdapter
 import com.androiddevs.lerun.databinding.FragmentRunBinding
 import com.androiddevs.lerun.presentation.statistic.StatisticViewModel
 import com.androiddevs.lerun.ui.customview.CustomMarkerView
+import com.androiddevs.lerun.utils.BitmapConverter
 import com.androiddevs.lerun.utils.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import com.androiddevs.lerun.utils.LabelChartFormatter
 import com.androiddevs.lerun.utils.SortType
@@ -173,6 +174,32 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
     }
 
     private fun subscribeObservers() {
+        viewModel.userImage().observe(viewLifecycleOwner) { userImage ->
+            if (userImage != null) {
+                if (!userImage.imageString.isNullOrBlank())
+                    binding.tvProfile.setImageBitmap(
+                        BitmapConverter.converterStringToBitmap(
+                            userImage.imageString!!
+                        )
+                    )
+                else
+                    binding.tvProfile.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.profile_n
+                        )
+                    )
+            } else {
+                binding.tvProfile.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.profile_n
+                    )
+                )
+            }
+        }
+
+
         statsModel.totalCaloriesBurned.observe(
             viewLifecycleOwner,
         ) { calories ->

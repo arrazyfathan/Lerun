@@ -168,6 +168,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     implementation(libs.play.services.oss.licenses)
+    implementation("com.vanniktech:android-image-cropper:4.5.0")
 
     implementation(libs.androidx.security.crypto.ktx)
 

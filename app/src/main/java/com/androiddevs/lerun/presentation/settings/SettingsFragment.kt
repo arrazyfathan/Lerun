@@ -1,13 +1,17 @@
 package com.androiddevs.lerun.presentation.settings
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -18,7 +22,12 @@ import com.androiddevs.lerun.BuildConfig
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.databinding.FragmentSettingsBinding
 import com.androiddevs.lerun.presentation.home.MainViewModel
+import com.androiddevs.lerun.utils.BitmapConverter
 import com.androiddevs.lerun.utils.viewBinding
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -54,7 +63,28 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun observe() {
         settingViewModel.userImage().observe(viewLifecycleOwner) { userImage ->
-            Timber.tag("photos").d(userImage.toString())
+            if (userImage != null) {
+                if (!userImage.imageString.isNullOrBlank())
+                    binding.tvProfile.setImageBitmap(
+                        BitmapConverter.converterStringToBitmap(
+                            userImage.imageString!!
+                        )
+                    )
+                else
+                    binding.tvProfile.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.profile_n
+                        )
+                    )
+            } else {
+                binding.tvProfile.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.profile_n
+                    )
+                )
+            }
         }
     }
 
@@ -69,8 +99,53 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         binding.versionInfo.text = getString(R.string.version_name, BuildConfig.VERSION_NAME)
 
-        binding.tvProfile.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.profile_n))
+        binding.tvProfile.setImageDrawable(
+            ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.profile_n
+            )
+        )
         binding.username.text = settingViewModel.getUsername()
+
+        binding.tvProfile.setOnClickListener {
+            // pickImage()
+        }
+    }
+
+    private fun pickImage() {
+        pickMedia.launch(
+            PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly).build()
+        )
+
+    }
+
+    private var pickMedia = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            val options = CropImageOptions().apply {
+                guidelines = CropImageView.Guidelines.ON
+            }
+            cropImage.launch(
+                CropImageContractOptions(
+                    uri = uri,
+                    options
+                )
+            )
+        } else {
+            Timber.tag("PhotoPicker").d("No media selected")
+        }
+    }
+
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            val converted = BitmapConverter.convertImageUriToBase64(result.uriContent!!, requireContext())
+            settingViewModel.changeImage(converted)
+        } else {
+            val exception = result.error
+            Timber.e(exception)
+        }
     }
 
     private fun showDialogEditProfile() {
@@ -83,13 +158,43 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val validation = view.findViewById<TextView>(R.id.validation_profile)
         val btnApply = view.findViewById<MaterialButton>(R.id.btn_save_dialog_profile)
         val btnCancel = view.findViewById<MaterialButton>(R.id.btn_save_cancel_profile)
+        val btnChangeImage = view.findViewById<MaterialButton>(R.id.btn_change_image)
+        val imageEdit = view.findViewById<ImageView>(R.id.image_edit)
 
-        // set current data
         val nameSharedPref = viewModel.getProfileName()
         val weightSharedPref = viewModel.getProfileWeight()
 
+        settingViewModel.userImage().observe(viewLifecycleOwner) { userImage ->
+            if (userImage != null) {
+                if (!userImage.imageString.isNullOrBlank())
+                    imageEdit.setImageBitmap(
+                        BitmapConverter.converterStringToBitmap(
+                            userImage.imageString!!
+                        )
+                    )
+                else
+                    imageEdit.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.profile_n
+                        )
+                    )
+            } else {
+                imageEdit.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.profile_n
+                    )
+                )
+            }
+        }
+
         name.setText(nameSharedPref)
         weight.setText(weightSharedPref.toString())
+
+        btnChangeImage.setOnClickListener {
+            pickImage()
+        }
 
         name.addTextChangedListener(
             object : TextWatcher {

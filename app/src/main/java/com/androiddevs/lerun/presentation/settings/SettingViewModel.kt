@@ -21,8 +21,12 @@ class SettingViewModel @Inject constructor(
         return imageRepository.getImage(userSettingStorage.getUsername()!!)
     }
 
-    fun changeImage(userImage: UserImage) {
+    fun changeImage(imageString: String) {
         viewModelScope.launch {
+            val userImage = UserImage(
+                id = getUsername(),
+                imageString = imageString
+            )
             imageRepository.upsertImage(userImage)
         }
     }
