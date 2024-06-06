@@ -16,13 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.androiddevs.lerun.R
 import com.androiddevs.lerun.ui.components.LerunActionButton
 import com.androiddevs.lerun.ui.components.LerunTextField
-import com.androiddevs.lerun.ui.designsystem.LerunTheme
 
 @Composable
 fun OnboardingScreen(
@@ -91,17 +88,5 @@ fun OnboardingScreen(
                 },
             )
         }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewOnboarding() {
-    LerunTheme {
-        OnboardingScreen(
-            viewModel = hiltViewModel<OnboardingViewModel>(),
-            onUserFilledProfile = {},
-            onSuccess = {}
-        )
     }
 }

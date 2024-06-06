@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -91,7 +92,6 @@ class MainActivity : AppCompatActivity() {
                 return@addOnCompleteListener
             }
             val token = task.result
-            // Log and toast
             Timber.d(token)
         }
     }

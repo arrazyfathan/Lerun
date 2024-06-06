@@ -15,8 +15,9 @@ import java.util.Calendar
 import java.util.Locale
 
 class DetailRunFragment : Fragment(R.layout.fragment_detail_run) {
-    private val binding by viewBinding(FragmentDetailRunBinding::bind)
 
+
+    private val binding by viewBinding(FragmentDetailRunBinding::bind)
     private val args: RunFragmentArgs by navArgs()
 
     override fun onViewCreated(

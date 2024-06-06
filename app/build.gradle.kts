@@ -2,15 +2,15 @@ import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 
 plugins {
     alias(libs.plugins.android.application)
-    id("kotlin-parcelize")
+    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.android)
-    id("androidx.navigation.safeargs.kotlin")
+    alias(libs.plugins.navigation.safe.args)
     alias(libs.plugins.hilt.android)
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
-    id("com.google.firebase.firebase-perf")
-    id("com.google.firebase.appdistribution")
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.firebase.perf)
+    alias(libs.plugins.firebase.appdistribution)
     alias(libs.plugins.compose.compiler)
     id("com.google.android.gms.oss-licenses-plugin")
 }
@@ -121,7 +121,6 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     ksp(libs.androidx.hilt.compiler)
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // Activity KTX for viewModels()
     implementation(libs.androidx.activity.ktx)
@@ -161,14 +160,11 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.navigation.compose)
-    // implementation(libs.androidx.compose.foundation)
-    implementation("androidx.compose.foundation:foundation:1.7.0-beta01")
-    implementation("androidx.compose.foundation:foundation-android:1.7.0-beta01")
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     implementation(libs.play.services.oss.licenses)
-    implementation("com.vanniktech:android-image-cropper:4.5.0")
+    implementation(libs.android.image.cropper)
 
     implementation(libs.androidx.security.crypto.ktx)
 

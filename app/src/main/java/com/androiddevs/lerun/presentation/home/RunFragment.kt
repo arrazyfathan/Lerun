@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.androiddevs.lerun.R
-import com.androiddevs.lerun.adapters.LatestRunAdapter
+import com.androiddevs.lerun.presentation.adapters.LatestRunAdapter
 import com.androiddevs.lerun.databinding.FragmentRunBinding
 import com.androiddevs.lerun.presentation.statistic.StatisticViewModel
 import com.androiddevs.lerun.ui.customview.CustomMarkerView

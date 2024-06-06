@@ -1,4 +1,4 @@
-package com.androiddevs.lerun.adapters
+package com.androiddevs.lerun.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
