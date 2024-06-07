@@ -1,4 +1,4 @@
-package com.androiddevs.lerun.presentation.detail_run
+package com.androiddevs.lerun.presentation.detailrun
 
 import android.os.Bundle
 import android.view.View

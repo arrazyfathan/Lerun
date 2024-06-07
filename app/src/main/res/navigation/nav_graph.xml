@@ -85,12 +85,12 @@
     </fragment>
     <fragment
         android:id="@+id/detailRunFragment"
-        android:name="com.androiddevs.lerun.presentation.detail_run.DetailRunFragment"
+        android:name="com.androiddevs.lerun.presentation.detailrun.DetailRunFragment"
         android:label="fragment_detail_run"
         tools:layout="@layout/fragment_detail_run" />
     <fragment
         android:id="@+id/allRunFragment"
-        android:name="com.androiddevs.lerun.presentation.all_run.AllRunFragment"
+        android:name="com.androiddevs.lerun.presentation.allrun.AllRunFragment"
         android:label="fragment_all_run"
         tools:layout="@layout/fragment_all_run" />
 </navigation>

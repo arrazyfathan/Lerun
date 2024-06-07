@@ -20,4 +20,11 @@ plugins {
     alias(libs.plugins.firebase.crashlytics) apply false
     alias(libs.plugins.firebase.perf) apply false
     alias(libs.plugins.firebase.appdistribution) apply false
+    alias(libs.plugins.spotless) apply false
 }
+
+/*subprojects {
+    afterEvaluate {
+        project.apply("${project.rootDir}/spotless.gradle")
+    }
+}*/

@@ -107,7 +107,7 @@ navigation-safe-args = { id = "androidx.navigation.safeargs.kotlin", version = "
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.2" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version = "1.4.2" }
 firebase-appdistribution = { id = "com.google.firebase.appdistribution", version = "3.2.0" }
-oss-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version = "0.10.6" }
+spotless = { id = "com.diffplug.spotless", version = "6.25.0" }
 
 [bundles]
 androidx-lifecycle = ["lifecycle.runtime", "lifecycle.viewmodel"]
