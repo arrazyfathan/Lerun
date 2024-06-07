@@ -24,10 +24,10 @@
 
     <View
         android:id="@+id/overlay"
+        style="@style/ShadowOverlay"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_gravity="bottom"
-        android:background="@drawable/overlay"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior" />
 
     <FrameLayout
@@ -37,7 +37,7 @@
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="30dp"
         android:background="@drawable/radius_100"
-        android:backgroundTint="@color/secondary_dark"
+        style="@style/NavigationStyle"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -43,6 +43,34 @@
 
     <style name="TextViewStyle" parent="Widget.MaterialComponents.TextView">
         <item name="android:textColor">@android:color/black</item>
-
     </style>
+
+    <style name="ButtonStyle">
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="textAllCaps">false</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="cornerRadius">100dp</item>
+    </style>
+
+    <style name="BgStyle">
+        <item name="backgroundColor">@color/white</item>
+    </style>
+
+    <style name="BlurOverlay">
+        <item name="blurOverlayColor">@color/main_light_transparent</item>
+    </style>
+
+    <style name="DashboardStyle">
+        <item name="cardBackgroundColor">@color/secondary_light</item>
+    </style>
+
+    <style name="ShadowOverlay">
+        <item name="android:background">@drawable/overlay_light</item>
+    </style>
+
+    <style name="NavigationStyle">
+        <item name="android:backgroundTint">@color/secondary_light</item>
+    </style>
+
 </resources>

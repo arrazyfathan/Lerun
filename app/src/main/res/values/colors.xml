@@ -19,6 +19,7 @@
     <!-- Dark -->
     <color name="ijo_tua">#77A613</color>
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
     <color name="green_dark_accent">#445E0C</color>
     <color name="ijo">#bbf246</color>
     <color name="transparent">#00000000</color>
@@ -30,7 +31,9 @@
     <color name="blue_accent">#62F3F6</color>
     <color name="dark_accent_text">#737377</color>
 
-    <!-- Dark -->
+    <!-- Light -->
     <color name="main_light">#FFFFFF</color>
+    <color name="main_light_transparent">#B2FAFAFA</color>
+    <color name="secondary_light">#E8F4F4F4</color>
 
 </resources>

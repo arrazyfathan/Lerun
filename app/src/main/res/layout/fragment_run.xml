@@ -14,9 +14,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container_view"
+            style="@style/BgStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/main_dark">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/banner"
@@ -53,16 +53,13 @@
                         tools:text="Try full access for free now" />
 
                     <com.google.android.material.button.MaterialButton
+                        style="@style/ButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:fontFamily="@font/inter_semibold"
                         android:text="Go Premium"
-                        android:textAllCaps="false"
                         android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                        android:textColor="@android:color/white"
                         android:textSize="12sp"
-                        app:cornerRadius="100dp"
                         app:layout_constraintStart_toStartOf="@+id/lets"
                         app:layout_constraintTop_toBottomOf="@+id/lets" />
 
@@ -85,6 +82,7 @@
 
             <TextView
                 android:id="@+id/tv_label_record"
+                style="@style/TextViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -92,7 +90,6 @@
                 android:layout_marginEnd="24dp"
                 android:fontFamily="@font/inter_semibold"
                 android:text="Statistics"
-                android:textColor="@android:color/white"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -105,7 +102,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="12dp"
-                app:cardBackgroundColor="@color/secondary_dark"
+                style="@style/DashboardStyle"
                 app:cardCornerRadius="20dp"
                 app:layout_constraintEnd_toStartOf="@+id/card_speed"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -129,12 +126,12 @@
 
                     <TextView
                         android:id="@+id/totalCalories"
+                        style="@style/TextViewStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:fontFamily="@font/inter_bold"
                         android:text="0 kcal"
-                        android:textColor="@android:color/white"
                         android:textSize="18sp" />
 
 
@@ -158,7 +155,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
-                app:cardBackgroundColor="@color/secondary_dark"
+                style="@style/DashboardStyle"
                 app:cardCornerRadius="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -187,7 +184,7 @@
                         android:layout_marginTop="24dp"
                         android:fontFamily="@font/inter_bold"
                         android:text="0 km/h"
-                        android:textColor="@android:color/white"
+                        style="@style/TextViewStyle"
                         android:textSize="18sp" />
 
 
@@ -212,7 +209,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="@color/secondary_dark"
+                style="@style/DashboardStyle"
                 app:cardCornerRadius="20dp"
                 app:layout_constraintEnd_toStartOf="@+id/card_time"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -241,7 +238,7 @@
                         android:layout_marginTop="24dp"
                         android:fontFamily="@font/inter_bold"
                         android:text="0 km"
-                        android:textColor="@android:color/white"
+                        style="@style/TextViewStyle"
                         android:textSize="18sp" />
 
 
@@ -264,7 +261,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
-                app:cardBackgroundColor="@color/secondary_dark"
+                style="@style/DashboardStyle"
                 app:cardCornerRadius="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -293,7 +290,7 @@
                         android:layout_marginTop="24dp"
                         android:fontFamily="@font/inter_bold"
                         android:text="0h0m0s"
-                        android:textColor="@android:color/white"
+                        style="@style/TextViewStyle"
                         android:textSize="18sp" />
 
 
@@ -345,6 +342,7 @@
 
             <TextView
                 android:id="@+id/tv_label_latest"
+                style="@style/TextViewStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -352,7 +350,6 @@
                 android:layout_marginEnd="24dp"
                 android:fontFamily="@font/inter_semibold"
                 android:text="Recent Activities"
-                android:textColor="@android:color/white"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -430,7 +427,7 @@
             android:id="@+id/header_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:blurOverlayColor="@color/main_dark_transparent"
+            style="@style/BlurOverlay"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -463,13 +460,13 @@
 
                 <TextView
                     android:id="@+id/tv_date_today"
+                    style="@style/TextViewStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="0dp"
                     android:layout_marginEnd="24dp"
                     android:fontFamily="@font/inter_medium"
-                    android:textColor="@android:color/white"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/image_profile"
@@ -478,12 +475,12 @@
 
                 <TextView
                     android:id="@+id/tv_name"
+                    style="@style/TextViewStyle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="24dp"
                     android:fontFamily="@font/inter_bold"
-                    android:textColor="@android:color/white"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/image_profile"
