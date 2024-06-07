@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        style="@style/TextViewStyle"
         android:fontFamily="@font/inter_semibold"
         android:text="@string/settings_label"
         android:textSize="24sp" />
@@ -38,7 +38,7 @@
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        style="@style/TextViewStyle"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/inter_semibold"
         android:text="Username"
@@ -51,8 +51,8 @@
         android:layout_marginTop="16dp"
         android:clickable="true"
         app:strokeWidth="0dp"
+        style="@style/DashboardStyle"
         android:focusable="true"
-        app:cardBackgroundColor="@color/secondary_dark"
         app:cardCornerRadius="8dp">
 
         <LinearLayout
@@ -67,7 +67,7 @@
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/inter_regular"
                 android:text="Edit Profile"
-                android:textColor="@android:color/white"
+                style="@style/TextViewStyle"
                 android:textSize="14sp" />
 
             <TextView
@@ -90,7 +90,7 @@
         android:layout_height="70dp"
         android:layout_marginTop="8dp"
         android:clickable="true"
-        app:cardBackgroundColor="@color/secondary_dark"
+        style="@style/DashboardStyle"
         app:strokeWidth="0dp"
         android:focusable="true"
         app:cardCornerRadius="8dp">
@@ -107,7 +107,7 @@
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/inter_regular"
                 android:text="Licenses"
-                android:textColor="@android:color/white"
+               style="@style/TextViewStyle"
                 android:textSize="14sp" />
 
             <TextView
@@ -127,7 +127,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         app:strokeWidth="0dp"
-        app:cardBackgroundColor="@color/secondary_dark"
+        style="@style/DashboardStyle"
         android:layout_height="70dp"
         android:layout_marginTop="8dp"
         app:cardCornerRadius="8dp">
@@ -144,7 +144,7 @@
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/inter_regular"
                 android:text="Version"
-                android:textColor="@android:color/white"
+                style="@style/TextViewStyle"
                 android:textSize="14sp" />
 
             <TextView

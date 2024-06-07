@@ -73,4 +73,14 @@
         <item name="android:backgroundTint">@color/secondary_light</item>
     </style>
 
+    <style name="IconStyle">
+        <item name="iconTint">@color/black</item>
+    </style>
+
+    <style name="EditTextStyle">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@drawable/radius_10_dp</item>
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+
 </resources>
