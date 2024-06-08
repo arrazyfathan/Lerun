@@ -65,6 +65,10 @@
         <item name="cardBackgroundColor">@color/secondary_dark</item>
     </style>
 
+    <style name="DetailCardStyle">
+        <item name="cardBackgroundColor">@color/main_dark</item>
+    </style>
+
     <style name="ShadowOverlay">
         <item name="android:background">@drawable/overlay</item>
     </style>

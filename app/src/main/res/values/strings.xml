@@ -30,4 +30,5 @@
     <string name="version_name">Lerun version v%1$s</string>
     <string name="settings_label">Settings</string>
     <string name="change_profile_image_label">Change Profile Image</string>
+    <string name="detail_run_label">Detail Run</string>
 </resources>
