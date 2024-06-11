@@ -3,6 +3,7 @@ package com.androiddevs.lerun.presentation.run
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.location.Location
 import android.os.Bundle
 import android.text.Editable
@@ -444,11 +445,11 @@ class TrackingFragment :
 
                     val myLocation = LatLng(location.latitude, location.longitude)
 
-                   /* map?.addMarker(
-                        MarkerOptions()
-                            .position(myLocation)
-                            .icon(bitmapDescriptorFromVector(R.drawable.custom_marker, 80))
-                    )*/
+                    /* map?.addMarker(
+                         MarkerOptions()
+                             .position(myLocation)
+                             .icon(bitmapDescriptorFromVector(R.drawable.custom_marker, 80))
+                     )*/
                     map?.animateCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 16f))
                 } catch (e: Exception) {
                     e.message?.toast()
@@ -459,12 +460,34 @@ class TrackingFragment :
     private fun loadTheme(googleMap: GoogleMap) {
         try {
             val isSuccess =
-                googleMap.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                        requireActivity(),
-                        R.raw.style_json,
-                    ),
-                )
+                when (requireContext().resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_YES, Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        googleMap.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                requireActivity(),
+                                R.raw.style_json,
+                            ),
+                        )
+                    }
+
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        googleMap.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                requireActivity(),
+                                R.raw.style_json_light,
+                            ),
+                        )
+                    }
+
+                    else -> {
+                        googleMap.setMapStyle(
+                            MapStyleOptions.loadRawResourceStyle(
+                                requireActivity(),
+                                R.raw.style_json,
+                            ),
+                        )
+                    }
+                }
 
             if (!isSuccess) {
                 Timber.tag("MAPS").e("Failed")

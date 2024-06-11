@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="300dp"
         android:layout_gravity="bottom"
-        android:background="@drawable/overlay" />
+        style="@style/ShadowOverlay"/>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardCancelRun"

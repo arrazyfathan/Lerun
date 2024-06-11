@@ -6,6 +6,7 @@
     android:background="@android:color/transparent">
 
     <com.google.android.material.card.MaterialCardView
+        style="@style/BgStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="18dp"
@@ -15,7 +16,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeWidth="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -46,30 +48,30 @@
 
             <TextView
                 android:id="@+id/validation"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:backgroundTint="@color/errorColor"
                 android:layout_marginTop="24dp"
-                android:textColor="@android:color/white"
                 android:layout_marginEnd="24dp"
+                android:background="@drawable/radius_10_dp"
+                android:backgroundTint="@color/errorColor"
                 android:fontFamily="@font/inter_medium"
-                android:textSize="12sp"
-                android:textAlignment="center"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:background="@drawable/radius_10_dp"
-                app:layout_constraintTop_toBottomOf="@id/divider"
-                android:text="Title cannot be empty" />
+                android:text="Title cannot be empty"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/divider" />
 
             <EditText
                 android:id="@+id/et_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="24dp"
                 android:background="@drawable/radius_10_dp"
                 android:backgroundTint="#0B0B0B"
                 android:fontFamily="@font/inter_regular"
@@ -95,7 +97,8 @@
                 app:cardCornerRadius="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_name">
+                app:layout_constraintTop_toBottomOf="@id/et_name"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -139,7 +142,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/container_distance"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/container_duration">
+                app:layout_constraintTop_toBottomOf="@id/container_duration"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -185,7 +189,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/container_average_speed"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/container_calories"
-                app:layout_constraintTop_toBottomOf="@id/container_duration">
+                app:layout_constraintTop_toBottomOf="@id/container_duration"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -231,7 +236,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/container_distance"
-                app:layout_constraintTop_toBottomOf="@id/container_duration">
+                app:layout_constraintTop_toBottomOf="@id/container_duration"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
