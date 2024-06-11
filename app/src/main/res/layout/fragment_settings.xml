@@ -7,9 +7,9 @@
     android:padding="16dp">
 
     <TextView
+        style="@style/TextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/TextViewStyle"
         android:fontFamily="@font/inter_semibold"
         android:text="@string/settings_label"
         android:textSize="24sp" />
@@ -36,9 +36,9 @@
 
     <TextView
         android:id="@+id/username"
+        style="@style/TextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/TextViewStyle"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/inter_semibold"
         android:text="Username"
@@ -46,14 +46,14 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnEditProfile"
+        style="@style/DashboardStyle"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_marginTop="16dp"
         android:clickable="true"
-        app:strokeWidth="0dp"
-        style="@style/DashboardStyle"
         android:focusable="true"
-        app:cardCornerRadius="8dp">
+        app:cardCornerRadius="8dp"
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -62,12 +62,12 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/TextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/inter_regular"
                 android:text="Edit Profile"
-                style="@style/TextViewStyle"
                 android:textSize="14sp" />
 
             <TextView
@@ -85,15 +85,68 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
+        style="@style/DashboardStyle"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="8dp"
+        app:strokeWidth="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="@string/themes_label"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/inter_light"
+                    android:text="Use dark theme"
+                    android:textColor="@color/text_dark"
+                    android:textSize="12sp" />
+
+
+            </LinearLayout>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/dark_theme_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:checked="false" />
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/btn_licenses"
+        style="@style/DashboardStyle"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_marginTop="8dp"
         android:clickable="true"
-        style="@style/DashboardStyle"
-        app:strokeWidth="0dp"
         android:focusable="true"
-        app:cardCornerRadius="8dp">
+        app:cardCornerRadius="8dp"
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -102,12 +155,12 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/TextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/inter_regular"
                 android:text="Licenses"
-               style="@style/TextViewStyle"
                 android:textSize="14sp" />
 
             <TextView
@@ -125,12 +178,12 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        app:strokeWidth="0dp"
         style="@style/DashboardStyle"
+        android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_marginTop="8dp"
-        app:cardCornerRadius="8dp">
+        app:cardCornerRadius="8dp"
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -139,12 +192,12 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/TextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/inter_regular"
                 android:text="Version"
-                style="@style/TextViewStyle"
                 android:textSize="14sp" />
 
             <TextView

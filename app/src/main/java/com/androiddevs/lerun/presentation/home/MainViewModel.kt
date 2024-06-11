@@ -38,6 +38,8 @@ constructor(
         return imageRepository.getImage(userSettingStorage.getUsername()!!)
     }
 
+    fun getDefaultTheme() = userSettingStorage.getUserThemes()
+
     var sortType = SortType.DATE
 
     init {

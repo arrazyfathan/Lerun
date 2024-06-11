@@ -1,6 +1,7 @@
 package com.androiddevs.lerun.data.local.preferences
 
 import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatDelegate
 import com.androiddevs.lerun.domain.UserSettingStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -34,6 +35,19 @@ class UserSettingStorageImpl @Inject constructor(
         }
     }
 
+    override fun getUserThemes(): Int {
+        return sharedPreferences.getInt(KEY_THEME, AppCompatDelegate.MODE_NIGHT_NO)
+    }
+
+    override suspend fun setUserThemes(theme: Int) {
+        withContext(Dispatchers.IO) {
+            sharedPreferences
+                .edit()
+                .putInt(KEY_THEME, theme)
+                .commit()
+        }
+    }
+
     override fun getUsername(): String? {
         return sharedPreferences.getString(KEY_USERNAME, null)
     }
@@ -41,6 +55,7 @@ class UserSettingStorageImpl @Inject constructor(
     companion object {
         private const val KEY_USERNAME = "KEY_USERNAME"
         private const val KEY_WEIGHT = "KEY_WEIGHT"
+        private const val KEY_THEME = "KEY_THEME"
     }
 }
 

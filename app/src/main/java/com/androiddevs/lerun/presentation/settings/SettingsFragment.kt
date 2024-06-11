@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -109,6 +110,23 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         binding.tvProfile.setOnClickListener {
             // pickImage()
+        }
+
+
+        val theme = settingViewModel.getTheme()
+        binding.darkThemeToggle.isChecked = theme != AppCompatDelegate.MODE_NIGHT_NO
+
+        binding.darkThemeToggle.setOnCheckedChangeListener { _, isChecked ->
+            AppCompatDelegate.setDefaultNightMode(
+                if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
+                else AppCompatDelegate.MODE_NIGHT_NO
+            )
+
+            if (isChecked) {
+                settingViewModel.setTheme(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                settingViewModel.setTheme(AppCompatDelegate.MODE_NIGHT_NO)
+            }
         }
     }
 

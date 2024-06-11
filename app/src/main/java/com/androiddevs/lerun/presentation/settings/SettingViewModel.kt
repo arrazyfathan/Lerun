@@ -21,6 +21,14 @@ class SettingViewModel @Inject constructor(
         return imageRepository.getImage(userSettingStorage.getUsername()!!)
     }
 
+    fun getTheme(): Int = userSettingStorage.getUserThemes()
+
+    fun setTheme(theme: Int) {
+        viewModelScope.launch {
+            userSettingStorage.setUserThemes(theme)
+        }
+    }
+
     fun changeImage(imageString: String) {
         viewModelScope.launch {
             val userImage = UserImage(
