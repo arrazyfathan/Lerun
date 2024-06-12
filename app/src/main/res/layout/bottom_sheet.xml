@@ -6,12 +6,10 @@
     android:background="@android:color/transparent">
 
     <com.google.android.material.card.MaterialCardView
-        style="@style/BgStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="18dp"
-        android:backgroundTint="@color/main_dark"
-        android:backgroundTintMode="multiply"
+        style="@style/DashboardStyle"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +29,7 @@
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="@string/run_deatail_label"
-                android:textColor="@android:color/white"
+                style="@style/TextViewStyle"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -72,15 +70,13 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="24dp"
-                android:background="@drawable/radius_10_dp"
-                android:backgroundTint="#0B0B0B"
+                style="@style/EditTextStyle"
                 android:fontFamily="@font/inter_regular"
                 android:hint="@string/hint_run_title"
                 android:paddingStart="24dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="24dp"
                 android:paddingBottom="10dp"
-                android:textColor="@android:color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -93,7 +89,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="24dp"
-                app:cardBackgroundColor="#0B0B0B"
+                style="@style/DetailCardStyle"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +119,7 @@
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/inter_semibold"
                         android:text="00:00:00:00"
-                        android:textColor="@android:color/white"
+                        style="@style/TextViewStyle"
                         android:textSize="38sp" />
 
                 </LinearLayout>
@@ -137,7 +133,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="5dp"
-                app:cardBackgroundColor="#0B0B0B"
+                style="@style/DetailCardStyle"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintEnd_toStartOf="@+id/container_distance"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -169,7 +165,7 @@
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/inter_semibold"
                         android:text="0"
-                        android:textColor="@android:color/white"
+                        style="@style/TextViewStyle"
                         android:textSize="16sp" />
 
                 </LinearLayout>
@@ -184,7 +180,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="5dp"
-                app:cardBackgroundColor="#0B0B0B"
+                style="@style/DetailCardStyle"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintEnd_toStartOf="@+id/container_average_speed"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -216,7 +212,7 @@
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/inter_semibold"
                         android:text="0"
-                        android:textColor="@android:color/white"
+                        style="@style/TextViewStyle"
                         android:textSize="16sp" />
 
                 </LinearLayout>
@@ -231,7 +227,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="24dp"
-                app:cardBackgroundColor="#0B0B0B"
+                style="@style/DetailCardStyle"
                 app:cardCornerRadius="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -263,7 +259,7 @@
                         android:layout_marginBottom="10dp"
                         android:fontFamily="@font/inter_semibold"
                         android:text="0"
-                        android:textColor="@android:color/white"
+                        style="@style/TextViewStyle"
                         android:textSize="16sp" />
 
                 </LinearLayout>
@@ -300,7 +296,7 @@
                 android:background="@android:color/transparent"
                 app:cornerRadius="100dp"
                 app:icon="@drawable/ic_close_white"
-                app:iconTint="@android:color/white"
+                style="@style/IconStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:rippleColor="@color/main_dark" />
