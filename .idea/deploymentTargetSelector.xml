@@ -15,7 +15,7 @@
       </SelectionState>
       <SelectionState runConfigName="Samples.Lerun.app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-06-06T02:14:37.605963Z">
+        <DropdownSelection timestamp="2024-06-13T03:09:23.952499Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=/Users/macintosh/.android/avd/Pixel_7_Pro_API_34.avd" />
