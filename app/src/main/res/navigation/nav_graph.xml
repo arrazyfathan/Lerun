@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/runFragment"
-        android:name="com.androiddevs.lerun.presentation.home.RunFragment"
+        android:name="com.arrazyfathan.lerun.presentation.home.RunFragment"
         android:label="RunFragment">
         <action
             android:id="@+id/action_runFragment_to_trackingFragment"
@@ -35,7 +35,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
             android:name="latestrun"
-            app:argType="com.androiddevs.lerun.data.local.db.Run" />
+            app:argType="com.arrazyfathan.lerun.data.local.db.Run" />
         <action
             android:id="@+id/action_runFragment_to_detailRunFragment"
             app:destination="@id/detailRunFragment"
@@ -53,11 +53,11 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.androiddevs.lerun.presentation.settings.SettingsFragment"
+        android:name="com.arrazyfathan.lerun.presentation.settings.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/trackingFragment"
-        android:name="com.androiddevs.lerun.presentation.run.TrackingFragment"
+        android:name="com.arrazyfathan.lerun.presentation.run.TrackingFragment"
         android:label="TrackingFragment">
         <action
             android:id="@+id/action_trackingFragment_to_runFragment"
@@ -69,11 +69,11 @@
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="com.androiddevs.lerun.presentation.statistic.StatisticsFragment"
+        android:name="com.arrazyfathan.lerun.presentation.statistic.StatisticsFragment"
         android:label="StatisticsFragment" />
     <fragment
         android:id="@+id/setupFragment"
-        android:name="com.androiddevs.lerun.presentation.onboarding.SetupFragment"
+        android:name="com.arrazyfathan.lerun.presentation.onboarding.SetupFragment"
         android:label="SetupFragment">
         <action
             android:id="@+id/action_setupFragment_to_runFragment"
@@ -85,12 +85,12 @@
     </fragment>
     <fragment
         android:id="@+id/detailRunFragment"
-        android:name="com.androiddevs.lerun.presentation.detailrun.DetailRunFragment"
+        android:name="com.arrazyfathan.lerun.presentation.detailrun.DetailRunFragment"
         android:label="fragment_detail_run"
         tools:layout="@layout/fragment_detail_run" />
     <fragment
         android:id="@+id/allRunFragment"
-        android:name="com.androiddevs.lerun.presentation.allrun.AllRunFragment"
+        android:name="com.arrazyfathan.lerun.presentation.allrun.AllRunFragment"
         android:label="fragment_all_run"
         tools:layout="@layout/fragment_all_run" />
 </navigation>

@@ -41,6 +41,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456169824609:android:4e4cce9eebfd5458762520",
+        "android_client_info": {
+          "package_name": "com.arrazyfathan.lerun"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "456169824609-tf6iqoq54su7pjsfr8bfoesdhguh9omm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCthTkyCMn2EMfpugJEfy606fjEmhLmCkQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "456169824609-tf6iqoq54su7pjsfr8bfoesdhguh9omm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

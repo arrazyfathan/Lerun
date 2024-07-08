@@ -1,4 +1,4 @@
-package com.androiddevs.lerun
+package com.arrazyfathan.lerun
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
