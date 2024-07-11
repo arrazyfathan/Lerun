@@ -8,19 +8,19 @@
     <action
         android:id="@+id/action_global_tackingFragment"
         app:destination="@+id/trackingFragment"
-        app:enterAnim="@anim/nav_default_enter_anim"
-        app:exitAnim="@anim/nav_default_exit_anim"
         app:launchSingleTop="true"
-        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        app:enterAnim="@anim/jak_pull_in_right"
+        app:exitAnim="@anim/push_out_left"
+        app:popEnterAnim="@anim/pull_in_left"
+        app:popExitAnim="@anim/push_out_right" />
 
     <action
         android:id="@+id/from_main_activity_to_tracking"
         app:destination="@+id/trackingFragment"
-        app:enterAnim="@anim/nav_default_enter_anim"
-        app:exitAnim="@anim/nav_default_exit_anim"
-        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        app:enterAnim="@anim/jak_pull_in_right"
+        app:exitAnim="@anim/push_out_left"
+        app:popEnterAnim="@anim/pull_in_left"
+        app:popExitAnim="@anim/push_out_right" />
 
     <fragment
         android:id="@+id/runFragment"
@@ -29,27 +29,27 @@
         <action
             android:id="@+id/action_runFragment_to_trackingFragment"
             app:destination="@id/trackingFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:enterAnim="@anim/jak_pull_in_right"
+            app:exitAnim="@anim/push_out_left"
+            app:popEnterAnim="@anim/pull_in_left"
+            app:popExitAnim="@anim/push_out_right" />
         <argument
             android:name="latestrun"
             app:argType="com.arrazyfathan.lerun.data.local.db.Run" />
         <action
             android:id="@+id/action_runFragment_to_detailRunFragment"
             app:destination="@id/detailRunFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:enterAnim="@anim/jak_pull_in_right"
+            app:exitAnim="@anim/push_out_left"
+            app:popEnterAnim="@anim/pull_in_left"
+            app:popExitAnim="@anim/push_out_right" />
         <action
             android:id="@+id/action_runFragment_to_allRunFragment"
             app:destination="@id/allRunFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:enterAnim="@anim/jak_pull_in_right"
+            app:exitAnim="@anim/push_out_left"
+            app:popEnterAnim="@anim/pull_in_left"
+            app:popExitAnim="@anim/push_out_right" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -62,10 +62,12 @@
         <action
             android:id="@+id/action_trackingFragment_to_runFragment"
             app:destination="@id/runFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:enterAnim="@anim/jak_pull_in_right"
+            app:exitAnim="@anim/push_out_left"
+            app:popEnterAnim="@anim/pull_in_left"
+            app:popExitAnim="@anim/push_out_right"
+            app:popUpTo="@id/runFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
@@ -78,10 +80,10 @@
         <action
             android:id="@+id/action_setupFragment_to_runFragment"
             app:destination="@id/runFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:enterAnim="@anim/jak_pull_in_right"
+            app:exitAnim="@anim/push_out_left"
+            app:popEnterAnim="@anim/pull_in_left"
+            app:popExitAnim="@anim/push_out_right" />
     </fragment>
     <fragment
         android:id="@+id/detailRunFragment"

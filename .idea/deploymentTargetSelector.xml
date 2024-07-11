@@ -15,10 +15,10 @@
       </SelectionState>
       <SelectionState runConfigName="Samples.Lerun.app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-06-13T03:09:23.952499Z">
+        <DropdownSelection timestamp="2024-07-08T02:20:09.293352Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/macintosh/.android/avd/Pixel_7_Pro_API_34.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/macintosh/.android/avd/Pixel_5_API_34.avd" />
             </handle>
           </Target>
         </DropdownSelection>
