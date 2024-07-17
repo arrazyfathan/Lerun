@@ -7,8 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arrazyfathan.lerun.R
-import com.arrazyfathan.lerun.presentation.adapters.RunAdapter
 import com.arrazyfathan.lerun.databinding.FragmentAllRunBinding
+import com.arrazyfathan.lerun.presentation.adapters.RunAdapter
 import com.arrazyfathan.lerun.presentation.home.MainViewModel
 import com.arrazyfathan.lerun.utils.SortType
 import com.arrazyfathan.lerun.utils.viewBinding

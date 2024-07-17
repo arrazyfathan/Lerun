@@ -12,8 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arrazyfathan.lerun.R
-import com.arrazyfathan.lerun.presentation.adapters.LatestRunAdapter
 import com.arrazyfathan.lerun.databinding.FragmentRunBinding
+import com.arrazyfathan.lerun.presentation.adapters.LatestRunAdapter
 import com.arrazyfathan.lerun.presentation.statistic.StatisticViewModel
 import com.arrazyfathan.lerun.ui.customview.CustomMarkerView
 import com.arrazyfathan.lerun.utils.BitmapConverter

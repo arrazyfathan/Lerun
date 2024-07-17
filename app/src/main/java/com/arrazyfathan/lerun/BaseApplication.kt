@@ -2,7 +2,6 @@ package com.arrazyfathan.lerun
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.arrazyfathan.lerun.data.local.preferences.UserSettingStorageImpl
 import com.arrazyfathan.lerun.domain.UserSettingStorage
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber

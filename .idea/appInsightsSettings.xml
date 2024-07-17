@@ -9,10 +9,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.arrazyfathan.lerun" />
+                  <option name="mobileSdkAppId" value="1:456169824609:android:4e4cce9eebfd5458762520" />
+                  <option name="projectId" value="lerun-f3159" />
+                  <option name="projectNumber" value="456169824609" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

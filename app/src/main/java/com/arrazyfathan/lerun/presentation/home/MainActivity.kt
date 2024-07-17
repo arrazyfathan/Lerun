@@ -8,11 +8,8 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -29,17 +26,11 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
     private lateinit var remoteConfig: FirebaseRemoteConfig
-
-    private val viewModel: MainViewModel by viewModels()
-
     private lateinit var binding: NewActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
-
-    companion object {
-        const val TAG = "MainActivity"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +43,7 @@ class MainActivity : AppCompatActivity() {
         generateNewToken()
         requestPermissions()
 
-        // setSupportActionBar(toolbar)
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNavigationView.setupWithNavController(navController)
         binding.bottomNavigationView.setOnItemReselectedListener {}
