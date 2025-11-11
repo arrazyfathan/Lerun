@@ -16,13 +16,13 @@ plugins {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 36
     namespace = "com.arrazyfathan.lerun"
 
     defaultConfig {
         applicationId = "com.arrazyfathan.lerun"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.2"
 
