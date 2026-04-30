@@ -1,10 +1,10 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.navigation.safe.args)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.google.services)
@@ -65,13 +65,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs +=
-            listOf(
-                "-Xcontext-receivers",
-            )
-    }
     buildFeatures {
         viewBinding = true
         compose = true
@@ -79,6 +72,13 @@ android {
     }
 
     packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
+}
+
+kotlin {
+    compilerOptions {
+        languageVersion.set(KotlinVersion.KOTLIN_2_2)
+        freeCompilerArgs.add("-Xcontext-receivers")
+    }
 }
 
 dependencies {
@@ -172,8 +172,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-}
-
-composeCompiler {
-    enableStrongSkippingMode = true
 }

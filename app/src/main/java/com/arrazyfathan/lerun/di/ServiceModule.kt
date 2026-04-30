@@ -8,6 +8,7 @@ import androidx.core.app.NotificationCompat
 import com.arrazyfathan.lerun.R
 import com.arrazyfathan.lerun.presentation.home.MainActivity
 import com.arrazyfathan.lerun.utils.Constants
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
@@ -23,13 +24,13 @@ object ServiceModule {
     @Provides
     fun provideFusedLocationProviderClient(
         @ApplicationContext app: Context,
-    ) = LocationServices.getFusedLocationProviderClient(app)
+    ): FusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(app)
 
     @ServiceScoped
     @Provides
     fun provideMainActivityPendingIntent(
         @ApplicationContext app: Context,
-    ) = if (Build.VERSION.SDK_INT >= 31) {
+    ): PendingIntent = if (Build.VERSION.SDK_INT >= 31) {
         PendingIntent.getActivity(
             app,
             0,
@@ -54,7 +55,7 @@ object ServiceModule {
     fun provideBaseNotificationBuilder(
         @ApplicationContext app: Context,
         pendingIntent: PendingIntent,
-    ) = NotificationCompat.Builder(app, Constants.NOTIFICATION_CHANNEL_ID)
+    ): NotificationCompat.Builder = NotificationCompat.Builder(app, Constants.NOTIFICATION_CHANNEL_ID)
         .setAutoCancel(false)
         .setOngoing(true)
         .setSmallIcon(R.drawable.ic_directions_run_black_24dp)

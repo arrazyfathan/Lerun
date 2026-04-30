@@ -1,12 +1,12 @@
 [versions]
-agp = "8.4.0"
+agp = "9.0.1"
 activityKtx = "1.9.0"
 androidImageCropper = "4.5.0"
 blurview = "version-2.0.3"
 core = "3.3.0"
 easypermissions = "3.0.0"
 espressoCore = "3.2.0"
-hiltAndroid = "2.50"
+hiltAndroid = "2.59.2"
 hiltCompiler = "1.1.0"
 junit = "4.12"
 junitVersion = "1.1.1"
@@ -17,21 +17,21 @@ constrainLayout = "2.1.4"
 material = "1.12.0"
 lifecycle = "2.8.0"
 mpandroidchart = "v3.1.0"
-navigation = "2.7.7"
+navigation = "2.9.7"
 glide = "4.11.0"
 maps = "18.2.0"
 location = "21.2.0"
-ossLicensesPlugin = "0.10.6"
+ossLicensesPlugin = "0.10.10"
 playServicesOssLicenses = "17.1.0"
-roomKtx = "2.6.0"
+roomKtx = "2.7.2"
 stickyscrollview = "1.0.3"
 timber = "4.7.1"
-kotlin = "2.0.0"
+kotlin = "2.2.10"
 activityCompose = "1.9.0"
 composeBom = "2024.02.02"
-composeNavigation = "2.8.0-alpha08"
+composeNavigation = "2.9.7"
 firebaseBom = "31.1.1"
-ksp = "2.0.0-1.0.21"
+ksp = "2.3.6"
 securityCryptoKtx = "1.1.0-alpha06"
 lifecycleRuntimeKtx = "2.7.0"
 
@@ -101,18 +101,15 @@ androidx-security-crypto-ktx = { module = "androidx.security:security-crypto-ktx
 android-application = { id = "com.android.application", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize",  version.ref = "kotlin"  }
-google-services = { id = "com.google.gms.google-services", version = "4.4.1" }
-navigation-safe-args = { id = "androidx.navigation.safeargs.kotlin", version = "2.7.7" }
-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "2.9.2" }
-firebase-perf = { id = "com.google.firebase.firebase-perf", version = "1.4.2" }
-firebase-appdistribution = { id = "com.google.firebase.appdistribution", version = "3.2.0" }
+google-services = { id = "com.google.gms.google-services", version = "4.4.4" }
+navigation-safe-args = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.5" }
+firebase-perf = { id = "com.google.firebase.firebase-perf", version = "2.0.2" }
+firebase-appdistribution = { id = "com.google.firebase.appdistribution", version = "5.2.0" }
 spotless = { id = "com.diffplug.spotless", version = "6.25.0" }
 
 [bundles]
 androidx-lifecycle = ["lifecycle.runtime", "lifecycle.viewmodel"]
 androidx-navigation = ["navigation.fragment", "navigation.ui"]
-
-
