@@ -1,5 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     alias(libs.plugins.android.application)
@@ -16,13 +16,13 @@ plugins {
 }
 
 android {
-    compileSdk = 36
+    compileSdk = 37
     namespace = "com.arrazyfathan.lerun"
 
     defaultConfig {
         applicationId = "com.arrazyfathan.lerun"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.2.1"
 
@@ -51,7 +51,6 @@ android {
         }
 
         getByName("debug") {
-            val testerGroup = rootProject.file("testergroup.properties")
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotesFile = "notes.txt"
