@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.androidx.baselineprofile)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
     alias(libs.plugins.navigation.safe.args)
@@ -82,6 +83,8 @@ kotlin {
 
 dependencies {
     implementation(fileTree("src/main/libs") { include("*.jar") })
+    implementation(libs.androidx.profileinstaller)
+    baselineProfile(project(":baselineprofile"))
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.ktx)

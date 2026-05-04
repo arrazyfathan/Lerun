@@ -2,6 +2,7 @@
 agp = "9.0.1"
 activityKtx = "1.9.0"
 androidImageCropper = "4.5.0"
+baselineProfile = "1.4.1"
 blurview = "version-2.0.3"
 core = "3.3.0"
 easypermissions = "3.0.0"
@@ -21,8 +22,8 @@ navigation = "2.9.7"
 glide = "4.11.0"
 maps = "18.2.0"
 location = "21.2.0"
-ossLicensesPlugin = "0.10.10"
-playServicesOssLicenses = "17.1.0"
+ossLicensesPlugin = "0.11.0"
+playServicesOssLicenses = "17.5.1"
 roomKtx = "2.7.2"
 stickyscrollview = "1.0.3"
 timber = "4.7.1"
@@ -33,6 +34,8 @@ composeNavigation = "2.9.7"
 firebaseBom = "31.1.1"
 ksp = "2.3.6"
 securityCryptoKtx = "1.1.0-alpha06"
+testRunner = "1.6.2"
+uiautomator = "2.3.0"
 lifecycleRuntimeKtx = "2.7.0"
 
 [libraries]
@@ -43,6 +46,7 @@ androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref =
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appCompat" }
+androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "baselineProfile" }
 androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomKtx" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
@@ -94,14 +98,20 @@ navigation-compose = { module = "androidx.navigation:navigation-compose", versio
 
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
+androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version = "1.4.1" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "testRunner" }
+androidx-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "uiautomator" }
 
 androidx-security-crypto-ktx = { module = "androidx.security:security-crypto-ktx", version.ref = "securityCryptoKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-test = { id = "com.android.test", version.ref = "agp" }
+androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineProfile" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize",  version.ref = "kotlin"  }
 google-services = { id = "com.google.gms.google-services", version = "4.4.4" }
 navigation-safe-args = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigation" }
