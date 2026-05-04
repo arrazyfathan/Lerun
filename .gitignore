@@ -18,3 +18,4 @@
 .cxx
 
 output-metadata.json
+/baselineprofile/build/
