@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.arrazyfathan.lerun.R
-import com.arrazyfathan.lerun.presentation.home.MainActivity
+import com.arrazyfathan.lerun.app.MainActivity
+import com.arrazyfathan.lerun.core.ui.R as UiR
 import com.arrazyfathan.lerun.utils.Constants
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -58,7 +58,7 @@ object ServiceModule {
     ): NotificationCompat.Builder = NotificationCompat.Builder(app, Constants.NOTIFICATION_CHANNEL_ID)
         .setAutoCancel(false)
         .setOngoing(true)
-        .setSmallIcon(R.drawable.ic_directions_run_black_24dp)
+        .setSmallIcon(UiR.drawable.ic_directions_run_black_24dp)
         .setContentTitle("Lerun")
         .setContentText("00:00:00")
         .setContentIntent(pendingIntent)

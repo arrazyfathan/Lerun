@@ -8,8 +8,8 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.arrazyfathan.lerun.R
-import com.arrazyfathan.lerun.presentation.home.MainActivity
+import com.arrazyfathan.lerun.app.MainActivity
+import com.arrazyfathan.lerun.core.ui.R as UiR
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -50,7 +50,7 @@ class LerunMessagingService : FirebaseMessagingService() {
         // ngtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder =
             NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.ic_run)
+                .setSmallIcon(UiR.drawable.ic_run)
                 .setContentTitle("Lerun")
                 .setContentText(messageBody)
                 .setAutoCancel(true)

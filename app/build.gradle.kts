@@ -4,15 +4,12 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.androidx.baselineprofile)
-    alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.navigation.safe.args)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.firebase.appdistribution)
-    alias(libs.plugins.compose.compiler)
     id("com.google.android.gms.oss-licenses-plugin")
 }
 
@@ -67,7 +64,6 @@ android {
     }
     buildFeatures {
         viewBinding = true
-        compose = true
         buildConfig = true
     }
 
@@ -82,6 +78,14 @@ kotlin {
 }
 
 dependencies {
+    implementation(project(":core:domain"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:common"))
+    implementation(project(":feature:run"))
+    implementation(project(":feature:statistics"))
+    implementation(project(":feature:settings"))
+    implementation(project(":feature:onboarding"))
+
     implementation(fileTree("src/main/libs") { include("*.jar") })
     implementation(libs.androidx.profileinstaller)
     baselineProfile(project(":baselineprofile"))
@@ -96,11 +100,6 @@ dependencies {
     // Material Design
     implementation(libs.material)
 
-    // Room
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.paging)
-
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
@@ -111,12 +110,7 @@ dependencies {
     // Navigation Components
     implementation(libs.bundles.androidx.navigation)
 
-    // Glide
-    implementation(libs.glide)
-    ksp(libs.glide.compiler)
-
     // Google Maps Location Services
-    implementation(libs.google.play.service.maps)
     implementation(libs.google.play.service.location)
 
     // Hilt
@@ -127,25 +121,10 @@ dependencies {
     // Activity KTX for viewModels()
     implementation(libs.androidx.activity.ktx)
 
-    // Easy Permissions
-    implementation(libs.easypermissions)
-
     // Timber
     implementation(libs.timber)
 
-    // MPAndroidChart
-    implementation(libs.mpandroidchart)
-
     implementation(libs.androidx.lifecycle.service)
-
-    // material dialog
-    implementation(libs.core)
-    implementation(libs.input)
-
-    // Sticky Header
-    implementation(libs.stickyscrollview)
-
-    implementation(libs.blurview)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics.ktx)
@@ -154,24 +133,4 @@ dependencies {
     implementation(libs.firebase.config.ktx)
     implementation(libs.firebase.messaging.ktx)
 
-    // Compose
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.navigation.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-
-    implementation(libs.play.services.oss.licenses)
-    implementation(libs.android.image.cropper)
-
-    implementation(libs.androidx.security.crypto.ktx)
-
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 }

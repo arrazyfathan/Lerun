@@ -1,56 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:startDestination="@id/setupFragment">
-
-    <action
-        android:id="@+id/action_global_tackingFragment"
-        app:destination="@+id/trackingFragment"
-        app:launchSingleTop="true"
-        app:enterAnim="@anim/jak_pull_in_right"
-        app:exitAnim="@anim/push_out_left"
-        app:popEnterAnim="@anim/pull_in_left"
-        app:popExitAnim="@anim/push_out_right" />
-
-    <action
-        android:id="@+id/from_main_activity_to_tracking"
-        app:destination="@+id/trackingFragment"
-        app:enterAnim="@anim/jak_pull_in_right"
-        app:exitAnim="@anim/push_out_left"
-        app:popEnterAnim="@anim/pull_in_left"
-        app:popExitAnim="@anim/push_out_right" />
 
     <fragment
         android:id="@+id/runFragment"
         android:name="com.arrazyfathan.lerun.presentation.home.RunFragment"
-        android:label="RunFragment">
-        <action
-            android:id="@+id/action_runFragment_to_trackingFragment"
-            app:destination="@id/trackingFragment"
-            app:enterAnim="@anim/jak_pull_in_right"
-            app:exitAnim="@anim/push_out_left"
-            app:popEnterAnim="@anim/pull_in_left"
-            app:popExitAnim="@anim/push_out_right" />
-        <argument
-            android:name="latestrun"
-            app:argType="com.arrazyfathan.lerun.data.local.db.Run" />
-        <action
-            android:id="@+id/action_runFragment_to_detailRunFragment"
-            app:destination="@id/detailRunFragment"
-            app:enterAnim="@anim/jak_pull_in_right"
-            app:exitAnim="@anim/push_out_left"
-            app:popEnterAnim="@anim/pull_in_left"
-            app:popExitAnim="@anim/push_out_right" />
-        <action
-            android:id="@+id/action_runFragment_to_allRunFragment"
-            app:destination="@id/allRunFragment"
-            app:enterAnim="@anim/jak_pull_in_right"
-            app:exitAnim="@anim/push_out_left"
-            app:popEnterAnim="@anim/pull_in_left"
-            app:popExitAnim="@anim/push_out_right" />
-    </fragment>
+        android:label="RunFragment" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.arrazyfathan.lerun.presentation.settings.SettingsFragment"
@@ -58,17 +16,7 @@
     <fragment
         android:id="@+id/trackingFragment"
         android:name="com.arrazyfathan.lerun.presentation.run.TrackingFragment"
-        android:label="TrackingFragment">
-        <action
-            android:id="@+id/action_trackingFragment_to_runFragment"
-            app:destination="@id/runFragment"
-            app:enterAnim="@anim/jak_pull_in_right"
-            app:exitAnim="@anim/push_out_left"
-            app:popEnterAnim="@anim/pull_in_left"
-            app:popExitAnim="@anim/push_out_right"
-            app:popUpTo="@id/runFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+        android:label="TrackingFragment" />
     <fragment
         android:id="@+id/statisticsFragment"
         android:name="com.arrazyfathan.lerun.presentation.statistic.StatisticsFragment"
@@ -76,15 +24,7 @@
     <fragment
         android:id="@+id/setupFragment"
         android:name="com.arrazyfathan.lerun.presentation.onboarding.SetupFragment"
-        android:label="SetupFragment">
-        <action
-            android:id="@+id/action_setupFragment_to_runFragment"
-            app:destination="@id/runFragment"
-            app:enterAnim="@anim/jak_pull_in_right"
-            app:exitAnim="@anim/push_out_left"
-            app:popEnterAnim="@anim/pull_in_left"
-            app:popExitAnim="@anim/push_out_right" />
-    </fragment>
+        android:label="SetupFragment" />
     <fragment
         android:id="@+id/detailRunFragment"
         android:name="com.arrazyfathan.lerun.presentation.detailrun.DetailRunFragment"
