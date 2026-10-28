@@ -20,12 +20,12 @@ val DarkColorScheme = darkColorScheme(
     onSurface = LerunWhite,
     onSurfaceVariant = LerunGray,
     error = LerunDarkRed,
-    errorContainer = LerunDarkRed5
+    errorContainer = LerunDarkRed5,
 )
 
 @Composable
 fun LerunTheme(
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = DarkColorScheme
     val view = LocalView.current
@@ -39,6 +39,6 @@ fun LerunTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = content,
     )
 }

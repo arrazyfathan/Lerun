@@ -11,23 +11,23 @@ import com.arrazyfathan.lerun.core.ui.R
 val Inter = FontFamily(
     Font(
         resId = R.font.inter_light,
-        weight = FontWeight.Light
+        weight = FontWeight.Light,
     ),
     Font(
         resId = R.font.inter_regular,
-        weight = FontWeight.Normal
+        weight = FontWeight.Normal,
     ),
     Font(
         resId = R.font.inter_regular,
-        weight = FontWeight.Medium
+        weight = FontWeight.Medium,
     ),
     Font(
         resId = R.font.inter_semibold,
-        weight = FontWeight.SemiBold
+        weight = FontWeight.SemiBold,
     ),
     Font(
         resId = R.font.inter_bold,
-        weight = FontWeight.Bold
+        weight = FontWeight.Bold,
     ),
 )
 
@@ -37,7 +37,7 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         lineHeight = 20.sp,
-        color = LerunGray
+        color = LerunGray,
     ),
     bodyMedium = TextStyle(
         fontFamily = Inter,
@@ -62,6 +62,6 @@ val Typography = Typography(
         fontFamily = Inter,
         fontWeight = FontWeight.SemiBold,
         fontSize = 24.sp,
-        color = LerunWhite
+        color = LerunWhite,
     ),
 )

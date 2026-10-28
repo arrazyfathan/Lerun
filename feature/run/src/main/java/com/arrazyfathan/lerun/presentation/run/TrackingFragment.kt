@@ -386,11 +386,10 @@ class TrackingFragment :
         }
     }
 
-    private fun sendCommandToService(action: String) =
-        Intent(requireContext(), TrackingService::class.java).also {
-            it.action = action
-            requireContext().startService(it)
-        }
+    private fun sendCommandToService(action: String) = Intent(requireContext(), TrackingService::class.java).also {
+        it.action = action
+        requireContext().startService(it)
+    }
 
     override fun onResume() {
         super.onResume()
@@ -445,7 +444,6 @@ class TrackingFragment :
         fusedLocationProviderClient.lastLocation
             .addOnSuccessListener { location ->
                 try {
-
                     val myLocation = LatLng(location.latitude, location.longitude)
 
                     /* map?.addMarker(
@@ -500,9 +498,7 @@ class TrackingFragment :
         }
     }
 
-    override fun onMyLocationButtonClick(): Boolean {
-        return false
-    }
+    override fun onMyLocationButtonClick(): Boolean = false
 
     override fun onMyLocationClick(location: Location) {
     }

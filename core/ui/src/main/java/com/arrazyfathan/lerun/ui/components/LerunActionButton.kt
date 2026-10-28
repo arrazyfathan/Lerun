@@ -29,7 +29,7 @@ fun LerunActionButton(
     isLoading: Boolean,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Button(
         onClick = onClick,
@@ -38,30 +38,30 @@ fun LerunActionButton(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
             disabledContainerColor = LerunGray,
-            disabledContentColor = LerunBlack
+            disabledContentColor = LerunBlack,
         ),
         shape = RoundedCornerShape(100f),
         modifier = modifier
-            .height(IntrinsicSize.Min)
+            .height(IntrinsicSize.Min),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             CircularProgressIndicator(
                 modifier = Modifier
                     .size(15.dp)
                     .alpha(if (isLoading) 1f else 0f),
                 strokeWidth = 1.5.dp,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.onPrimary,
             )
             Text(
                 text = text,
                 modifier = Modifier
-                    .alpha(if(isLoading) 0f else 1f),
-                fontWeight = FontWeight.SemiBold
+                    .alpha(if (isLoading) 0f else 1f),
+                fontWeight = FontWeight.SemiBold,
             )
         }
     }
@@ -73,7 +73,7 @@ fun LerunOutlinedActionButton(
     isLoading: Boolean,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     OutlinedButton(
         onClick = onClick,
@@ -83,30 +83,30 @@ fun LerunOutlinedActionButton(
         ),
         border = BorderStroke(
             width = 0.5.dp,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.onBackground,
         ),
         shape = RoundedCornerShape(100f),
         modifier = modifier
-            .height(IntrinsicSize.Min)
+            .height(IntrinsicSize.Min),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             CircularProgressIndicator(
                 modifier = Modifier
                     .size(15.dp)
                     .alpha(if (isLoading) 1f else 0f),
                 strokeWidth = 1.5.dp,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             )
             Text(
                 text = text,
                 modifier = Modifier
-                    .alpha(if(isLoading) 0f else 1f),
-                fontWeight = FontWeight.Medium
+                    .alpha(if (isLoading) 0f else 1f),
+                fontWeight = FontWeight.Medium,
             )
         }
     }

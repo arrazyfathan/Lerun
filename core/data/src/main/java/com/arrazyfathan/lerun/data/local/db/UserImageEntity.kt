@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class UserImageEntity(
     @PrimaryKey(autoGenerate = false)
     var id: String,
-    var imageString: String?
+    var imageString: String?,
 )

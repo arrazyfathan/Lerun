@@ -38,9 +38,7 @@ constructor(
     fun getProfileName() = userSettingStorage.getUsername()
     fun getProfileWeight() = userSettingStorage.getUserWeight()
 
-    fun userImage(): LiveData<UserImage?> {
-        return imageRepository.getImage(userSettingStorage.getUsername()!!)
-    }
+    fun userImage(): LiveData<UserImage?> = imageRepository.getImage(userSettingStorage.getUsername()!!)
 
     fun getDefaultTheme() = userSettingStorage.getUserThemes()
 
@@ -79,27 +77,25 @@ constructor(
         }
     }
 
-    fun isUserFilledUserProfile(): Boolean {
-        return (userSettingStorage.getUserWeight() != 0 && !userSettingStorage.getUsername()
-            .isNullOrBlank())
+    fun isUserFilledUserProfile(): Boolean = (
+        userSettingStorage.getUserWeight() != 0 && !userSettingStorage.getUsername()
+            .isNullOrBlank()
+        )
+
+    fun sortRuns(sortType: SortType) = when (sortType) {
+        SortType.DATE -> runsSortedByDate.value?.let { runs.value = it }
+        SortType.RUNNING_TIME -> runsSortedByTimeInMillis.value?.let { runs.value = it }
+        SortType.AVG_SPEED -> runsSortedByAvgSpeed.value?.let { runs.value = it }
+        SortType.DISTANCE -> runsSortedByDistance.value?.let { runs.value = it }
+        SortType.CALORIES_BURNED -> runsSortedByCaloriesBurned.value?.let { runs.value = it }
+        SortType.DATE_ASC -> runsSortedByDateAsc.value?.let { runs.value = it }
+    }.also {
+        this.sortType = sortType
     }
 
-    fun sortRuns(sortType: SortType) =
-        when (sortType) {
-            SortType.DATE -> runsSortedByDate.value?.let { runs.value = it }
-            SortType.RUNNING_TIME -> runsSortedByTimeInMillis.value?.let { runs.value = it }
-            SortType.AVG_SPEED -> runsSortedByAvgSpeed.value?.let { runs.value = it }
-            SortType.DISTANCE -> runsSortedByDistance.value?.let { runs.value = it }
-            SortType.CALORIES_BURNED -> runsSortedByCaloriesBurned.value?.let { runs.value = it }
-            SortType.DATE_ASC -> runsSortedByDateAsc.value?.let { runs.value = it }
-        }.also {
-            this.sortType = sortType
-        }
-
-    fun insertRun(run: Run) =
-        viewModelScope.launch {
-            runRepository.insertRun(run)
-        }
+    fun insertRun(run: Run) = viewModelScope.launch {
+        runRepository.insertRun(run)
+    }
 
     fun setUserProfile(name: String, weight: String) {
         viewModelScope.launch {

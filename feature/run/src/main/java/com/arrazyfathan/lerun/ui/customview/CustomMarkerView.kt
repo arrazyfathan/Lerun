@@ -18,12 +18,10 @@ import java.util.Locale
 class CustomMarkerView(
     private val runs: List<Run>,
     context: Context,
-    layoutId: Int
+    layoutId: Int,
 ) : MarkerView(context, layoutId) {
 
-    override fun getOffset(): MPPointF {
-        return MPPointF(-width / 2f, -height.toFloat())
-    }
+    override fun getOffset(): MPPointF = MPPointF(-width / 2f, -height.toFloat())
 
     override fun refreshContent(e: Entry?, highlight: Highlight?) {
         super.refreshContent(e, highlight)

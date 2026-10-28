@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Singleton
 class UserSettingStorageImpl @Inject constructor(
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
 ) : UserSettingStorage {
 
     override suspend fun setUserName(name: String) {
@@ -22,9 +22,7 @@ class UserSettingStorageImpl @Inject constructor(
         }
     }
 
-    override fun getUserWeight(): Int {
-        return sharedPreferences.getInt(KEY_WEIGHT, 0)
-    }
+    override fun getUserWeight(): Int = sharedPreferences.getInt(KEY_WEIGHT, 0)
 
     override suspend fun setUserWeight(weight: Int) {
         withContext(Dispatchers.IO) {
@@ -35,9 +33,7 @@ class UserSettingStorageImpl @Inject constructor(
         }
     }
 
-    override fun getUserThemes(): Int {
-        return sharedPreferences.getInt(KEY_THEME, AppCompatDelegate.MODE_NIGHT_NO)
-    }
+    override fun getUserThemes(): Int = sharedPreferences.getInt(KEY_THEME, AppCompatDelegate.MODE_NIGHT_NO)
 
     override suspend fun setUserThemes(theme: Int) {
         withContext(Dispatchers.IO) {
@@ -48,9 +44,7 @@ class UserSettingStorageImpl @Inject constructor(
         }
     }
 
-    override fun getUsername(): String? {
-        return sharedPreferences.getString(KEY_USERNAME, null)
-    }
+    override fun getUsername(): String? = sharedPreferences.getString(KEY_USERNAME, null)
 
     companion object {
         private const val KEY_USERNAME = "KEY_USERNAME"
@@ -58,4 +52,3 @@ class UserSettingStorageImpl @Inject constructor(
         private const val KEY_THEME = "KEY_THEME"
     }
 }
-

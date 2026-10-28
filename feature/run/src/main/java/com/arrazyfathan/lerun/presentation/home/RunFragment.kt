@@ -38,7 +38,9 @@ import kotlin.math.round
 import com.arrazyfathan.lerun.core.ui.R as UiR
 
 @AndroidEntryPoint
-class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionCallbacks {
+class RunFragment :
+    Fragment(R.layout.fragment_run),
+    EasyPermissions.PermissionCallbacks {
     private val binding by viewBinding(FragmentRunBinding::bind)
     private val viewModel: MainViewModel by viewModels()
     private lateinit var latestRunAdapter: LatestRunAdapter
@@ -164,29 +166,29 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
     private fun subscribeObservers() {
         viewModel.userImage().observe(viewLifecycleOwner) { userImage ->
             if (userImage != null) {
-                if (!userImage.imageString.isNullOrBlank())
+                if (!userImage.imageString.isNullOrBlank()) {
                     binding.tvProfile.setImageBitmap(
                         BitmapConverter.converterStringToBitmap(
-                            userImage.imageString!!
-                        )
+                            userImage.imageString!!,
+                        ),
                     )
-                else
+                } else {
                     binding.tvProfile.setImageDrawable(
                         ContextCompat.getDrawable(
                             requireContext(),
-                            UiR.drawable.profile_n
-                        )
+                            UiR.drawable.profile_n,
+                        ),
                     )
+                }
             } else {
                 binding.tvProfile.setImageDrawable(
                     ContextCompat.getDrawable(
                         requireContext(),
-                        UiR.drawable.profile_n
-                    )
+                        UiR.drawable.profile_n,
+                    ),
                 )
             }
         }
-
 
         viewModel.totalCaloriesBurned.observe(
             viewLifecycleOwner,
@@ -271,12 +273,11 @@ class RunFragment : Fragment(R.layout.fragment_run), EasyPermissions.PermissionC
         }
     }
 
-    private fun setupRecyclerView() =
-        binding.rvRuns.apply {
-            latestRunAdapter = LatestRunAdapter()
-            adapter = latestRunAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
+    private fun setupRecyclerView() = binding.rvRuns.apply {
+        latestRunAdapter = LatestRunAdapter()
+        adapter = latestRunAdapter
+        layoutManager = LinearLayoutManager(requireContext())
+    }
 
     private fun requestPermissions() {
         if (TrackingUtility.hasLocationPermissions(requireContext())) {

@@ -10,16 +10,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val imageRepository: ImageRepository,
     private val userSettingStorage: UserSettingStorage,
 ) : ViewModel() {
 
-    fun userImage(): LiveData<UserImage?> {
-        return imageRepository.getImage(userSettingStorage.getUsername()!!)
-    }
+    fun userImage(): LiveData<UserImage?> = imageRepository.getImage(userSettingStorage.getUsername()!!)
 
     fun getTheme(): Int = userSettingStorage.getUserThemes()
 
@@ -33,19 +30,15 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch {
             val userImage = UserImage(
                 id = getUsername(),
-                imageString = imageString
+                imageString = imageString,
             )
             imageRepository.upsertImage(userImage)
         }
     }
 
-    fun getUsername(): String {
-        return userSettingStorage.getUsername().orEmpty()
-    }
+    fun getUsername(): String = userSettingStorage.getUsername().orEmpty()
 
-    fun getProfileWeight(): Int {
-        return userSettingStorage.getUserWeight()
-    }
+    fun getProfileWeight(): Int = userSettingStorage.getUserWeight()
 
     fun setUserProfile(name: String, weight: String) {
         viewModelScope.launch {

@@ -36,15 +36,13 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideEncryptedSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
-        return EncryptedSharedPreferences(
-            context,
-            "user_setting_pref",
-            MasterKey(context),
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    }
+    fun provideEncryptedSharedPreferences(@ApplicationContext context: Context): SharedPreferences = EncryptedSharedPreferences(
+        context,
+        "user_setting_pref",
+        MasterKey(context),
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
+    )
 
     private const val RUNNING_DATABASE_NAME = "running_db"
 }

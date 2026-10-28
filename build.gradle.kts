@@ -26,8 +26,6 @@ plugins {
     alias(libs.plugins.spotless) apply false
 }
 
-/*subprojects {
-    afterEvaluate {
-        project.apply("${project.rootDir}/spotless.gradle")
-    }
-}*/
+subprojects {
+    apply(from = "${rootProject.projectDir}/spotless.gradle")
+}

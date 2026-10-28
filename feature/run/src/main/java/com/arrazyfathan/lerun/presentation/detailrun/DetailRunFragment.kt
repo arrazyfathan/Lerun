@@ -40,28 +40,27 @@ class DetailRunFragment : Fragment(R.layout.fragment_detail_run) {
         loadDetail()
     }
 
-    private fun loadDetail() =
-        with(binding) {
-            titleRun.text = run.title
+    private fun loadDetail() = with(binding) {
+        titleRun.text = run.title
 
-            val calendar =
-                Calendar.getInstance().apply {
-                    timeInMillis = run.timestamp
-                }
-            val dateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
-            dateRun.text = dateFormat.format(calendar.time)
+        val calendar =
+            Calendar.getInstance().apply {
+                timeInMillis = run.timestamp
+            }
+        val dateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
+        dateRun.text = dateFormat.format(calendar.time)
 
-            Glide.with(requireActivity()).load(run.img).into(snapshotImage)
+        Glide.with(requireActivity()).load(run.img).into(snapshotImage)
 
-            val distanceInKm = "${run.distanceInMeters / 1000f} Km"
-            distanceDetail.text = distanceInKm
+        val distanceInKm = "${run.distanceInMeters / 1000f} Km"
+        distanceDetail.text = distanceInKm
 
-            durationDetail.text = TrackingUtility.getFormattedStopWatchTime(run.timeInMillis)
+        durationDetail.text = TrackingUtility.getFormattedStopWatchTime(run.timeInMillis)
 
-            val calories = "${run.caloriesBurned}kcal"
-            caloriesDetail.text = calories
+        val calories = "${run.caloriesBurned}kcal"
+        caloriesDetail.text = calories
 
-            val speed = "${run.avgSpeedInKMH}km/h"
-            averageSpeedDetail.text = speed
-        }
+        val speed = "${run.avgSpeedInKMH}km/h"
+        averageSpeedDetail.text = speed
+    }
 }

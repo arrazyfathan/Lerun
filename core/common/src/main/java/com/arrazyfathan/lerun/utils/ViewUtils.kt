@@ -22,7 +22,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 /**
  * Created by Ar Razy Fathan Rabbani on 06/12/22.
  */
@@ -109,9 +108,7 @@ fun TextView.changeTextColor(
 fun color(
     context: Context,
     color: Int,
-): Int {
-    return ContextCompat.getColor(context, color)
-}
+): Int = ContextCompat.getColor(context, color)
 
 fun colorAnimator(
     fromColor: Int,
@@ -132,7 +129,6 @@ fun View.gone() {
     this.visibility = View.GONE
 }
 
-
 fun View.visible() {
     this.visibility = View.VISIBLE
 }
@@ -141,7 +137,8 @@ fun Fragment.getBitmapFromVectorDrawable(drawableId: Int): Bitmap {
     val drawable = ContextCompat.getDrawable(requireContext(), drawableId)
     val bitmap = Bitmap.createBitmap(
         drawable!!.intrinsicWidth,
-        drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+        drawable.intrinsicHeight,
+        Bitmap.Config.ARGB_8888,
     )
     val canvas = Canvas(bitmap)
     drawable.setBounds(0, 0, canvas.width, canvas.height)
@@ -149,13 +146,10 @@ fun Fragment.getBitmapFromVectorDrawable(drawableId: Int): Bitmap {
     return bitmap
 }
 
-fun Fragment.bitmapDescriptorFromVector(vectorResId: Int, size: Int = 10): BitmapDescriptor? {
-    return ContextCompat.getDrawable(requireContext(), vectorResId)?.run {
-        setBounds(0, 0, intrinsicWidth, intrinsicHeight)
-        val bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
-        draw(Canvas(bitmap))
-        val resize = Bitmap.createScaledBitmap(bitmap, size, size, false)
-        BitmapDescriptorFactory.fromBitmap(resize)
-    }
+fun Fragment.bitmapDescriptorFromVector(vectorResId: Int, size: Int = 10): BitmapDescriptor? = ContextCompat.getDrawable(requireContext(), vectorResId)?.run {
+    setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+    val bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
+    draw(Canvas(bitmap))
+    val resize = Bitmap.createScaledBitmap(bitmap, size, size, false)
+    BitmapDescriptorFactory.fromBitmap(resize)
 }
-

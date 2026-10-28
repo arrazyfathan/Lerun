@@ -31,7 +31,9 @@ import javax.inject.Inject
 import com.arrazyfathan.lerun.core.ui.R as UiR
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), AppNavigator {
+class MainActivity :
+    AppCompatActivity(),
+    AppNavigator {
 
     @Inject
     lateinit var userSettingStorage: UserSettingStorage

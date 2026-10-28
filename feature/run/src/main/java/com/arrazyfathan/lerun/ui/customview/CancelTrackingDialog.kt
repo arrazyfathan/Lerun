@@ -13,18 +13,16 @@ class CancelTrackingDialog : DialogFragment() {
         yesListener = listener
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialAlertDialogBuilder(requireContext(), UiR.style.AlertDialogTheme)
-            .setTitle("Cancel the run?")
-            .setMessage("Are you sure to cancel the run and delete the data")
-            .setPositiveButton("Yes") { _, _ ->
-                yesListener?.let { yes ->
-                    yes()
-                }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = MaterialAlertDialogBuilder(requireContext(), UiR.style.AlertDialogTheme)
+        .setTitle("Cancel the run?")
+        .setMessage("Are you sure to cancel the run and delete the data")
+        .setPositiveButton("Yes") { _, _ ->
+            yesListener?.let { yes ->
+                yes()
             }
-            .setNegativeButton("No") { dialogInterface, _ ->
-                dialogInterface.cancel()
-            }
-            .create()
-    }
+        }
+        .setNegativeButton("No") { dialogInterface, _ ->
+            dialogInterface.cancel()
+        }
+        .create()
 }

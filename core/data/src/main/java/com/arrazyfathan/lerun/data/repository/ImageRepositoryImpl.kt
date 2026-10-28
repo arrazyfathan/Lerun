@@ -12,16 +12,12 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class ImageRepositoryImpl @Inject constructor(
-    private val imageDao: ImageDao
+    private val imageDao: ImageDao,
 ) : ImageRepository {
 
-
-    override fun getImage(id: String): LiveData<UserImage?> {
-        return imageDao.getImageById(id).map { it?.toDomain() }
-    }
+    override fun getImage(id: String): LiveData<UserImage?> = imageDao.getImageById(id).map { it?.toDomain() }
 
     override suspend fun upsertImage(userImage: UserImage) {
         withContext(Dispatchers.IO) {

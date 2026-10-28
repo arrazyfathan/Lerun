@@ -42,7 +42,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val binding by viewBinding(FragmentSettingsBinding::bind)
     private val settingViewModel: SettingViewModel by viewModels()
 
-
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?,
@@ -63,25 +62,26 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private fun observe() {
         settingViewModel.userImage().observe(viewLifecycleOwner) { userImage ->
             if (userImage != null) {
-                if (!userImage.imageString.isNullOrBlank())
+                if (!userImage.imageString.isNullOrBlank()) {
                     binding.tvProfile.setImageBitmap(
                         BitmapConverter.converterStringToBitmap(
-                            userImage.imageString!!
-                        )
+                            userImage.imageString!!,
+                        ),
                     )
-                else
+                } else {
                     binding.tvProfile.setImageDrawable(
                         ContextCompat.getDrawable(
                             requireContext(),
-                            UiR.drawable.profile_n
-                        )
+                            UiR.drawable.profile_n,
+                        ),
                     )
+                }
             } else {
                 binding.tvProfile.setImageDrawable(
                     ContextCompat.getDrawable(
                         requireContext(),
-                        UiR.drawable.profile_n
-                    )
+                        UiR.drawable.profile_n,
+                    ),
                 )
             }
         }
@@ -101,8 +101,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.tvProfile.setImageDrawable(
             ContextCompat.getDrawable(
                 requireContext(),
-                UiR.drawable.profile_n
-            )
+                UiR.drawable.profile_n,
+            ),
         )
         binding.username.text = settingViewModel.getUsername()
 
@@ -110,14 +110,16 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             // pickImage()
         }
 
-
         val theme = settingViewModel.getTheme()
         binding.darkThemeToggle.isChecked = theme != AppCompatDelegate.MODE_NIGHT_NO
 
         binding.darkThemeToggle.setOnCheckedChangeListener { _, isChecked ->
             AppCompatDelegate.setDefaultNightMode(
-                if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
-                else AppCompatDelegate.MODE_NIGHT_NO
+                if (isChecked) {
+                    AppCompatDelegate.MODE_NIGHT_YES
+                } else {
+                    AppCompatDelegate.MODE_NIGHT_NO
+                },
             )
 
             if (isChecked) {
@@ -131,13 +133,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private fun pickImage() {
         pickMedia.launch(
             PickVisualMediaRequest.Builder()
-                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly).build()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly).build(),
         )
-
     }
 
     private var pickMedia = registerForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
+        ActivityResultContracts.PickVisualMedia(),
     ) { uri: Uri? ->
         if (uri != null) {
             val options = CropImageOptions().apply {
@@ -146,8 +147,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             cropImage.launch(
                 CropImageContractOptions(
                     uri = uri,
-                    options
-                )
+                    options,
+                ),
             )
         } else {
             Timber.tag("PhotoPicker").d("No media selected")
@@ -182,25 +183,26 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         settingViewModel.userImage().observe(viewLifecycleOwner) { userImage ->
             if (userImage != null) {
-                if (!userImage.imageString.isNullOrBlank())
+                if (!userImage.imageString.isNullOrBlank()) {
                     imageEdit.setImageBitmap(
                         BitmapConverter.converterStringToBitmap(
-                            userImage.imageString!!
-                        )
+                            userImage.imageString!!,
+                        ),
                     )
-                else
+                } else {
                     imageEdit.setImageDrawable(
                         ContextCompat.getDrawable(
                             requireContext(),
-                            UiR.drawable.profile_n
-                        )
+                            UiR.drawable.profile_n,
+                        ),
                     )
+                }
             } else {
                 imageEdit.setImageDrawable(
                     ContextCompat.getDrawable(
                         requireContext(),
-                        UiR.drawable.profile_n
-                    )
+                        UiR.drawable.profile_n,
+                    ),
                 )
             }
         }

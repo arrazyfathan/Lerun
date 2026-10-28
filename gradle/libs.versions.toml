@@ -122,7 +122,7 @@ navigation-safe-args = { id = "androidx.navigation.safeargs.kotlin", version.ref
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version = "3.0.5" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version = "2.0.2" }
 firebase-appdistribution = { id = "com.google.firebase.appdistribution", version = "5.2.0" }
-spotless = { id = "com.diffplug.spotless", version = "6.25.0" }
+spotless = { id = "com.diffplug.spotless", version = "8.1.0" }
 
 [bundles]
 androidx-lifecycle = ["lifecycle.runtime", "lifecycle.viewmodel"]

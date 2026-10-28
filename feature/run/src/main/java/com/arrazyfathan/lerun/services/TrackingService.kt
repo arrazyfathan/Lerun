@@ -271,11 +271,10 @@ class TrackingService : LifecycleService() {
         }
     }
 
-    private fun addEmptyPolyline() =
-        pathPoint.value?.apply {
-            add(mutableListOf())
-            pathPoint.postValue(this)
-        } ?: pathPoint.postValue(mutableListOf(mutableListOf()))
+    private fun addEmptyPolyline() = pathPoint.value?.apply {
+        add(mutableListOf())
+        pathPoint.postValue(this)
+    } ?: pathPoint.postValue(mutableListOf(mutableListOf()))
 
     private fun startForegroundService() {
         startTimer()

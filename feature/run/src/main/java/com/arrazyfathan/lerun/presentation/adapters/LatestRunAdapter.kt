@@ -20,21 +20,18 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
         onItemClickListener = listener
     }
 
-    class LatestRunViewHolder(val binding: NewItemRunBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    class LatestRunViewHolder(val binding: NewItemRunBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): LatestRunViewHolder {
-        return LatestRunViewHolder(
-            NewItemRunBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false,
-            ),
-        )
-    }
+    ): LatestRunViewHolder = LatestRunViewHolder(
+        NewItemRunBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false,
+        ),
+    )
 
     override fun onBindViewHolder(
         holder: LatestRunViewHolder,
@@ -76,16 +73,12 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
             override fun areItemsTheSame(
                 oldItem: Run,
                 newItem: Run,
-            ): Boolean {
-                return oldItem.id == newItem.id
-            }
+            ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
                 oldItem: Run,
                 newItem: Run,
-            ): Boolean {
-                return oldItem.hashCode() == newItem.hashCode()
-            }
+            ): Boolean = oldItem.hashCode() == newItem.hashCode()
         }
 
     val differ = AsyncListDiffer(this, diffCallback)

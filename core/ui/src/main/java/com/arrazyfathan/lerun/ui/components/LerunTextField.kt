@@ -48,38 +48,38 @@ fun LerunTextField(
     modifier: Modifier = Modifier,
     error: String? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
-    additionalInfo: String? = null
+    additionalInfo: String? = null,
 ) {
     var isFocused by remember {
         mutableStateOf(false)
     }
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            if(title != null) {
+            if (title != null) {
                 Text(
                     text = title,
                     color = Color.White,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
                 )
             }
-            if(error != null) {
+            if (error != null) {
                 Text(
                     text = error,
                     color = MaterialTheme.colorScheme.error,
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
                 )
-            } else if(additionalInfo != null) {
+            } else if (additionalInfo != null) {
                 Text(
                     text = additionalInfo,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
                 )
             }
         }
@@ -88,10 +88,10 @@ fun LerunTextField(
             value = value,
             onValueChange = onValueChange,
             textStyle = LocalTextStyle.current.copy(
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             ),
             keyboardOptions = KeyboardOptions(
-                keyboardType = keyboardType
+                keyboardType = keyboardType,
             ),
             singleLine = true,
             cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
@@ -100,11 +100,11 @@ fun LerunTextField(
                 .background(
                     if (isFocused) {
                         MaterialTheme.colorScheme.primary.copy(
-                            alpha = 0.05f
+                            alpha = 0.05f,
                         )
                     } else {
                         MaterialTheme.colorScheme.surface
-                    }
+                    },
                 )
                 .border(
                     width = 1.dp,
@@ -113,7 +113,7 @@ fun LerunTextField(
                     } else {
                         Color.Transparent
                     },
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(16.dp),
                 )
                 .padding(12.dp)
                 .onFocusChanged {
@@ -123,43 +123,43 @@ fun LerunTextField(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    if(startIcon != null) {
+                    if (startIcon != null) {
                         Icon(
                             imageVector = startIcon,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Spacer(modifier = Modifier.width(16.dp))
                     }
                     Box(
                         modifier = Modifier
-                            .weight(1f)
+                            .weight(1f),
                     ) {
-                        if(value.isEmpty() && !isFocused) {
+                        if (value.isEmpty() && !isFocused) {
                             Text(
                                 text = hint,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                                    alpha = 0.4f
+                                    alpha = 0.4f,
                                 ),
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
                             )
                         }
                         innerBox()
                     }
-                    if(endIcon != null) {
+                    if (endIcon != null) {
                         Spacer(modifier = Modifier.width(16.dp))
                         Icon(
                             imageVector = endIcon,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier
-                                .padding(end = 8.dp)
+                                .padding(end = 8.dp),
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -179,7 +179,7 @@ private fun LerunTextFieldPreview() {
             title = "Email",
             additionalInfo = "Must be a valid email",
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
     }
 }

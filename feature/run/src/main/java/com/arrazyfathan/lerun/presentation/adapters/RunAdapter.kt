@@ -21,21 +21,18 @@ import java.util.Locale
 import com.arrazyfathan.lerun.core.ui.R as UiR
 
 class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
-    class RunViewHolder(val binding: ItemRunExpandableBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    class RunViewHolder(val binding: ItemRunExpandableBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
-    ): RunViewHolder {
-        return RunViewHolder(
-            ItemRunExpandableBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false,
-            ),
-        )
-    }
+    ): RunViewHolder = RunViewHolder(
+        ItemRunExpandableBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false,
+        ),
+    )
 
     override fun onBindViewHolder(
         holder: RunViewHolder,
@@ -128,16 +125,12 @@ class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
             override fun areItemsTheSame(
                 oldItem: Run,
                 newItem: Run,
-            ): Boolean {
-                return oldItem.id == newItem.id
-            }
+            ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
                 oldItem: Run,
                 newItem: Run,
-            ): Boolean {
-                return oldItem.hashCode() == newItem.hashCode()
-            }
+            ): Boolean = oldItem.hashCode() == newItem.hashCode()
         }
 
     private val differ = AsyncListDiffer(this, diffCallback)

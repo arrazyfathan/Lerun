@@ -69,9 +69,8 @@ class AllRunFragment : Fragment(R.layout.fragment_all_run) {
         }
     }
 
-    private fun setupRecyclerView() =
-        binding.rvAllRuns.apply {
-            adapter = runAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
+    private fun setupRecyclerView() = binding.rvAllRuns.apply {
+        adapter = runAdapter
+        layoutManager = LinearLayoutManager(requireContext())
+    }
 }
