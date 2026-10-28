@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.arrazyfathan.lerun.core.ui.R as UiR
 import com.arrazyfathan.lerun.domain.model.Run
 import com.arrazyfathan.lerun.feature.run.databinding.ItemRunExpandableBinding
 import com.arrazyfathan.lerun.utils.TrackingUtility
@@ -19,9 +18,10 @@ import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import com.arrazyfathan.lerun.core.ui.R as UiR
 
 class RunAdapter : RecyclerView.Adapter<RunAdapter.RunViewHolder>() {
-    inner class RunViewHolder(val binding: ItemRunExpandableBinding) :
+    class RunViewHolder(val binding: ItemRunExpandableBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(

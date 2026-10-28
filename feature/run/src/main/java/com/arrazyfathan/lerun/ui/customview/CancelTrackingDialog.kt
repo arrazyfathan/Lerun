@@ -3,8 +3,8 @@ package com.arrazyfathan.lerun.ui.customview
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import com.arrazyfathan.lerun.core.ui.R as UiR
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.arrazyfathan.lerun.core.ui.R as UiR
 
 class CancelTrackingDialog : DialogFragment() {
     private var yesListener: (() -> Unit)? = null

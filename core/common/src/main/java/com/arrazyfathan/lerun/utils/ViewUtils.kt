@@ -123,9 +123,9 @@ fun colorAnimator(
     return valueAnimator
 }
 
-context(Fragment)
+context(fragment: Fragment)
 fun String.toast() {
-    Toast.makeText(requireContext(), this, Toast.LENGTH_SHORT).show()
+    Toast.makeText(fragment.requireContext(), this, Toast.LENGTH_SHORT).show()
 }
 
 fun View.gone() {

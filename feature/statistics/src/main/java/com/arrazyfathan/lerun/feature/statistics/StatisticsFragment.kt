@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.arrazyfathan.lerun.core.ui.R as UiR
 import com.arrazyfathan.lerun.feature.statistics.R
 import com.arrazyfathan.lerun.feature.statistics.databinding.FragmentStatisticsBinding
 import com.arrazyfathan.lerun.utils.TrackingUtility
@@ -19,6 +18,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.round
+import com.arrazyfathan.lerun.core.ui.R as UiR
 
 @AndroidEntryPoint
 class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
@@ -31,7 +31,7 @@ class StatisticsFragment : Fragment(R.layout.fragment_statistics) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentStatisticsBinding.inflate(inflater, container, false)
         return binding.root
     }

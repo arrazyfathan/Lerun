@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.ksp)
@@ -19,15 +17,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-}
-
-kotlin {
-    compilerOptions {
-        languageVersion.set(KotlinVersion.KOTLIN_2_2)
-        freeCompilerArgs.add("-Xcontext-receivers")
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
@@ -52,7 +43,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.androidx.lifecycle.service)
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.config.ktx)
+    implementation(libs.firebase.config)
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)

@@ -3,7 +3,6 @@ package com.arrazyfathan.lerun.presentation.settings
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -20,7 +19,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.arrazyfathan.lerun.core.ui.R as UiR
 import com.arrazyfathan.lerun.feature.settings.R
 import com.arrazyfathan.lerun.feature.settings.databinding.FragmentSettingsBinding
 import com.arrazyfathan.lerun.utils.BitmapConverter
@@ -36,6 +34,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import com.arrazyfathan.lerun.core.ui.R as UiR
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment(R.layout.fragment_settings) {

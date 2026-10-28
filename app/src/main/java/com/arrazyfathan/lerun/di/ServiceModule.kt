@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.arrazyfathan.lerun.app.MainActivity
-import com.arrazyfathan.lerun.core.ui.R as UiR
 import com.arrazyfathan.lerun.utils.Constants
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -16,6 +15,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ServiceComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ServiceScoped
+import com.arrazyfathan.lerun.core.ui.R as UiR
 
 @Module
 @InstallIn(ServiceComponent::class)

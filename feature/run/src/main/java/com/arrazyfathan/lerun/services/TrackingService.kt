@@ -7,7 +7,6 @@ import android.app.NotificationManager.IMPORTANCE_LOW
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -18,7 +17,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
-import com.arrazyfathan.lerun.core.ui.R as UiR
 import com.arrazyfathan.lerun.utils.Constants.ACTION_PAUSE_SERVICE
 import com.arrazyfathan.lerun.utils.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.arrazyfathan.lerun.utils.Constants.ACTION_STOP_SERVICE
@@ -43,6 +41,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import com.arrazyfathan.lerun.core.ui.R as UiR
 
 typealias Polyline = MutableList<LatLng>
 typealias Polylines = MutableList<Polyline>
@@ -200,7 +199,7 @@ class TrackingService : LifecycleService() {
             }
 
         val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         currentNotificationBuilder.javaClass.getDeclaredField("mActions").apply {
             isAccessible = true
@@ -283,7 +282,7 @@ class TrackingService : LifecycleService() {
         isTracking.postValue(true)
 
         val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager)

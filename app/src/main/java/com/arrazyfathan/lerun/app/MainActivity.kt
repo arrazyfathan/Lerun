@@ -15,21 +15,26 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
 import androidx.navigation.ui.setupWithNavController
 import com.arrazyfathan.lerun.R
-import com.arrazyfathan.lerun.core.ui.R as UiR
 import com.arrazyfathan.lerun.databinding.NewActivityMainBinding
+import com.arrazyfathan.lerun.domain.UserSettingStorage
 import com.arrazyfathan.lerun.domain.model.Run
 import com.arrazyfathan.lerun.navigation.AppNavigator
 import com.arrazyfathan.lerun.utils.Constants.ACTION_SHOW_TRACKING_FRAGMENT
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.ktx.remoteConfig
-import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import com.google.firebase.remoteconfig.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfigSettings
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
+import javax.inject.Inject
+import com.arrazyfathan.lerun.core.ui.R as UiR
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), AppNavigator {
+
+    @Inject
+    lateinit var userSettingStorage: UserSettingStorage
 
     private lateinit var remoteConfig: FirebaseRemoteConfig
     private lateinit var binding: NewActivityMainBinding
@@ -44,6 +49,7 @@ class MainActivity : AppCompatActivity(), AppNavigator {
         setupRemoteConfig()
         setTheme(UiR.style.Base_Theme_Lerun)
         setContentView(binding.root)
+        setupNavigationGraph()
         generateNewToken()
         requestPermissions()
 
@@ -130,7 +136,18 @@ class MainActivity : AppCompatActivity(), AppNavigator {
         }
     }
 
+    private fun setupNavigationGraph() {
+        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
+        val isProfileFilled =
+            userSettingStorage.getUserWeight() != 0 && !userSettingStorage.getUsername().isNullOrBlank()
+        navGraph.setStartDestination(if (isProfileFilled) R.id.runFragment else R.id.setupFragment)
+        navController.graph = navGraph
+    }
+
     override fun openRun(clearOnboardingFromBackStack: Boolean) {
+        if (clearOnboardingFromBackStack) {
+            navController.graph.setStartDestination(R.id.runFragment)
+        }
         navController.navigate(
             R.id.runFragment,
             null,

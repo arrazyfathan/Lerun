@@ -18,7 +18,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.arrazyfathan.lerun.core.ui.R as UiR
 import com.arrazyfathan.lerun.domain.model.Run
 import com.arrazyfathan.lerun.feature.run.R
 import com.arrazyfathan.lerun.feature.run.databinding.FragmentTrackingBinding
@@ -52,6 +51,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import java.util.Calendar
 import kotlin.math.round
+import com.arrazyfathan.lerun.core.ui.R as UiR
 
 @AndroidEntryPoint
 class TrackingFragment :

@@ -49,8 +49,9 @@ class SettingViewModel @Inject constructor(
 
     fun setUserProfile(name: String, weight: String) {
         viewModelScope.launch {
+            val parsedWeight = weight.toFloatOrNull()?.toInt() ?: 0
             userSettingStorage.setUserName(name)
-            userSettingStorage.setUserWeight(weight.toInt())
+            userSettingStorage.setUserWeight(parsedWeight)
         }
     }
 }

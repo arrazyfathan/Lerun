@@ -20,7 +20,7 @@ class LatestRunAdapter : RecyclerView.Adapter<LatestRunAdapter.LatestRunViewHold
         onItemClickListener = listener
     }
 
-    inner class LatestRunViewHolder(val binding: NewItemRunBinding) :
+    class LatestRunViewHolder(val binding: NewItemRunBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(

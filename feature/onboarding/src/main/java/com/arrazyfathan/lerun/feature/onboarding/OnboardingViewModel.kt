@@ -1,10 +1,8 @@
 package com.arrazyfathan.lerun.presentation.onboarding
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.arrazyfathan.lerun.domain.UserSettingStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -19,10 +17,9 @@ class OnboardingViewModel @Inject constructor(
             .isNullOrBlank())
     }
 
-    fun setUserProfile(name: String, weight: String) {
-        viewModelScope.launch {
-            userSettingStorage.setUserName(name)
-            userSettingStorage.setUserWeight(weight.toInt())
-        }
+    suspend fun setUserProfile(name: String, weight: String) {
+        val parsedWeight = weight.toFloatOrNull()?.toInt() ?: 0
+        userSettingStorage.setUserName(name)
+        userSettingStorage.setUserWeight(parsedWeight)
     }
 }
