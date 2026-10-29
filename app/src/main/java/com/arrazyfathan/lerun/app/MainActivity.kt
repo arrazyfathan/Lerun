@@ -2,23 +2,24 @@ package com.arrazyfathan.lerun.app
 
 import android.Manifest
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.view.View
+import android.view.Window
+import androidx.activity.SystemBarStyle
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.navOptions
-import androidx.navigation.ui.setupWithNavController
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arrazyfathan.lerun.R
-import com.arrazyfathan.lerun.databinding.NewActivityMainBinding
-import com.arrazyfathan.lerun.domain.UserSettingStorage
-import com.arrazyfathan.lerun.domain.model.Run
-import com.arrazyfathan.lerun.navigation.AppNavigator
+import com.arrazyfathan.lerun.navigation.MainApp
+import com.arrazyfathan.lerun.presentation.onboarding.SetupRoute
+import com.arrazyfathan.lerun.ui.AppUiViewModel
+import com.arrazyfathan.lerun.ui.designsystem.LerunTheme
 import com.arrazyfathan.lerun.utils.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.google.firebase.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
@@ -26,70 +27,79 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import timber.log.Timber
-import javax.inject.Inject
 import com.arrazyfathan.lerun.core.ui.R as UiR
 
 @AndroidEntryPoint
-class MainActivity :
-    AppCompatActivity(),
-    AppNavigator {
+class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var userSettingStorage: UserSettingStorage
+    private val appUiViewModel: AppUiViewModel by viewModels()
 
     private lateinit var remoteConfig: FirebaseRemoteConfig
-    private lateinit var binding: NewActivityMainBinding
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
-    private val navController: NavController
-        get() = (supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment).navController
+    private val trackingIntentEvents = MutableSharedFlow<Unit>(
+        replay = 1,
+        extraBufferCapacity = 1,
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        binding = NewActivityMainBinding.inflate(layoutInflater)
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.auto(
+                Color.TRANSPARENT,
+                Color.TRANSPARENT,
+            ),
+            navigationBarStyle = SystemBarStyle.auto(
+                Color.TRANSPARENT,
+                Color.TRANSPARENT,
+            ),
+        )
+        window.disableNavigationBarContrastEnforcement(Build.VERSION.SDK_INT)
+
         setupRemoteConfig()
         setTheme(UiR.style.Base_Theme_Lerun)
-        setContentView(binding.root)
-        setupNavigationGraph()
         generateNewToken()
         requestPermissions()
 
-        navigateTrackingFragmentIfNeeded(intent)
-        binding.bottomNavigationView.setupWithNavController(navController)
-        binding.bottomNavigationView.setOnItemReselectedListener {}
-        binding.bottomNavigationView.background = null
-        binding.bottomNavigationView.menu.getItem(1).isEnabled = false
-        binding.bottomNavigationView.itemIconTintList = null
-
-        binding.fabinside.setOnClickListener {
-            openTracking()
+        if (savedInstanceState == null) {
+            consumeTrackingIntent(intent)
         }
 
-        navController
-            .addOnDestinationChangedListener { _, destination, _ ->
-                when (destination.id) {
-                    R.id.settingsFragment, R.id.runFragment, R.id.statisticsFragment -> {
-                        binding.bottomNavigationView.visibility = View.VISIBLE
-                        binding.containerNavMenu.visibility = View.VISIBLE
-                        binding.fabinside.visibility = View.VISIBLE
-                        binding.overlay.visibility = View.VISIBLE
-                    }
+        setContent {
+            val appUiState by appUiViewModel.state.collectAsStateWithLifecycle()
 
-                    else -> {
-                        binding.bottomNavigationView.visibility = View.GONE
-                        binding.containerNavMenu.visibility = View.GONE
-                        binding.fabinside.visibility = View.GONE
-                        binding.overlay.visibility = View.GONE
-                    }
+            LerunTheme(darkTheme = appUiState.isDarkTheme) {
+                if (appUiState.isProfileCompleted) {
+                    MainApp(
+                        trackingIntentEvents = trackingIntentEvents.asSharedFlow(),
+                        onTrackingIntentConsumed = {
+                            trackingIntentEvents.resetReplayCache()
+                        },
+                    )
+                } else {
+                    SetupRoute(
+                        onNavigateToRun = {
+                            // Profile completion state automatically switches to MainApp via ObserveUserSettingsUseCase
+                        },
+                    )
                 }
             }
+        }
+    }
+
+    private fun consumeTrackingIntent(intent: Intent?) {
+        if (intent?.action == ACTION_SHOW_TRACKING_FRAGMENT) {
+            intent.action = null
+            trackingIntentEvents.tryEmit(Unit)
+        }
     }
 
     private fun generateNewToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
-                Timber.w("Fetching FCM refistration token failed ${task.exception}")
+                Timber.w("Fetching FCM registration token failed ${task.exception}")
                 return@addOnCompleteListener
             }
             val token = task.result
@@ -99,10 +109,9 @@ class MainActivity :
 
     private fun setupRemoteConfig() {
         remoteConfig = Firebase.remoteConfig
-        val configSetting =
-            remoteConfigSettings {
-                minimumFetchIntervalInSeconds = 60
-            }
+        val configSetting = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 60
+        }
 
         remoteConfig.setConfigSettingsAsync(configSetting)
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
@@ -121,13 +130,7 @@ class MainActivity :
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        navigateTrackingFragmentIfNeeded(intent)
-    }
-
-    private fun navigateTrackingFragmentIfNeeded(intent: Intent?) {
-        if (intent?.action == ACTION_SHOW_TRACKING_FRAGMENT) {
-            openTracking()
-        }
+        consumeTrackingIntent(intent)
     }
 
     private fun requestPermissions() {
@@ -137,64 +140,10 @@ class MainActivity :
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
+}
 
-    private fun setupNavigationGraph() {
-        val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
-        val isProfileFilled =
-            userSettingStorage.getUserWeight() != 0 && !userSettingStorage.getUsername().isNullOrBlank()
-        navGraph.setStartDestination(if (isProfileFilled) R.id.runFragment else R.id.setupFragment)
-        navController.graph = navGraph
-    }
-
-    override fun openRun(clearOnboardingFromBackStack: Boolean) {
-        if (clearOnboardingFromBackStack) {
-            navController.graph.setStartDestination(R.id.runFragment)
-        }
-        navController.navigate(
-            R.id.runFragment,
-            null,
-            navOptions {
-                launchSingleTop = true
-                if (clearOnboardingFromBackStack) {
-                    popUpTo(R.id.setupFragment) {
-                        inclusive = true
-                    }
-                }
-            },
-        )
-    }
-
-    override fun openTracking() {
-        navController.navigate(
-            R.id.trackingFragment,
-            null,
-            navOptions {
-                launchSingleTop = true
-            },
-        )
-    }
-
-    override fun openAllRuns() {
-        navController.navigate(R.id.allRunFragment)
-    }
-
-    override fun openRunDetail(run: Run) {
-        navController.navigate(
-            R.id.detailRunFragment,
-            bundleOf("latestrun" to run),
-        )
-    }
-
-    override fun closeTrackingToRun() {
-        navController.navigate(
-            R.id.runFragment,
-            null,
-            navOptions {
-                launchSingleTop = true
-                popUpTo(R.id.runFragment) {
-                    inclusive = true
-                }
-            },
-        )
+internal fun Window.disableNavigationBarContrastEnforcement(sdkInt: Int) {
+    if (sdkInt >= Build.VERSION_CODES.Q) {
+        isNavigationBarContrastEnforced = false
     }
 }

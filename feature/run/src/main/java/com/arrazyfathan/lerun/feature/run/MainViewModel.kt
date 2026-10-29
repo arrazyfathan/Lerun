@@ -1,106 +1,206 @@
 package com.arrazyfathan.lerun.presentation.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.arrazyfathan.lerun.domain.UserSettingStorage
 import com.arrazyfathan.lerun.domain.model.Run
-import com.arrazyfathan.lerun.domain.model.UserImage
-import com.arrazyfathan.lerun.domain.repository.ImageRepository
-import com.arrazyfathan.lerun.domain.repository.RunRepository
-import com.arrazyfathan.lerun.utils.SortType
+import com.arrazyfathan.lerun.domain.model.SortType
+import com.arrazyfathan.lerun.domain.usecase.GetRunByIdUseCase
+import com.arrazyfathan.lerun.domain.usecase.InsertRunUseCase
+import com.arrazyfathan.lerun.domain.usecase.ObserveRunSummaryUseCase
+import com.arrazyfathan.lerun.domain.usecase.ObserveRunsUseCase
+import com.arrazyfathan.lerun.domain.usecase.ObserveUserImageUseCase
+import com.arrazyfathan.lerun.domain.usecase.ObserveUserSettingsUseCase
+import com.arrazyfathan.lerun.domain.usecase.SaveUserProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@Immutable
+data class RunState(
+    val profileName: String = "",
+    val profileWeight: Int = 0,
+    val profileImageBase64: String? = null,
+    val bannerTitle: String = "Try full access for free now",
+    val runs: List<Run> = emptyList(),
+    val runsSortedByDateAsc: List<Run> = emptyList(),
+    val totalTimeInMillis: Long = 0L,
+    val totalDistanceInMeters: Int = 0,
+    val totalCaloriesBurned: Int = 0,
+    val totalAvgSpeedInKMH: Float = 0f,
+    val sortType: SortType = SortType.DATE,
+    val selectedRun: Run? = null,
+    val isDarkTheme: Boolean = true,
+)
+
+sealed interface RunAction {
+    data object OnStarted : RunAction
+    data class OnBannerTitleUpdated(val title: String) : RunAction
+    data class OnSortTypeChanged(val sortType: SortType) : RunAction
+    data class OnSaveRun(val run: Run) : RunAction
+    data class OnSelectRun(val run: Run) : RunAction
+    data class OnLoadRunById(val runId: Int) : RunAction
+}
+
+sealed interface RunEvent {
+    data object RunSaved : RunEvent
+}
+
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
-class MainViewModel
-@Inject
-constructor(
-    private val runRepository: RunRepository,
-    private val userSettingStorage: UserSettingStorage,
-    private val imageRepository: ImageRepository,
+class MainViewModel @Inject constructor(
+    private val observeRunsUseCase: ObserveRunsUseCase,
+    private val observeRunSummaryUseCase: ObserveRunSummaryUseCase,
+    private val getRunByIdUseCase: GetRunByIdUseCase,
+    private val insertRunUseCase: InsertRunUseCase,
+    private val observeUserSettingsUseCase: ObserveUserSettingsUseCase,
+    private val observeUserImageUseCase: ObserveUserImageUseCase,
+    private val saveUserProfileUseCase: SaveUserProfileUseCase,
 ) : ViewModel() {
-    val runsSortedByDate = runRepository.getAllRunsSortedByDate()
-    val runsSortedByDateAsc = runRepository.getAllRunsSortedByDateAsc()
-    private val runsSortedByDistance = runRepository.getAllRunsSortedByDistance()
-    private val runsSortedByCaloriesBurned = runRepository.getAllRunsSortedByCaloriesBurned()
-    private val runsSortedByTimeInMillis = runRepository.getAllRunsSortedByTimeInMillis()
-    private val runsSortedByAvgSpeed = runRepository.getAllRunsSortedByAvgSpeed()
-    val totalTimeRun = runRepository.getTotalTimeInMillis()
-    val totalDistance = runRepository.getTotalDistance()
-    val totalCaloriesBurned = runRepository.getTotalCaloriesBurned()
-    val totalAverageSpeed = runRepository.getTotalAvgSpeed()
 
-    val runs = MediatorLiveData<List<Run>>()
+    private val currentSettings = observeUserSettingsUseCase.current()
 
-    fun getProfileName() = userSettingStorage.getUsername()
-    fun getProfileWeight() = userSettingStorage.getUserWeight()
+    private val _state = MutableStateFlow(
+        RunState(
+            profileName = currentSettings.userName,
+            profileWeight = currentSettings.weightInKg,
+            isDarkTheme = currentSettings.isDarkTheme,
+        ),
+    )
+    val state = _state.asStateFlow()
 
-    fun userImage(): LiveData<UserImage?> = imageRepository.getImage(userSettingStorage.getUsername()!!)
-
-    fun getDefaultTheme() = userSettingStorage.getUserThemes()
-
-    var sortType = SortType.DATE
+    private val _events = Channel<RunEvent>(Channel.BUFFERED)
+    val events = _events.receiveAsFlow()
 
     init {
-        runs.addSource(runsSortedByDate) { result ->
-            if (sortType == SortType.DATE) {
-                result?.let { runs.value = it }
+        observeUserSettings()
+        observeUserImage()
+        observeRunSummary()
+        observeSortedRuns()
+    }
+
+    fun onAction(action: RunAction) {
+        when (action) {
+            RunAction.OnStarted -> {
+                val latestSettings = observeUserSettingsUseCase.current()
+                _state.update {
+                    it.copy(
+                        profileName = latestSettings.userName,
+                        profileWeight = latestSettings.weightInKg,
+                    )
+                }
             }
-        }
-        runs.addSource(runsSortedByAvgSpeed) { result ->
-            if (sortType == SortType.AVG_SPEED) {
-                result?.let { runs.value = it }
+
+            is RunAction.OnBannerTitleUpdated -> {
+                if (action.title.isNotBlank()) {
+                    _state.update { it.copy(bannerTitle = action.title) }
+                }
             }
-        }
-        runs.addSource(runsSortedByCaloriesBurned) { result ->
-            if (sortType == SortType.CALORIES_BURNED) {
-                result?.let { runs.value = it }
+
+            is RunAction.OnSortTypeChanged -> {
+                _state.update { it.copy(sortType = action.sortType) }
             }
-        }
-        runs.addSource(runsSortedByDistance) { result ->
-            if (sortType == SortType.DISTANCE) {
-                result?.let { runs.value = it }
+
+            is RunAction.OnSaveRun -> {
+                viewModelScope.launch {
+                    insertRunUseCase(action.run)
+                    _events.send(RunEvent.RunSaved)
+                }
             }
-        }
-        runs.addSource(runsSortedByTimeInMillis) { result ->
-            if (sortType == SortType.RUNNING_TIME) {
-                result?.let { runs.value = it }
+
+            is RunAction.OnSelectRun -> {
+                _state.update { it.copy(selectedRun = action.run) }
             }
-        }
-        runs.addSource(runsSortedByDateAsc) { result ->
-            if (sortType == SortType.DATE_ASC) {
-                result?.let { runs.value = it }
+
+            is RunAction.OnLoadRunById -> {
+                viewModelScope.launch {
+                    val existing = _state.value.selectedRun?.takeIf { it.id == action.runId }
+                        ?: _state.value.runs.firstOrNull { it.id == action.runId }
+                        ?: getRunByIdUseCase(action.runId)
+                    if (existing != null) {
+                        _state.update { it.copy(selectedRun = existing) }
+                    }
+                }
             }
         }
     }
 
-    fun isUserFilledUserProfile(): Boolean = (
-        userSettingStorage.getUserWeight() != 0 && !userSettingStorage.getUsername()
-            .isNullOrBlank()
-        )
-
-    fun sortRuns(sortType: SortType) = when (sortType) {
-        SortType.DATE -> runsSortedByDate.value?.let { runs.value = it }
-        SortType.RUNNING_TIME -> runsSortedByTimeInMillis.value?.let { runs.value = it }
-        SortType.AVG_SPEED -> runsSortedByAvgSpeed.value?.let { runs.value = it }
-        SortType.DISTANCE -> runsSortedByDistance.value?.let { runs.value = it }
-        SortType.CALORIES_BURNED -> runsSortedByCaloriesBurned.value?.let { runs.value = it }
-        SortType.DATE_ASC -> runsSortedByDateAsc.value?.let { runs.value = it }
-    }.also {
-        this.sortType = sortType
+    private fun observeUserSettings() {
+        viewModelScope.launch {
+            observeUserSettingsUseCase().collect { settings ->
+                _state.update {
+                    it.copy(
+                        profileName = settings.userName,
+                        profileWeight = settings.weightInKg,
+                        isDarkTheme = settings.isDarkTheme,
+                    )
+                }
+            }
+        }
     }
 
-    fun insertRun(run: Run) = viewModelScope.launch {
-        runRepository.insertRun(run)
+    private fun observeUserImage() {
+        viewModelScope.launch {
+            observeUserImageUseCase().collect { userImage ->
+                _state.update {
+                    it.copy(profileImageBase64 = userImage?.imageString)
+                }
+            }
+        }
+    }
+
+    private fun observeRunSummary() {
+        viewModelScope.launch {
+            observeRunSummaryUseCase().collect { summary ->
+                _state.update {
+                    it.copy(
+                        totalTimeInMillis = summary.totalTimeInMillis,
+                        totalDistanceInMeters = summary.totalDistanceInMeters,
+                        totalCaloriesBurned = summary.totalCaloriesBurned,
+                        totalAvgSpeedInKMH = summary.totalAvgSpeedInKMH,
+                        runsSortedByDateAsc = summary.runsSortedByDateAsc,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun observeSortedRuns() {
+        viewModelScope.launch {
+            _state
+                .map { it.sortType }
+                .distinctUntilChanged()
+                .flatMapLatest { sortType ->
+                    observeRunsUseCase(sortType)
+                }
+                .collect { sortedRuns ->
+                    _state.update { it.copy(runs = sortedRuns) }
+                }
+        }
+    }
+
+    fun getProfileWeight(): Int = _state.value.profileWeight
+
+    fun insertRun(run: Run) {
+        onAction(RunAction.OnSaveRun(run))
+    }
+
+    fun sortRuns(sortType: SortType) {
+        onAction(RunAction.OnSortTypeChanged(sortType))
     }
 
     fun setUserProfile(name: String, weight: String) {
         viewModelScope.launch {
-            userSettingStorage.setUserName(name)
-            userSettingStorage.setUserWeight(weight.toInt())
+            saveUserProfileUseCase(name, weight)
         }
     }
 }

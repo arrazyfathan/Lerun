@@ -20,9 +20,10 @@ object Constants {
     const val NOTIFICATION_CHANNEL_NAME = "Tracking"
     const val NOTIFICATION_ID = 1
 
-    // location request
-    const val LOCATION_UPDATE_INTERVAL = 5000L
-    const val FASTEST_LOCATION_INTERVAL = 2000L
+    // location request (real-time high frequency updates)
+    const val LOCATION_UPDATE_INTERVAL = 1000L
+    const val FASTEST_LOCATION_INTERVAL = 500L
+    const val LOCATION_SMOOTH_ANIMATION_DURATION_MS = 450
 
     // Color polyline
     const val POLYLINE_WIDTH = 12f

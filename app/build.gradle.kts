@@ -2,6 +2,8 @@ import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.androidx.baselineprofile)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
@@ -62,7 +64,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
-        viewBinding = true
+        compose = true
         buildConfig = true
     }
 
@@ -84,13 +86,9 @@ dependencies {
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.ktx)
-    implementation(libs.androidx.constrainLayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    // Material Design
-    implementation(libs.material)
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
@@ -99,8 +97,16 @@ dependencies {
     // Coroutine Lifecycle Scopes
     implementation(libs.bundles.androidx.lifecycle)
 
-    // Navigation Components
-    implementation(libs.bundles.androidx.navigation)
+    // Navigation 3 & Serialization
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
 
     // Google Maps Location Services
     implementation(libs.google.play.service.location)

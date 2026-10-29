@@ -8,6 +8,8 @@ import com.arrazyfathan.lerun.data.mapper.toEntity
 import com.arrazyfathan.lerun.domain.model.UserImage
 import com.arrazyfathan.lerun.domain.repository.ImageRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,6 +18,8 @@ import javax.inject.Singleton
 class ImageRepositoryImpl @Inject constructor(
     private val imageDao: ImageDao,
 ) : ImageRepository {
+
+    override fun observeImage(id: String): Flow<UserImage?> = imageDao.observeImageById(id).map { it?.toDomain() }
 
     override fun getImage(id: String): LiveData<UserImage?> = imageDao.getImageById(id).map { it?.toDomain() }
 

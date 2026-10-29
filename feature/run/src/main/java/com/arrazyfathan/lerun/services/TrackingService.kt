@@ -93,7 +93,6 @@ class TrackingService : LifecycleService() {
         isFirstRun = true
         pauseService()
         postInitialValues()
-        // stopForeground(true)
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
     }
@@ -145,10 +144,7 @@ class TrackingService : LifecycleService() {
         isTimerEnabled = true
         CoroutineScope(Dispatchers.Main).launch {
             while (isTracking.value!!) {
-                // time different between now and timeStarted
                 lapTime = System.currentTimeMillis() - timeStarted
-
-                // post new lap time
                 timeRunInMillis.postValue(timeRun + lapTime)
                 if (timeRunInMillis.value!! > lastSecondTimeStamp + 1000L) {
                     timeRunInSecond.postValue(timeRunInSecond.value!! + 1)
@@ -223,6 +219,9 @@ class TrackingService : LifecycleService() {
                         LOCATION_UPDATE_INTERVAL,
                     )
                         .setMinUpdateIntervalMillis(FASTEST_LOCATION_INTERVAL)
+                        .setMaxUpdateDelayMillis(LOCATION_UPDATE_INTERVAL)
+                        .setMinUpdateDistanceMeters(1f)
+                        .setWaitForAccurateLocation(false)
                         .build()
 
                 if (ActivityCompat.checkSelfPermission(
@@ -250,12 +249,10 @@ class TrackingService : LifecycleService() {
         object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
                 super.onLocationResult(result)
-                if (isTracking.value!!) {
-                    result.locations.let { locations ->
-                        for (location in locations) {
-                            addPathPoint(location)
-                            Timber.d("New location : ${location.latitude}, ${location.longitude}")
-                        }
+                if (isTracking.value == true) {
+                    for (location in result.locations) {
+                        addPathPoint(location)
+                        Timber.d("New location : ${location.latitude}, ${location.longitude}")
                     }
                 }
             }
@@ -264,17 +261,31 @@ class TrackingService : LifecycleService() {
     private fun addPathPoint(location: Location?) {
         location?.let {
             val position = LatLng(location.latitude, location.longitude)
-            pathPoint.value?.apply {
-                last().add(position)
-                pathPoint.postValue(this)
+            val updatedPolylines = pathPoint.value
+                ?.map { polyline -> polyline.toMutableList() }
+                ?.toMutableList()
+                ?: mutableListOf(mutableListOf())
+
+            if (updatedPolylines.isEmpty()) {
+                updatedPolylines.add(mutableListOf())
+            }
+
+            val lastPolyline = updatedPolylines.last()
+            if (lastPolyline.lastOrNull() != position) {
+                lastPolyline.add(position)
+                pathPoint.postValue(updatedPolylines)
             }
         }
     }
 
-    private fun addEmptyPolyline() = pathPoint.value?.apply {
-        add(mutableListOf())
-        pathPoint.postValue(this)
-    } ?: pathPoint.postValue(mutableListOf(mutableListOf()))
+    private fun addEmptyPolyline() {
+        val updatedPolylines = pathPoint.value
+            ?.map { polyline -> polyline.toMutableList() }
+            ?.toMutableList()
+            ?: mutableListOf()
+        updatedPolylines.add(mutableListOf())
+        pathPoint.postValue(updatedPolylines)
+    }
 
     private fun startForegroundService() {
         startTimer()
