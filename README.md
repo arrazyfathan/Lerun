@@ -39,7 +39,7 @@
 
 ## Migration from XML to Jetpack Compose
 
-Lerun originally started as a single-module Android app built with legacy **XML Views, Fragments, and Navigation Component**, and is actively **migrating to 100% Jetpack Compose** alongside a **multi-module Clean Architecture**:
+Lerun originally started as a single-module Android app built with legacy **XML Views, Fragments, and Navigation Component**, and has been **migrated to 100% Jetpack Compose** alongside a **multi-module Clean Architecture**:
 
 | Area | Legacy (XML) | Modernized (Jetpack Compose) |
 | :--- | :--- | :--- |
@@ -81,7 +81,7 @@ Lerun/
 ### Core & Asynchronous
 - **[Kotlin](https://kotlinlang.org/)**: 100% Kotlin codebase with Kotlinx Serialization.
 - **[Coroutines](https://github.com/Kotlin/kotlinx.coroutines) & [Flow](https://kotlinlang.org/docs/flow.html)**: Structured concurrency and reactive state streams (`StateFlow`, `SharedFlow`).
-- **Java 11** & **Android SDK**: `minSdk = 24`, `targetSdk = 37`, `compileSdk = 37`.
+- **Java & Android SDK**: Java 11 bytecode compatibility target (`minSdk = 24`, `targetSdk = 37`, `compileSdk = 37`), built with JDK 17+.
 
 ### UI & Navigation
 - **[Jetpack Compose](https://developer.android.com/jetpack/compose)**: Modern declarative UI toolkit with **Material 3**.
@@ -114,7 +114,7 @@ Lerun/
 ### Prerequisites
 
 - **Android Studio**: Latest stable version (supporting AGP `9.x` and Compile SDK `37`).
-- **JDK**: Java 11 or higher.
+- **JDK**: Java 17 or higher (required by Gradle 9 and AGP 9; project compiles with Java 11 target compatibility).
 - **Android Device or Emulator**: Running Android 7.0 (API 24) or higher with Google Play Services installed.
 
 ### 1. Clone the Repository
@@ -150,7 +150,7 @@ You can open the project directly in **Android Studio** and click **Run**, or bu
 # Assemble the debug APK
 ./gradlew assembleDebug
 
-# Install and launch on a connected device/emulator
+# Install on a connected device/emulator
 ./gradlew installDebug
 ```
 
