@@ -2,6 +2,7 @@ package com.arrazyfathan.lerun
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
@@ -19,9 +20,11 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.arrazyfathan.lerun.domain.model.Run
 import com.arrazyfathan.lerun.domain.model.SortType
+import com.arrazyfathan.lerun.feature.onboarding.navigation.OnboardingNavRoute
+import com.arrazyfathan.lerun.feature.run.navigation.RunNavRoute
+import com.arrazyfathan.lerun.feature.settings.navigation.SettingsNavRoute
 import com.arrazyfathan.lerun.navigation.LerunFloatingBottomBar
 import com.arrazyfathan.lerun.navigation.Navigator
-import com.arrazyfathan.lerun.navigation.Screen
 import com.arrazyfathan.lerun.navigation.rememberNavigationState
 import com.arrazyfathan.lerun.navigation.toEntries
 import com.arrazyfathan.lerun.presentation.allrun.AllRunScreenContent
@@ -224,15 +227,15 @@ class ComposeScreensTest {
         composeTestRule.setContent {
             LerunTheme(darkTheme = true) {
                 val navigationState = rememberNavigationState(
-                    startRoute = Screen.Run,
-                    topLevelRoutes = listOf(Screen.Run, Screen.Settings),
+                    startRoute = RunNavRoute,
+                    topLevelRoutes = listOf(RunNavRoute, SettingsNavRoute),
                 )
                 val navigator = remember(navigationState) { Navigator(navigationState) }
                 val entryProvider = entryProvider<NavKey> {
-                    entry<Screen.Run> {
+                    entry<RunNavRoute> {
                         Text("Home Screen Content")
                     }
-                    entry<Screen.Settings> {
+                    entry<SettingsNavRoute> {
                         Text("Settings Screen Content")
                     }
                 }
@@ -257,5 +260,42 @@ class ComposeScreensTest {
         composeTestRule.onNodeWithText("Settings Screen Content").assertIsDisplayed()
         composeTestRule.onNodeWithContentDescription("Activity").performClick()
         composeTestRule.onNodeWithText("Home Screen Content").assertIsDisplayed()
+    }
+
+    @Test
+    fun navigation3_completesOnboardingToRunAndClearsOnboardingRoot() {
+        composeTestRule.setContent {
+            LerunTheme(darkTheme = true) {
+                val navigationState = rememberNavigationState(
+                    startRoute = OnboardingNavRoute,
+                    topLevelRoutes = listOf(RunNavRoute, SettingsNavRoute),
+                    homeRoute = RunNavRoute,
+                )
+                val navigator = remember(navigationState) { Navigator(navigationState) }
+                val entryProvider = entryProvider<NavKey> {
+                    entry<OnboardingNavRoute> {
+                        Button(onClick = { navigator.completeOnboarding() }) {
+                            Text("Complete Onboarding")
+                        }
+                    }
+                    entry<RunNavRoute> {
+                        Text("Home Screen Content")
+                    }
+                    entry<SettingsNavRoute> {
+                        Text("Settings Screen Content")
+                    }
+                }
+                NavDisplay(
+                    entries = navigationState.toEntries(entryProvider),
+                    onBack = { navigator.goBack() },
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+        }
+
+        composeTestRule.onNodeWithText("Complete Onboarding").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Complete Onboarding").performClick()
+        composeTestRule.onNodeWithText("Home Screen Content").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Complete Onboarding").assertDoesNotExist()
     }
 }

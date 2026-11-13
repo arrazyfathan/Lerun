@@ -45,12 +45,12 @@ Lerun originally started as a single-module Android app built with legacy **XML 
 | :--- | :--- | :--- |
 | **UI Layer** | XML Layouts (`ConstraintLayout`, `RecyclerView`, `CardView`) | Declarative **Jetpack Compose** & **Material 3** |
 | **App Structure** | Multiple `Fragment` classes hosted in an XML `NavHostFragment` | Single-Activity (`MainActivity`) with **Compose screens & routes** |
-| **Navigation** | Fragment XML Navigation Graph | Type-safe **Jetpack Navigation 3** (`NavDisplay`, `NavBackStack`, `kotlinx.serialization`) |
+| **Navigation** | Fragment XML Navigation Graph | Modularized, type-safe **Jetpack Navigation 3** (`NavDisplay`, `NavBackStack`, feature `EntryProviderScope<NavKey>` builders, `kotlinx.serialization`) |
 | **Design System** | XML styles & attributes | Centralized Compose theme (`LerunTheme`, `Color`, `Type`, `Icons`) in `:core:ui` |
 | **Visual Effects** | `BlurView` (View hierarchy blur) | Compose-native glassmorphism with **Haze** (`dev.chrisbanes.haze`) |
 | **View Interop** | Native XML widgets | Seamless Compose `AndroidView` interoperability for Google Maps `MapView` & `MPAndroidChart` `BarChart` |
 
-> **Current Migration Status**: All core user flows (**Onboarding**, **Home / Run Dashboard**, **Live Tracking**, **All Runs**, **Run Detail**, **Statistics**, and **Settings**) and app navigation have been migrated to Jetpack Compose. Legacy View dependencies (`MPAndroidChart`, Google Maps `MapView`, and `Android-Image-Cropper`) are bridged cleanly via Compose interoperability APIs.
+> **Current Migration Status**: All core user flows (**Onboarding**, **Home / Run Dashboard**, **Live Tracking**, **All Runs**, **Run Detail**, **Statistics**, and **Settings**) and app navigation are implemented in Jetpack Compose with **Jetpack Navigation 3**. Each `:feature:*` module defines its own serializable `NavKey` routes and `EntryProviderScope<NavKey>` entry builders, assembled in `:app` (`AppNavigation.kt`) with onboarding hosted directly inside `NavDisplay`. Legacy View dependencies (`MPAndroidChart`, Google Maps `MapView`, and `Android-Image-Cropper`) are bridged cleanly via Compose interoperability APIs.
 
 ---
 
@@ -60,17 +60,17 @@ The project follows **Clean Architecture** principles combined with **MVVM / Uni
 
 ```text
 Lerun/
-├── app/                   # Application entry point (MainActivity), top-level Navigation 3 host, DI & Services
+├── app/                   # Application entry point (MainActivity), Navigation 3 NavDisplay host & transitions, DI & Services
 ├── core/
 │   ├── common/            # Shared utilities, constants, formatters, and tracking helpers
 │   ├── domain/            # Pure business logic: Domain models, Repository interfaces, and UseCases
 │   ├── data/              # Data layer: Room database, DAOs, encrypted preferences, mappers & Repository impls
 │   └── ui/                # Shared Compose Design System (LerunTheme, typography, colors) & reusable UI components
 ├── feature/
-│   ├── onboarding/        # First-time user setup screen & OnboardingViewModel
-│   ├── run/               # Home dashboard, Live GPS Tracking screen, All Runs, Run Detail & TrackingService
-│   ├── statistics/        # Running analytics & chart visualization screen
-│   └── settings/          # User profile settings, image picker/cropper & theme switching
+│   ├── onboarding/        # First-time user setup screen, OnboardingViewModel & OnboardingNavigation
+│   ├── run/               # Home dashboard, Live GPS Tracking, All Runs, Run Detail, TrackingService & RunNavigation
+│   ├── statistics/        # Running analytics, chart visualization screen & StatisticsNavigation
+│   └── settings/          # User profile settings, image picker/cropper, theme switching & SettingsNavigation
 └── baselineprofile/       # Macrobenchmark & Baseline Profile generator for startup & runtime optimization
 ```
 
@@ -85,7 +85,7 @@ Lerun/
 
 ### UI & Navigation
 - **[Jetpack Compose](https://developer.android.com/jetpack/compose)**: Modern declarative UI toolkit with **Material 3**.
-- **[Jetpack Navigation 3](https://developer.android.com/guide/navigation)**: Type-safe Compose navigation (`androidx.navigation3:navigation3-runtime` & `navigation3-ui`) with custom hierarchical and top-level transitions.
+- **[Jetpack Navigation 3](https://developer.android.com/guide/navigation)**: Modularized type-safe Compose navigation (`androidx.navigation3:navigation3-runtime`, `navigation3-ui`, and `lifecycle-viewmodel-navigation3`) with per-tab back stacks, onboarding inside `NavDisplay`, and custom hierarchical/top-level transitions.
 - **[Haze](https://github.com/chrisbanes/haze)**: Glassmorphism and background blur effects for Jetpack Compose.
 - **[MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)**: Interactive bar charts rendered via Compose `AndroidView`.
 - **[Android Image Cropper](https://github.com/CanHub/Android-Image-Cropper)**: Profile photo selection and cropping.
@@ -105,7 +105,7 @@ Lerun/
 ### Firebase & Tooling
 - **Firebase Suite**: Analytics, Crashlytics, Performance Monitoring, Remote Config, Cloud Messaging, and App Distribution.
 - **[Timber](https://github.com/JakeWharton/timber)**: Extensible logging utility.
-- **[Spotless](https://github.com/diffplug/spotless) + ktlint**: Automated code formatting for Kotlin and Java.
+- **[Spotless](https://github.com/diffplug/spotless) + ktlint**: Automated code formatting for Kotlin (`ktlint`) and Java (`googleJavaFormat`) configured in [`spotless.gradle`](spotless.gradle).
 
 ---
 
@@ -114,7 +114,7 @@ Lerun/
 ### Prerequisites
 
 - **Android Studio**: Latest stable version (supporting AGP `9.x` and Compile SDK `37`).
-- **JDK**: Java 17 or higher (required by Gradle 9 and AGP 9; project compiles with Java 11 target compatibility).
+- **JDK**: Java 17 or higher (required by Gradle 9 and AGP 9; project compiles with Java 11 target compatibility, and `gradlew` / `gradle.properties` include `--enable-native-access=ALL-UNNAMED` for clean execution on JDK 24+).
 - **Android Device or Emulator**: Running Android 7.0 (API 24) or higher with Google Play Services installed.
 
 ### 1. Clone the Repository
@@ -157,10 +157,13 @@ You can open the project directly in **Android Studio** and click **Run**, or bu
 ### 5. Useful Gradle Commands
 
 ```bash
-# Run unit tests
+# Run unit tests (including NavigationStateTest)
 ./gradlew testDebugUnitTest
 
-# Check code formatting with Spotless (ktlint)
+# Run Compose UI & Navigation 3 instrumentation tests on a connected device/emulator
+./gradlew :app:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=com.arrazyfathan.lerun.ComposeScreensTest
+
+# Check code formatting with Spotless (ktlint + googleJavaFormat)
 ./gradlew spotlessCheck
 
 # Automatically format code with Spotless

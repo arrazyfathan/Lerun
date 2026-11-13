@@ -17,7 +17,6 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arrazyfathan.lerun.R
 import com.arrazyfathan.lerun.navigation.MainApp
-import com.arrazyfathan.lerun.presentation.onboarding.SetupRoute
 import com.arrazyfathan.lerun.ui.AppUiViewModel
 import com.arrazyfathan.lerun.ui.designsystem.LerunTheme
 import com.arrazyfathan.lerun.utils.Constants.ACTION_SHOW_TRACKING_FRAGMENT
@@ -71,20 +70,13 @@ class MainActivity : AppCompatActivity() {
             val appUiState by appUiViewModel.state.collectAsStateWithLifecycle()
 
             LerunTheme(darkTheme = appUiState.isDarkTheme) {
-                if (appUiState.isProfileCompleted) {
-                    MainApp(
-                        trackingIntentEvents = trackingIntentEvents.asSharedFlow(),
-                        onTrackingIntentConsumed = {
-                            trackingIntentEvents.resetReplayCache()
-                        },
-                    )
-                } else {
-                    SetupRoute(
-                        onNavigateToRun = {
-                            // Profile completion state automatically switches to MainApp via ObserveUserSettingsUseCase
-                        },
-                    )
-                }
+                MainApp(
+                    isProfileCompleted = appUiState.isProfileCompleted,
+                    trackingIntentEvents = trackingIntentEvents.asSharedFlow(),
+                    onTrackingIntentConsumed = {
+                        trackingIntentEvents.resetReplayCache()
+                    },
+                )
             }
         }
     }

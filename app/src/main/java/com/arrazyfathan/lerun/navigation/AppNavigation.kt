@@ -57,65 +57,59 @@ import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.arrazyfathan.lerun.presentation.allrun.AllRunRoute
-import com.arrazyfathan.lerun.presentation.detailrun.DetailRunRoute
-import com.arrazyfathan.lerun.presentation.home.RunRoute
-import com.arrazyfathan.lerun.presentation.run.TrackingRoute
-import com.arrazyfathan.lerun.presentation.settings.SettingsRoute
-import com.arrazyfathan.lerun.presentation.statistic.StatisticsRoute
+import com.arrazyfathan.lerun.feature.onboarding.navigation.OnboardingNavRoute
+import com.arrazyfathan.lerun.feature.onboarding.navigation.onboardingEntry
+import com.arrazyfathan.lerun.feature.run.navigation.AllRunsNavRoute
+import com.arrazyfathan.lerun.feature.run.navigation.DetailRunNavRoute
+import com.arrazyfathan.lerun.feature.run.navigation.RunNavRoute
+import com.arrazyfathan.lerun.feature.run.navigation.TrackingNavRoute
+import com.arrazyfathan.lerun.feature.run.navigation.runEntries
+import com.arrazyfathan.lerun.feature.settings.navigation.SettingsNavRoute
+import com.arrazyfathan.lerun.feature.settings.navigation.settingsEntry
+import com.arrazyfathan.lerun.feature.statistics.navigation.StatisticsNavRoute
+import com.arrazyfathan.lerun.feature.statistics.navigation.statisticsEntry
 import com.arrazyfathan.lerun.ui.designsystem.LerunGreen
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.serialization.Serializable
 import com.arrazyfathan.lerun.core.ui.R as UiR
 
-@Serializable
-sealed class Screen(
+private data class TopLevelDestination(
+    val route: NavKey,
     val label: String,
     @DrawableRes val selectedIcon: Int,
     @DrawableRes val unselectedIcon: Int,
-) : NavKey {
+)
 
-    @Serializable
-    data object Run : Screen(
-        label = "Activity",
-        selectedIcon = UiR.drawable.ic_activity_selected,
-        unselectedIcon = UiR.drawable.ic_activity_unselected,
-    )
+private val RunDestination = TopLevelDestination(
+    route = RunNavRoute,
+    label = "Activity",
+    selectedIcon = UiR.drawable.ic_activity_selected,
+    unselectedIcon = UiR.drawable.ic_activity_unselected,
+)
 
-    @Serializable
-    data object Settings : Screen(
-        label = "Setting",
-        selectedIcon = UiR.drawable.ic_setting_selected,
-        unselectedIcon = UiR.drawable.ic_setting_unselected,
-    )
+private val SettingsDestination = TopLevelDestination(
+    route = SettingsNavRoute,
+    label = "Setting",
+    selectedIcon = UiR.drawable.ic_setting_selected,
+    unselectedIcon = UiR.drawable.ic_setting_unselected,
+)
 
-    @Serializable
-    data object Statistics : Screen(
-        label = "Statistics",
-        selectedIcon = UiR.drawable.ic_activity_selected,
-        unselectedIcon = UiR.drawable.ic_activity_unselected,
-    )
-}
+private val TopLevelRoutes: List<NavKey> = listOf(
+    RunDestination.route,
+    SettingsDestination.route,
+)
 
-@Serializable
-data object TrackingNavRoute : NavKey
-
-@Serializable
-data object AllRunsNavRoute : NavKey
-
-@Serializable
-data class DetailRunNavRoute(val runId: Int) : NavKey
-
-private val TopLevelScreens = listOf(
-    Screen.Run,
-    Screen.Settings,
+private val BottomBarRoutes: Set<NavKey> = setOf(
+    RunNavRoute,
+    SettingsNavRoute,
+    StatisticsNavRoute,
 )
 
 class NavigationState(
     val startRoute: NavKey,
     topLevelRoute: NavBackStack<NavKey>,
     val backStacks: Map<NavKey, NavBackStack<NavKey>>,
+    val topLevelRoutes: Set<NavKey> = backStacks.keys,
 ) {
     private val topLevelStack = topLevelRoute
 
@@ -124,9 +118,6 @@ class NavigationState(
 
     val currentRoute: NavKey
         get() = backStacks[currentTopLevelRoute]?.lastOrNull() ?: currentTopLevelRoute
-
-    val topLevelRoutes: Set<NavKey>
-        get() = backStacks.keys
 
     fun navigateTopLevel(route: NavKey) {
         if (route == startRoute) {
@@ -139,6 +130,11 @@ class NavigationState(
         }
     }
 
+    fun replaceRoot(route: NavKey) {
+        topLevelStack.clear()
+        topLevelStack.add(route)
+    }
+
     fun popTopLevel(): Boolean {
         if (topLevelStack.size <= 1) return false
         topLevelStack.removeLastOrNull()
@@ -146,8 +142,8 @@ class NavigationState(
     }
 
     val stacksInUse: List<NavKey>
-        get() = if (currentTopLevelRoute == startRoute) {
-            listOf(startRoute)
+        get() = if (currentTopLevelRoute !in topLevelRoutes || currentTopLevelRoute == startRoute) {
+            listOf(currentTopLevelRoute)
         } else {
             listOf(startRoute, currentTopLevelRoute)
         }
@@ -157,28 +153,33 @@ class NavigationState(
 fun rememberNavigationState(
     startRoute: NavKey,
     topLevelRoutes: List<NavKey>,
+    homeRoute: NavKey = startRoute,
 ): NavigationState {
     val topLevelRoute = key("top_level_route") {
         rememberNavBackStack(startRoute)
     }
-    val backStacks = topLevelRoutes.associateWith { routeKey ->
+    val stackRoots = remember(startRoute, topLevelRoutes) {
+        (listOf(startRoute) + topLevelRoutes).distinct()
+    }
+    val backStacks = stackRoots.associateWith { routeKey ->
         key("stack_$routeKey") {
             rememberNavBackStack(routeKey)
         }
     }
 
-    return remember(startRoute, topLevelRoutes, topLevelRoute, backStacks) {
+    return remember(homeRoute, topLevelRoutes, topLevelRoute, backStacks) {
         NavigationState(
-            startRoute = startRoute,
+            startRoute = homeRoute,
             topLevelRoute = topLevelRoute,
             backStacks = backStacks,
+            topLevelRoutes = topLevelRoutes.toSet(),
         )
     }
 }
 
 class Navigator(val state: NavigationState) {
     fun navigate(route: NavKey) {
-        if (route in state.backStacks.keys) {
+        if (route in state.topLevelRoutes) {
             val targetStack = state.backStacks[route]
             if (route == state.currentTopLevelRoute && (targetStack?.size ?: 0) > 1) {
                 while (targetStack != null && targetStack.size > 1) {
@@ -192,6 +193,12 @@ class Navigator(val state: NavigationState) {
             if (currentStack?.lastOrNull() != route) {
                 currentStack?.add(route)
             }
+        }
+    }
+
+    fun completeOnboarding(targetRoute: NavKey = state.startRoute) {
+        if (state.currentTopLevelRoute != targetRoute) {
+            state.replaceRoot(targetRoute)
         }
     }
 
@@ -238,61 +245,51 @@ fun NavigationState.toEntries(
 
 @Composable
 fun MainApp(
+    isProfileCompleted: Boolean = true,
     trackingIntentEvents: Flow<Unit> = emptyFlow(),
     onTrackingIntentConsumed: () -> Unit = {},
 ) {
+    val initialRoute: NavKey = if (isProfileCompleted) RunNavRoute else OnboardingNavRoute
     val navigationState = rememberNavigationState(
-        startRoute = Screen.Run,
-        topLevelRoutes = TopLevelScreens,
+        startRoute = initialRoute,
+        topLevelRoutes = TopLevelRoutes,
+        homeRoute = RunNavRoute,
     )
     val navigator = remember(navigationState) { Navigator(navigationState) }
 
+    LaunchedEffect(isProfileCompleted) {
+        if (isProfileCompleted && navigationState.currentTopLevelRoute == OnboardingNavRoute) {
+            navigator.completeOnboarding()
+        }
+    }
+
     LaunchedEffect(trackingIntentEvents) {
         trackingIntentEvents.collect {
-            onTrackingIntentConsumed()
-            navigator.navigate(TrackingNavRoute)
+            if (navigationState.currentTopLevelRoute != OnboardingNavRoute) {
+                onTrackingIntentConsumed()
+                navigator.navigate(TrackingNavRoute)
+            }
         }
     }
 
     val entryProvider = entryProvider<NavKey> {
-        entry<Screen.Run> {
-            RunRoute(
-                onOpenAllRuns = { navigator.navigate(AllRunsNavRoute) },
-                onOpenRunDetail = { run ->
-                    run.id?.let { id -> navigator.navigate(DetailRunNavRoute(id)) }
-                },
-            )
-        }
-        entry<Screen.Settings> {
-            SettingsRoute()
-        }
-        entry<Screen.Statistics> {
-            StatisticsRoute()
-        }
-        entry<TrackingNavRoute> {
-            TrackingRoute(
-                onCloseTrackingToRun = {
-                    navigator.popToCurrentTopLevel()
-                    navigator.navigate(Screen.Run)
-                },
-            )
-        }
-        entry<AllRunsNavRoute> {
-            AllRunRoute()
-        }
-        entry<DetailRunNavRoute> { route ->
-            DetailRunRoute(
-                runId = route.runId,
-            )
-        }
+        onboardingEntry(
+            onNavigateToRun = { navigator.completeOnboarding() },
+        )
+        runEntries(
+            onOpenAllRuns = { navigator.navigate(AllRunsNavRoute) },
+            onOpenRunDetail = { runId -> navigator.navigate(DetailRunNavRoute(runId)) },
+            onCloseTrackingToRun = {
+                navigator.popToCurrentTopLevel()
+                navigator.navigate(RunNavRoute)
+            },
+        )
+        settingsEntry()
+        statisticsEntry()
     }
 
     val currentRoute = navigationState.currentRoute
-    val showBottomBar = currentRoute in setOf<NavKey>(
-        Screen.Run,
-        Screen.Settings,
-        Screen.Statistics,
-    )
+    val showBottomBar = currentRoute in BottomBarRoutes
 
     val density = LocalDensity.current
     val maxHideOffsetPx = remember(density) { with(density) { 220.dp.toPx() } }
@@ -333,7 +330,7 @@ fun MainApp(
                 val initialKey = initialState.key
                 val targetKey = targetState.key
                 if (initialKey in navigationState.topLevelRoutes && targetKey in navigationState.topLevelRoutes) {
-                    val topLevelList = TopLevelScreens
+                    val topLevelList = TopLevelRoutes
                     val initialIndex = topLevelList.indexOf(initialKey)
                     val targetIndex = topLevelList.indexOf(targetKey)
                     if (targetIndex >= initialIndex) {
@@ -349,7 +346,7 @@ fun MainApp(
                 val initialKey = initialState.key
                 val targetKey = targetState.key
                 if (initialKey in navigationState.topLevelRoutes && targetKey in navigationState.topLevelRoutes) {
-                    val topLevelList = TopLevelScreens
+                    val topLevelList = TopLevelRoutes
                     val initialIndex = topLevelList.indexOf(initialKey)
                     val targetIndex = topLevelList.indexOf(targetKey)
                     if (targetIndex >= initialIndex) {
@@ -365,7 +362,7 @@ fun MainApp(
                 val initialKey = initialState.key
                 val targetKey = targetState.key
                 if (initialKey in navigationState.topLevelRoutes && targetKey in navigationState.topLevelRoutes) {
-                    val topLevelList = TopLevelScreens
+                    val topLevelList = TopLevelRoutes
                     val initialIndex = topLevelList.indexOf(initialKey)
                     val targetIndex = topLevelList.indexOf(targetKey)
                     if (targetIndex >= initialIndex) {
@@ -422,7 +419,7 @@ fun MainApp(
 @Composable
 fun LerunFloatingBottomBar(
     currentRoute: NavKey?,
-    onNavigateToRoute: (Screen) -> Unit,
+    onNavigateToRoute: (NavKey) -> Unit,
     onOpenTracking: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -439,7 +436,7 @@ fun LerunFloatingBottomBar(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val isRunSelected = currentRoute == Screen.Run
+            val isRunSelected = currentRoute == RunDestination.route
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -448,19 +445,19 @@ fun LerunFloatingBottomBar(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
                         role = Role.Tab,
-                        onClick = { onNavigateToRoute(Screen.Run) },
+                        onClick = { onNavigateToRoute(RunDestination.route) },
                     ),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     painter = painterResource(
                         id = if (isRunSelected) {
-                            Screen.Run.selectedIcon
+                            RunDestination.selectedIcon
                         } else {
-                            Screen.Run.unselectedIcon
+                            RunDestination.unselectedIcon
                         },
                     ),
-                    contentDescription = Screen.Run.label,
+                    contentDescription = RunDestination.label,
                     tint = if (isRunSelected) {
                         MaterialTheme.colorScheme.onSurface
                     } else {
@@ -491,7 +488,7 @@ fun LerunFloatingBottomBar(
                 }
             }
 
-            val isSettingsSelected = currentRoute == Screen.Settings
+            val isSettingsSelected = currentRoute == SettingsDestination.route
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -500,19 +497,19 @@ fun LerunFloatingBottomBar(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
                         role = Role.Tab,
-                        onClick = { onNavigateToRoute(Screen.Settings) },
+                        onClick = { onNavigateToRoute(SettingsDestination.route) },
                     ),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     painter = painterResource(
                         id = if (isSettingsSelected) {
-                            Screen.Settings.selectedIcon
+                            SettingsDestination.selectedIcon
                         } else {
-                            Screen.Settings.unselectedIcon
+                            SettingsDestination.unselectedIcon
                         },
                     ),
-                    contentDescription = Screen.Settings.label,
+                    contentDescription = SettingsDestination.label,
                     tint = if (isSettingsSelected) {
                         MaterialTheme.colorScheme.onSurface
                     } else {
