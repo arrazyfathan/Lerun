@@ -26,8 +26,8 @@
 
 ### Key Features
 
-- **Real-Time GPS Run Tracking**: Tracks your running route, live duration, distance, average speed, and calories burned using a foreground location service (`TrackingService`).
-- **Interactive Route Visualization**: Displays live polylines on Google Maps and captures route snapshots upon completing a run.
+- **Real-Time GPS Run Tracking**: Tracks your running route, live duration, distance, average speed, and calories burned using a `StateFlow`-backed foreground location service (`TrackingService`).
+- **Interactive Route Visualization**: Smoothly loads Google Maps (`MapsInitializer.Renderer.LATEST`), centers the camera on the user's live location pin within a bounded viewport, provides a **My Location** re-center button and a location-loading indicator, draws smoothed live polylines, and captures route snapshots upon completing a run.
 - **Run History & Filtering**: Browse recent runs on the home screen or view all runs sorted by Date, Duration, Distance, Average Speed, or Calories Burned.
 - **Detailed Run Breakdown**: Inspect individual run metrics, route snapshots, and manage saved runs.
 - **Workout Statistics**: Visualize your cumulative progress (total distance, total time, total calories, average speed) alongside interactive bar charts.
@@ -56,21 +56,24 @@ Lerun originally started as a single-module Android app built with legacy **XML 
 
 ## Architecture & Module Structure
 
-The project follows **Clean Architecture** principles combined with **MVVM / Unidirectional Data Flow (UDF)**, organized into feature and core modules for scalability and build performance:
+The project follows **Clean Architecture** principles combined with **MVI (Model-View-Intent) / Unidirectional Data Flow (UDF)** and **100% Kotlin Flow** across all layers (no `LiveData`), organized into feature and core modules for scalability and build performance:
+
+- **Consistent MVI Pattern**: Every feature exposes an `@Immutable` `State`, a sealed `Action` interface for user/system intents, and a `Channel`-backed `Event` `Flow` for one-off side effects (`AppUiViewModel`, `OnboardingViewModel`, `MainViewModel`, `TrackingViewModel`, `SettingViewModel`, `StatisticViewModel`).
+- **Compose Stability & State-Holder Split**: Route composables resolve `viewModel()` and pass immutable state plus `onAction` callbacks into stateless UI composables—avoiding `ViewModel` parameters in UI composables for clean previews, testing, and recomposition skipping.
 
 ```text
 Lerun/
-├── app/                   # Application entry point (MainActivity), Navigation 3 NavDisplay host & transitions, DI & Services
+├── app/                   # Application entry point (MainActivity), AppUiViewModel, Navigation 3 NavDisplay host & transitions, DI & Services
 ├── core/
 │   ├── common/            # Shared utilities, constants, formatters, and tracking helpers
-│   ├── domain/            # Pure business logic: Domain models, Repository interfaces, and UseCases
-│   ├── data/              # Data layer: Room database, DAOs, encrypted preferences, mappers & Repository impls
+│   ├── domain/            # Pure business logic: Domain models, Flow-based Repository interfaces, and UseCases
+│   ├── data/              # Data layer: Room database (Flow queries), DAOs, encrypted preferences, mappers & Repository impls
 │   └── ui/                # Shared Compose Design System (LerunTheme, typography, colors) & reusable UI components
 ├── feature/
-│   ├── onboarding/        # First-time user setup screen, OnboardingViewModel & OnboardingNavigation
-│   ├── run/               # Home dashboard, Live GPS Tracking, All Runs, Run Detail, TrackingService & RunNavigation
-│   ├── statistics/        # Running analytics, chart visualization screen & StatisticsNavigation
-│   └── settings/          # User profile settings, image picker/cropper, theme switching & SettingsNavigation
+│   ├── onboarding/        # First-time user setup screen, OnboardingViewModel (MVI) & OnboardingNavigation
+│   ├── run/               # Home dashboard, Live GPS Tracking (TrackingViewModel + TrackingService), All Runs, Run Detail & RunNavigation
+│   ├── statistics/        # Running analytics, chart visualization screen, StatisticViewModel (MVI) & StatisticsNavigation
+│   └── settings/          # User profile settings, image picker/cropper, theme switching, SettingViewModel (MVI) & SettingsNavigation
 └── baselineprofile/       # Macrobenchmark & Baseline Profile generator for startup & runtime optimization
 ```
 
@@ -80,7 +83,7 @@ Lerun/
 
 ### Core & Asynchronous
 - **[Kotlin](https://kotlinlang.org/)**: 100% Kotlin codebase with Kotlinx Serialization.
-- **[Coroutines](https://github.com/Kotlin/kotlinx.coroutines) & [Flow](https://kotlinlang.org/docs/flow.html)**: Structured concurrency and reactive state streams (`StateFlow`, `SharedFlow`).
+- **[Coroutines](https://github.com/Kotlin/kotlinx.coroutines) & [Flow](https://kotlinlang.org/docs/flow.html)**: Structured concurrency and reactive state streams (`Flow`, `StateFlow`, `Channel` events) end-to-end from Room DAOs to UI, with zero `LiveData` usage.
 - **Java & Android SDK**: Java 11 bytecode compatibility target (`minSdk = 24`, `targetSdk = 37`, `compileSdk = 37`), built with JDK 17+.
 
 ### UI & Navigation
@@ -105,7 +108,7 @@ Lerun/
 ### Firebase & Tooling
 - **Firebase Suite**: Analytics, Crashlytics, Performance Monitoring, Remote Config, Cloud Messaging, and App Distribution.
 - **[Timber](https://github.com/JakeWharton/timber)**: Extensible logging utility.
-- **[Spotless](https://github.com/diffplug/spotless) + ktlint**: Automated code formatting for Kotlin (`ktlint`) and Java (`googleJavaFormat`) configured in [`spotless.gradle`](spotless.gradle).
+- **[Spotless](https://github.com/diffplug/spotless) + ktlint (`1.8.0`)**: Automated code formatting for Kotlin (`ktlint` with Compose-aware rules in [`.editorconfig`](.editorconfig)) and Java (`googleJavaFormat`) configured in [`spotless.gradle`](spotless.gradle).
 
 ---
 
