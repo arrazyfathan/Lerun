@@ -26,7 +26,6 @@ dependencies {
     implementation(libs.androidx.security.crypto.ktx)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)
-    implementation(libs.androidx.lifecycle.livedata)
     implementation(libs.hilt.android)
     ksp(libs.androidx.room.compiler)
     ksp(libs.hilt.compiler)

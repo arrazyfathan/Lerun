@@ -31,7 +31,6 @@ dependencies {
     implementation(project(":core:ui"))
 
     implementation(libs.bundles.androidx.lifecycle)
-    implementation(libs.androidx.lifecycle.livedata)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.google.play.service.maps)

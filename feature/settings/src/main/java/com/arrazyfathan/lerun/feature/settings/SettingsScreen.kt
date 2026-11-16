@@ -88,8 +88,9 @@ import com.arrazyfathan.lerun.core.ui.R as UiR
 
 @Composable
 fun SettingsRoute(
-    viewModel: SettingViewModel = viewModel(),
+    modifier: Modifier = Modifier,
 ) {
+    val viewModel: SettingViewModel = viewModel()
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -112,6 +113,7 @@ fun SettingsRoute(
         state = state,
         snackbarHostState = snackbarHostState,
         onAction = viewModel::onAction,
+        modifier = modifier,
     )
 }
 
@@ -120,6 +122,7 @@ fun SettingsScreen(
     state: SettingState,
     snackbarHostState: SnackbarHostState,
     onAction: (SettingAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
 
@@ -160,9 +163,12 @@ fun SettingsScreen(
 
     if (state.showEditProfileSheet) {
         EditProfileBottomSheet(
-            initialName = state.username,
-            initialWeight = state.weight.toString(),
+            name = state.editName,
+            weight = state.editWeight,
+            showValidation = state.showValidationError,
             profileImageBase64 = state.profileImageBase64,
+            onNameChange = { onAction(SettingAction.OnEditNameChanged(it)) },
+            onWeightChange = { onAction(SettingAction.OnEditWeightChanged(it)) },
             onPickImageClick = {
                 pickMediaLauncher.launch(
                     PickVisualMediaRequest.Builder()
@@ -170,8 +176,8 @@ fun SettingsScreen(
                         .build(),
                 )
             },
-            onSaveProfile = { newName, newWeight ->
-                onAction(SettingAction.SaveProfile(newName, newWeight))
+            onSaveProfile = {
+                onAction(SettingAction.SubmitEditProfile)
             },
             onDismiss = { onAction(SettingAction.DismissEditProfileSheet) },
         )
@@ -376,17 +382,17 @@ private fun SettingsItemCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileBottomSheet(
-    initialName: String,
-    initialWeight: String,
+    name: String,
+    weight: String,
+    showValidation: Boolean,
     profileImageBase64: String?,
+    onNameChange: (String) -> Unit,
+    onWeightChange: (String) -> Unit,
     onPickImageClick: () -> Unit,
-    onSaveProfile: (name: String, weight: String) -> Unit,
+    onSaveProfile: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var name by rememberSaveable { mutableStateOf(initialName) }
-    var weight by rememberSaveable { mutableStateOf(initialWeight) }
-    var showValidation by rememberSaveable { mutableStateOf(false) }
 
     val decodedBitmap = remember(profileImageBase64) {
         if (!profileImageBase64.isNullOrBlank()) {
@@ -496,10 +502,7 @@ fun EditProfileBottomSheet(
 
             ProfileSheetInputField(
                 value = name,
-                onValueChange = {
-                    name = it
-                    showValidation = false
-                },
+                onValueChange = onNameChange,
                 hint = "Enter your name",
                 keyboardOptions = KeyboardOptions.Default,
                 modifier = Modifier
@@ -510,10 +513,7 @@ fun EditProfileBottomSheet(
 
             ProfileSheetInputField(
                 value = weight,
-                onValueChange = {
-                    weight = it
-                    showValidation = false
-                },
+                onValueChange = onWeightChange,
                 hint = "Enter your weight",
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
@@ -523,13 +523,7 @@ fun EditProfileBottomSheet(
             )
 
             Button(
-                onClick = {
-                    if (name.isBlank() || weight.isBlank()) {
-                        showValidation = true
-                    } else {
-                        onSaveProfile(name.trim(), weight.trim())
-                    }
-                },
+                onClick = onSaveProfile,
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = LerunGreen,

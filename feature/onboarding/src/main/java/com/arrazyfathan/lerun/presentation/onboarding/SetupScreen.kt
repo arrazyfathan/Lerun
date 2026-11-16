@@ -56,21 +56,8 @@ import com.arrazyfathan.lerun.core.ui.R as UiR
 fun SetupRoute(
     onNavigateToRun: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: OnboardingViewModel = viewModel(),
 ) {
-    SetupScreen(
-        onNavigateToRun = onNavigateToRun,
-        viewModel = viewModel,
-        modifier = modifier,
-    )
-}
-
-@Composable
-fun SetupScreen(
-    onNavigateToRun: () -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: OnboardingViewModel = viewModel(),
-) {
+    val viewModel: OnboardingViewModel = viewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -89,10 +76,25 @@ fun SetupScreen(
         }
     }
 
-    SetupScreenContent(
+    SetupScreen(
         state = state,
         snackbarHostState = snackbarHostState,
         onAction = viewModel::onAction,
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun SetupScreen(
+    state: OnboardingState,
+    snackbarHostState: SnackbarHostState,
+    onAction: (OnboardingAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    SetupScreenContent(
+        state = state,
+        snackbarHostState = snackbarHostState,
+        onAction = onAction,
         modifier = modifier,
     )
 }

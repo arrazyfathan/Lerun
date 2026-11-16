@@ -5,7 +5,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
@@ -147,11 +150,16 @@ class ComposeScreensTest {
             caloriesBurned = 290,
         )
         composeTestRule.setContent {
+            var expandedIds by remember { mutableStateOf(emptySet<Int>()) }
             LerunTheme(darkTheme = true) {
                 AllRunScreenContent(
                     runs = listOf(sampleRun),
                     selectedSortType = SortType.DATE,
+                    expandedRunIds = expandedIds,
                     onSortTypeSelected = {},
+                    onToggleExpandRun = { id ->
+                        expandedIds = if (id in expandedIds) expandedIds - id else expandedIds + id
+                    },
                 )
             }
         }

@@ -30,52 +30,42 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.arrazyfathan.lerun.domain.model.Run
+import com.arrazyfathan.lerun.feature.statistics.StatisticAction
+import com.arrazyfathan.lerun.feature.statistics.StatisticState
+import com.arrazyfathan.lerun.feature.statistics.StatisticViewModel
 import com.arrazyfathan.lerun.ui.designsystem.Inter
 import com.arrazyfathan.lerun.ui.designsystem.LerunDarkAccentText
 import com.arrazyfathan.lerun.ui.designsystem.LerunTheme
-import com.arrazyfathan.lerun.utils.TrackingUtility
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import kotlin.math.round
 import android.graphics.Color as AndroidColor
 import com.arrazyfathan.lerun.core.ui.R as UiR
 
 @Composable
-fun StatisticsRoute(
-    viewModel: StatisticViewModel = viewModel(),
-) {
+fun StatisticsRoute(modifier: Modifier = Modifier) {
+    val viewModel: StatisticViewModel = viewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    StatisticsScreen(state = state)
+    StatisticsScreen(
+        state = state,
+        onAction = viewModel::onAction,
+        modifier = modifier,
+    )
 }
 
 @Composable
 fun StatisticsScreen(
     state: StatisticState,
     modifier: Modifier = Modifier,
+    onAction: (StatisticAction) -> Unit = {},
 ) {
-    val formattedTotalTime = TrackingUtility.getFormattedStopWatchTime(state.totalTimeRun)
-
-    val formattedTotalDistance = run {
-        val km = state.totalDistance / 1000f
-        val rounded = round(km * 10f) / 10
-        "${rounded}km"
-    }
-
-    val formattedAverageSpeed = run {
-        val rounded = round(state.totalAverageSpeed * 10f) / 10
-        "${rounded}km/h"
-    }
-
-    val formattedCalories = "${state.totalCaloriesBurned}kcal"
-
     StatisticsScreenContent(
-        totalTime = formattedTotalTime,
-        totalDistance = formattedTotalDistance,
-        totalCalories = formattedCalories,
-        averageSpeed = formattedAverageSpeed,
+        totalTime = state.formattedTotalTime,
+        totalDistance = state.formattedTotalDistance,
+        totalCalories = state.formattedCalories,
+        averageSpeed = state.formattedAverageSpeed,
         runs = state.runsSortedByDate,
         modifier = modifier,
     )
@@ -95,12 +85,13 @@ fun StatisticsScreenContent(
 
     if (isLandscape) {
         Row(
-            modifier = modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .padding(16.dp),
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .statusBarsPadding()
+                    .navigationBarsPadding()
+                    .padding(16.dp),
         ) {
             StatisticsMetricsGrid(
                 totalTime = totalTime,
@@ -108,25 +99,28 @@ fun StatisticsScreenContent(
                 totalCalories = totalCalories,
                 averageSpeed = averageSpeed,
                 valueFontSize = 30.sp,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
             )
             StatisticsBarChart(
                 runs = runs,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
             )
         }
     } else {
         Column(
-            modifier = modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 120.dp),
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .statusBarsPadding()
+                    .navigationBarsPadding()
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 120.dp),
         ) {
             StatisticsMetricsGrid(
                 totalTime = totalTime,
@@ -134,15 +128,17 @@ fun StatisticsScreenContent(
                 totalCalories = totalCalories,
                 averageSpeed = averageSpeed,
                 valueFontSize = 36.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.55f),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(0.55f),
             )
             StatisticsBarChart(
                 runs = runs,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.45f),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(0.45f),
             )
         }
     }
@@ -260,13 +256,15 @@ private fun StatisticsBarChart(
             }
         },
         update = { barChart ->
-            val entries = runs.indices.map { i ->
-                BarEntry(i.toFloat(), runs[i].avgSpeedInKMH)
-            }
-            val barDataSet = BarDataSet(entries, "Average Speed Over Time").apply {
-                valueTextColor = AndroidColor.WHITE
-                color = ContextCompat.getColor(barChart.context, UiR.color.colorAccent)
-            }
+            val entries =
+                runs.indices.map { i ->
+                    BarEntry(i.toFloat(), runs[i].avgSpeedInKMH)
+                }
+            val barDataSet =
+                BarDataSet(entries, "Average Speed Over Time").apply {
+                    valueTextColor = AndroidColor.WHITE
+                    color = ContextCompat.getColor(barChart.context, UiR.color.colorAccent)
+                }
             barChart.data = BarData(barDataSet)
             barChart.invalidate()
         },

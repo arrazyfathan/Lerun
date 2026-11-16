@@ -27,11 +27,17 @@ data class SettingState(
     val profileImageBase64: String? = null,
     val isDarkTheme: Boolean = true,
     val showEditProfileSheet: Boolean = false,
+    val editName: String = "",
+    val editWeight: String = "",
+    val showValidationError: Boolean = false,
 )
 
 sealed interface SettingAction {
     data object ShowEditProfileSheet : SettingAction
     data object DismissEditProfileSheet : SettingAction
+    data class OnEditNameChanged(val name: String) : SettingAction
+    data class OnEditWeightChanged(val weight: String) : SettingAction
+    data object SubmitEditProfile : SettingAction
     data class SaveProfile(val name: String, val weight: String) : SettingAction
     data class ChangeImage(val imageBase64: String) : SettingAction
     data class SetDarkTheme(val isDarkTheme: Boolean) : SettingAction
@@ -59,6 +65,8 @@ class SettingViewModel @Inject constructor(
             username = initialSettings.userName,
             weight = initialSettings.weightInKg,
             isDarkTheme = initialSettings.isDarkTheme,
+            editName = initialSettings.userName,
+            editWeight = initialSettings.weightInKg.toString(),
         ),
     )
     val state = _state.asStateFlow()
@@ -89,15 +97,62 @@ class SettingViewModel @Inject constructor(
     fun onAction(action: SettingAction) {
         when (action) {
             SettingAction.ShowEditProfileSheet -> {
-                _state.update { it.copy(showEditProfileSheet = true) }
+                _state.update {
+                    it.copy(
+                        showEditProfileSheet = true,
+                        editName = it.username,
+                        editWeight = it.weight.toString(),
+                        showValidationError = false,
+                    )
+                }
             }
 
             SettingAction.DismissEditProfileSheet -> {
-                _state.update { it.copy(showEditProfileSheet = false) }
+                _state.update {
+                    it.copy(
+                        showEditProfileSheet = false,
+                        showValidationError = false,
+                    )
+                }
+            }
+
+            is SettingAction.OnEditNameChanged -> {
+                _state.update {
+                    it.copy(
+                        editName = action.name,
+                        showValidationError = false,
+                    )
+                }
+            }
+
+            is SettingAction.OnEditWeightChanged -> {
+                _state.update {
+                    it.copy(
+                        editWeight = action.weight,
+                        showValidationError = false,
+                    )
+                }
+            }
+
+            SettingAction.SubmitEditProfile -> {
+                val current = _state.value
+                val trimmedName = current.editName.trim()
+                val trimmedWeight = current.editWeight.trim()
+                if (trimmedName.isBlank() || trimmedWeight.isBlank()) {
+                    _state.update { it.copy(showValidationError = true) }
+                } else {
+                    saveUserProfile(trimmedName, trimmedWeight)
+                }
             }
 
             is SettingAction.SaveProfile -> {
-                saveUserProfile(action.name, action.weight)
+                val trimmedName = action.name.trim()
+                val trimmedWeight = action.weight.trim()
+                if (trimmedName.isBlank() || trimmedWeight.isBlank()) {
+                    _state.update { it.copy(showValidationError = true) }
+                } else {
+                    saveUserProfile(trimmedName, trimmedWeight)
+                }
             }
 
             is SettingAction.ChangeImage -> {
@@ -137,7 +192,12 @@ class SettingViewModel @Inject constructor(
     private fun saveUserProfile(name: String, weight: String) {
         viewModelScope.launch {
             saveUserProfileUseCase(name = name, weight = weight)
-            _state.update { it.copy(showEditProfileSheet = false) }
+            _state.update {
+                it.copy(
+                    showEditProfileSheet = false,
+                    showValidationError = false,
+                )
+            }
             _event.send(SettingEvent.ShowMessage("Saved"))
         }
     }

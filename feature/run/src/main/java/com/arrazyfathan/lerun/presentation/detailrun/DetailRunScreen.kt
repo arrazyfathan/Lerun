@@ -54,8 +54,8 @@ import com.arrazyfathan.lerun.core.ui.R as UiR
 fun DetailRunRoute(
     runId: Int?,
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = viewModel(),
 ) {
+    val viewModel: MainViewModel = viewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(runId) {

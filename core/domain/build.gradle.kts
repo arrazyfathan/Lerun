@@ -20,7 +20,6 @@ dependencies {
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.bundles.androidx.lifecycle)
-    implementation(libs.androidx.lifecycle.livedata)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.hilt.android)
 }

@@ -40,9 +40,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -104,28 +102,11 @@ fun RunRoute(
     onOpenAllRuns: () -> Unit,
     onOpenRunDetail: (Run) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = viewModel(),
 ) {
-    RunScreen(
-        onOpenAllRuns = onOpenAllRuns,
-        onOpenRunDetail = onOpenRunDetail,
-        viewModel = viewModel,
-        modifier = modifier,
-    )
-}
-
-@Composable
-fun RunScreen(
-    onOpenAllRuns: () -> Unit,
-    onOpenRunDetail: (Run) -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: MainViewModel = viewModel(),
-) {
+    val viewModel: MainViewModel = viewModel()
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val state by viewModel.state.collectAsStateWithLifecycle()
-
-    var showPermissionDialog by remember { mutableStateOf(false) }
 
     val backgroundPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -137,11 +118,36 @@ fun RunScreen(
         val fineGranted = result[Manifest.permission.ACCESS_FINE_LOCATION] == true
         val coarseGranted = result[Manifest.permission.ACCESS_COARSE_LOCATION] == true
         if (!fineGranted && !coarseGranted) {
-            showPermissionDialog = true
+            viewModel.onAction(RunAction.OnPermissionDenied)
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
             !TrackingUtility.hasLocationPermissions(context)
         ) {
             backgroundPermissionLauncher.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+        }
+    }
+
+    LaunchedEffect(viewModel) {
+        viewModel.events.collect { event ->
+            when (event) {
+                RunEvent.RequestLocationPermissions -> {
+                    locationPermissionsLauncher.launch(
+                        arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                        ),
+                    )
+                }
+
+                RunEvent.OpenAppSettings -> {
+                    val intent = Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts("package", context.packageName, null),
+                    )
+                    context.startActivity(intent)
+                }
+
+                RunEvent.RunSaved -> Unit
+            }
         }
     }
 
@@ -178,9 +184,26 @@ fun RunScreen(
         }
     }
 
-    if (showPermissionDialog) {
+    RunScreen(
+        state = state,
+        onAction = viewModel::onAction,
+        onOpenAllRuns = onOpenAllRuns,
+        onOpenRunDetail = onOpenRunDetail,
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun RunScreen(
+    state: RunState,
+    onAction: (RunAction) -> Unit,
+    onOpenAllRuns: () -> Unit,
+    onOpenRunDetail: (Run) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    if (state.showPermissionDialog) {
         AlertDialog(
-            onDismissRequest = { showPermissionDialog = false },
+            onDismissRequest = { onAction(RunAction.OnDismissPermissionDialog) },
             title = {
                 Text(
                     text = "Location Permission Required",
@@ -196,29 +219,14 @@ fun RunScreen(
             },
             confirmButton = {
                 TextButton(
-                    onClick = {
-                        showPermissionDialog = false
-                        val intent = Intent(
-                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                            Uri.fromParts("package", context.packageName, null),
-                        )
-                        context.startActivity(intent)
-                    },
+                    onClick = { onAction(RunAction.OnOpenAppSettings) },
                 ) {
                     Text("Settings")
                 }
             },
             dismissButton = {
                 TextButton(
-                    onClick = {
-                        showPermissionDialog = false
-                        locationPermissionsLauncher.launch(
-                            arrayOf(
-                                Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.ACCESS_COARSE_LOCATION,
-                            ),
-                        )
-                    },
+                    onClick = { onAction(RunAction.OnRetryPermissionRequest) },
                 ) {
                     Text("Retry")
                 }
@@ -236,10 +244,14 @@ fun RunScreen(
         totalDistanceMeters = state.totalDistanceInMeters,
         totalTimeMillis = state.totalTimeInMillis,
         chartRuns = state.runsSortedByDateAsc,
+        selectedChartRun = state.selectedChartRun,
         latestRuns = state.runs.take(3),
+        onSelectChartRun = { run ->
+            onAction(RunAction.OnChartRunSelected(run))
+        },
         onOpenAllRuns = onOpenAllRuns,
         onOpenRunDetail = { run ->
-            viewModel.onAction(RunAction.OnSelectRun(run))
+            onAction(RunAction.OnSelectRun(run))
             onOpenRunDetail(run)
         },
         modifier = modifier,
@@ -261,10 +273,11 @@ fun RunScreenContent(
     onOpenAllRuns: () -> Unit,
     onOpenRunDetail: (Run) -> Unit,
     modifier: Modifier = Modifier,
+    selectedChartRun: Run? = null,
+    onSelectChartRun: (Run?) -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
     val hazeState = rememberHazeState()
-    var selectedChartRun by remember(chartRuns) { mutableStateOf<Run?>(null) }
 
     val formattedCalories = "$totalCalories kcal"
     val formattedAvgSpeed = "${round(totalAvgSpeed * 10f) / 10} km/h"
@@ -361,7 +374,7 @@ fun RunScreenContent(
 
                 SpeedOverTimeLineChart(
                     runs = chartRuns,
-                    onRunSelected = { selectedChartRun = it },
+                    onRunSelected = onSelectChartRun,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp)

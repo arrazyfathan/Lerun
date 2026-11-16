@@ -11,7 +11,6 @@ import com.arrazyfathan.lerun.domain.usecase.ObserveRunSummaryUseCase
 import com.arrazyfathan.lerun.domain.usecase.ObserveRunsUseCase
 import com.arrazyfathan.lerun.domain.usecase.ObserveUserImageUseCase
 import com.arrazyfathan.lerun.domain.usecase.ObserveUserSettingsUseCase
-import com.arrazyfathan.lerun.domain.usecase.SaveUserProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -19,7 +18,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -38,14 +39,25 @@ data class RunState(
     val totalCaloriesBurned: Int = 0,
     val totalAvgSpeedInKMH: Float = 0f,
     val sortType: SortType = SortType.DATE,
+    val isSortDropdownExpanded: Boolean = false,
+    val expandedRunIds: Set<Int> = emptySet(),
     val selectedRun: Run? = null,
+    val selectedChartRun: Run? = null,
+    val showPermissionDialog: Boolean = false,
     val isDarkTheme: Boolean = true,
 )
 
 sealed interface RunAction {
     data object OnStarted : RunAction
     data class OnBannerTitleUpdated(val title: String) : RunAction
+    data object OnPermissionDenied : RunAction
+    data object OnDismissPermissionDialog : RunAction
+    data object OnRetryPermissionRequest : RunAction
+    data object OnOpenAppSettings : RunAction
+    data class OnChartRunSelected(val run: Run?) : RunAction
+    data class OnSortDropdownToggled(val expanded: Boolean) : RunAction
     data class OnSortTypeChanged(val sortType: SortType) : RunAction
+    data class OnToggleExpandRun(val runId: Int) : RunAction
     data class OnSaveRun(val run: Run) : RunAction
     data class OnSelectRun(val run: Run) : RunAction
     data class OnLoadRunById(val runId: Int) : RunAction
@@ -53,6 +65,8 @@ sealed interface RunAction {
 
 sealed interface RunEvent {
     data object RunSaved : RunEvent
+    data object RequestLocationPermissions : RunEvent
+    data object OpenAppSettings : RunEvent
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -64,7 +78,6 @@ class MainViewModel @Inject constructor(
     private val insertRunUseCase: InsertRunUseCase,
     private val observeUserSettingsUseCase: ObserveUserSettingsUseCase,
     private val observeUserImageUseCase: ObserveUserImageUseCase,
-    private val saveUserProfileUseCase: SaveUserProfileUseCase,
 ) : ViewModel() {
 
     private val currentSettings = observeUserSettingsUseCase.current()
@@ -106,8 +119,54 @@ class MainViewModel @Inject constructor(
                 }
             }
 
+            RunAction.OnPermissionDenied -> {
+                _state.update { it.copy(showPermissionDialog = true) }
+            }
+
+            RunAction.OnDismissPermissionDialog -> {
+                _state.update { it.copy(showPermissionDialog = false) }
+            }
+
+            RunAction.OnRetryPermissionRequest -> {
+                _state.update { it.copy(showPermissionDialog = false) }
+                viewModelScope.launch {
+                    _events.send(RunEvent.RequestLocationPermissions)
+                }
+            }
+
+            RunAction.OnOpenAppSettings -> {
+                _state.update { it.copy(showPermissionDialog = false) }
+                viewModelScope.launch {
+                    _events.send(RunEvent.OpenAppSettings)
+                }
+            }
+
+            is RunAction.OnChartRunSelected -> {
+                _state.update { it.copy(selectedChartRun = action.run) }
+            }
+
+            is RunAction.OnSortDropdownToggled -> {
+                _state.update { it.copy(isSortDropdownExpanded = action.expanded) }
+            }
+
             is RunAction.OnSortTypeChanged -> {
-                _state.update { it.copy(sortType = action.sortType) }
+                _state.update {
+                    it.copy(
+                        sortType = action.sortType,
+                        isSortDropdownExpanded = false,
+                    )
+                }
+            }
+
+            is RunAction.OnToggleExpandRun -> {
+                _state.update { current ->
+                    val updatedIds = if (action.runId in current.expandedRunIds) {
+                        current.expandedRunIds - action.runId
+                    } else {
+                        current.expandedRunIds + action.runId
+                    }
+                    current.copy(expandedRunIds = updatedIds)
+                }
             }
 
             is RunAction.OnSaveRun -> {
@@ -135,8 +194,8 @@ class MainViewModel @Inject constructor(
     }
 
     private fun observeUserSettings() {
-        viewModelScope.launch {
-            observeUserSettingsUseCase().collect { settings ->
+        observeUserSettingsUseCase()
+            .onEach { settings ->
                 _state.update {
                     it.copy(
                         profileName = settings.userName,
@@ -145,22 +204,22 @@ class MainViewModel @Inject constructor(
                     )
                 }
             }
-        }
+            .launchIn(viewModelScope)
     }
 
     private fun observeUserImage() {
-        viewModelScope.launch {
-            observeUserImageUseCase().collect { userImage ->
+        observeUserImageUseCase()
+            .onEach { userImage ->
                 _state.update {
                     it.copy(profileImageBase64 = userImage?.imageString)
                 }
             }
-        }
+            .launchIn(viewModelScope)
     }
 
     private fun observeRunSummary() {
-        viewModelScope.launch {
-            observeRunSummaryUseCase().collect { summary ->
+        observeRunSummaryUseCase()
+            .onEach { summary ->
                 _state.update {
                     it.copy(
                         totalTimeInMillis = summary.totalTimeInMillis,
@@ -168,39 +227,25 @@ class MainViewModel @Inject constructor(
                         totalCaloriesBurned = summary.totalCaloriesBurned,
                         totalAvgSpeedInKMH = summary.totalAvgSpeedInKMH,
                         runsSortedByDateAsc = summary.runsSortedByDateAsc,
+                        selectedChartRun = it.selectedChartRun?.let { selected ->
+                            summary.runsSortedByDateAsc.firstOrNull { run -> run.id == selected.id }
+                        },
                     )
                 }
             }
-        }
+            .launchIn(viewModelScope)
     }
 
     private fun observeSortedRuns() {
-        viewModelScope.launch {
-            _state
-                .map { it.sortType }
-                .distinctUntilChanged()
-                .flatMapLatest { sortType ->
-                    observeRunsUseCase(sortType)
-                }
-                .collect { sortedRuns ->
-                    _state.update { it.copy(runs = sortedRuns) }
-                }
-        }
-    }
-
-    fun getProfileWeight(): Int = _state.value.profileWeight
-
-    fun insertRun(run: Run) {
-        onAction(RunAction.OnSaveRun(run))
-    }
-
-    fun sortRuns(sortType: SortType) {
-        onAction(RunAction.OnSortTypeChanged(sortType))
-    }
-
-    fun setUserProfile(name: String, weight: String) {
-        viewModelScope.launch {
-            saveUserProfileUseCase(name, weight)
-        }
+        _state
+            .map { it.sortType }
+            .distinctUntilChanged()
+            .flatMapLatest { sortType ->
+                observeRunsUseCase(sortType)
+            }
+            .onEach { sortedRuns ->
+                _state.update { it.copy(runs = sortedRuns) }
+            }
+            .launchIn(viewModelScope)
     }
 }

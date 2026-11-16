@@ -1,7 +1,5 @@
 package com.arrazyfathan.lerun.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
 import com.arrazyfathan.lerun.data.local.db.RunDAO
 import com.arrazyfathan.lerun.data.mapper.toDomain
 import com.arrazyfathan.lerun.data.mapper.toEntity
@@ -49,28 +47,6 @@ constructor(
     override fun observeTotalCaloriesBurned(): Flow<Int> = runDao.observeTotalCaloriesBurned()
 
     override fun observeTotalTimeInMillis(): Flow<Long> = runDao.observeTotalTimeInMillis()
-
-    override fun getAllRunsSortedByDate(): LiveData<List<Run>> = runDao.getAllRunsSortedByDate().mapRuns()
-
-    override fun getAllRunsSortedByDateAsc(): LiveData<List<Run>> = runDao.getAllRunsSortedByDateAscending().mapRuns()
-
-    override fun getAllRunsSortedByDistance(): LiveData<List<Run>> = runDao.getAllRunsSortedByDistance().mapRuns()
-
-    override fun getAllRunsSortedByTimeInMillis(): LiveData<List<Run>> = runDao.getAllRunsSortedByTimeInMillis().mapRuns()
-
-    override fun getAllRunsSortedByAvgSpeed(): LiveData<List<Run>> = runDao.getAllRunsSortedByAvgSpeed().mapRuns()
-
-    override fun getAllRunsSortedByCaloriesBurned(): LiveData<List<Run>> = runDao.getAllRunsSortedByCaloriesBurned().mapRuns()
-
-    override fun getTotalAvgSpeed(): LiveData<Float> = runDao.getTotalAvgSpeed()
-
-    override fun getTotalDistance(): LiveData<Int> = runDao.getTotalDistance()
-
-    override fun getTotalCaloriesBurned(): LiveData<Int> = runDao.getTotalCaloriesBurned()
-
-    override fun getTotalTimeInMillis(): LiveData<Long> = runDao.getTotalTimeInMillis()
-
-    private fun LiveData<List<com.arrazyfathan.lerun.data.local.db.Run>>.mapRuns(): LiveData<List<Run>> = map { runs -> runs.map { it.toDomain() } }
 
     private fun Flow<List<com.arrazyfathan.lerun.data.local.db.Run>>.mapRunsFlow(): Flow<List<Run>> = map { runs -> runs.map { it.toDomain() } }
 }

@@ -14,9 +14,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arrazyfathan.lerun.R
 import com.arrazyfathan.lerun.navigation.MainApp
+import com.arrazyfathan.lerun.ui.AppUiAction
+import com.arrazyfathan.lerun.ui.AppUiEvent
 import com.arrazyfathan.lerun.ui.AppUiViewModel
 import com.arrazyfathan.lerun.ui.designsystem.LerunTheme
 import com.arrazyfathan.lerun.utils.Constants.ACTION_SHOW_TRACKING_FRAGMENT
@@ -26,8 +29,8 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import com.arrazyfathan.lerun.core.ui.R as UiR
 
@@ -38,10 +41,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var remoteConfig: FirebaseRemoteConfig
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
-    private val trackingIntentEvents = MutableSharedFlow<Unit>(
-        replay = 1,
-        extraBufferCapacity = 1,
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,14 +67,16 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val appUiState by appUiViewModel.state.collectAsStateWithLifecycle()
+            val trackingIntentEvents = remember(appUiViewModel) {
+                appUiViewModel.events
+                    .filterIsInstance<AppUiEvent.NavigateToTracking>()
+                    .map { }
+            }
 
             LerunTheme(darkTheme = appUiState.isDarkTheme) {
                 MainApp(
                     isProfileCompleted = appUiState.isProfileCompleted,
-                    trackingIntentEvents = trackingIntentEvents.asSharedFlow(),
-                    onTrackingIntentConsumed = {
-                        trackingIntentEvents.resetReplayCache()
-                    },
+                    trackingIntentEvents = trackingIntentEvents,
                 )
             }
         }
@@ -84,7 +85,7 @@ class MainActivity : AppCompatActivity() {
     private fun consumeTrackingIntent(intent: Intent?) {
         if (intent?.action == ACTION_SHOW_TRACKING_FRAGMENT) {
             intent.action = null
-            trackingIntentEvents.tryEmit(Unit)
+            appUiViewModel.onAction(AppUiAction.OnTrackingIntentReceived)
         }
     }
 

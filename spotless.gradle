@@ -15,9 +15,10 @@ spotless {
         target 'src/**/*.kt'
         targetExclude("**/build/**/*.kt")
         trimTrailingWhitespace()
-        ktlint()
+        ktlint("1.8.0")
             .editorConfigOverride([
-                "ktlint_function_naming_ignore_when_annotated_with": "Composable",
+                "ktlint_function_naming_ignore_when_annotated_with": "Composable, Preview",
+                "ktlint_standard_function-naming": "disabled",
                 "ktlint_standard_property-naming": "disabled",
                 "ktlint_standard_backing-property-naming": "disabled",
                 "ktlint_standard_value-argument-comment": "disabled",

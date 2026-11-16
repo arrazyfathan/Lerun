@@ -38,10 +38,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -61,6 +58,7 @@ import com.arrazyfathan.lerun.domain.model.Run
 import com.arrazyfathan.lerun.domain.model.SortType
 import com.arrazyfathan.lerun.presentation.home.MainViewModel
 import com.arrazyfathan.lerun.presentation.home.RunAction
+import com.arrazyfathan.lerun.presentation.home.RunState
 import com.arrazyfathan.lerun.ui.designsystem.Inter
 import com.arrazyfathan.lerun.ui.designsystem.LerunDarkAccentText
 import com.arrazyfathan.lerun.ui.designsystem.LerunGreen
@@ -76,26 +74,36 @@ import com.arrazyfathan.lerun.core.ui.R as UiR
 @Composable
 fun AllRunRoute(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = viewModel(),
 ) {
+    val viewModel: MainViewModel = viewModel()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
     AllRunScreen(
-        viewModel = viewModel,
+        state = state,
+        onAction = viewModel::onAction,
         modifier = modifier,
     )
 }
 
 @Composable
 fun AllRunScreen(
+    state: RunState,
+    onAction: (RunAction) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = viewModel(),
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
     AllRunScreenContent(
         runs = state.runs,
         selectedSortType = state.sortType,
+        isSortDropdownExpanded = state.isSortDropdownExpanded,
+        expandedRunIds = state.expandedRunIds,
+        onSortDropdownToggled = { expanded ->
+            onAction(RunAction.OnSortDropdownToggled(expanded))
+        },
         onSortTypeSelected = { sortType ->
-            viewModel.onAction(RunAction.OnSortTypeChanged(sortType))
+            onAction(RunAction.OnSortTypeChanged(sortType))
+        },
+        onToggleExpandRun = { runId ->
+            onAction(RunAction.OnToggleExpandRun(runId))
         },
         modifier = modifier,
     )
@@ -107,30 +115,36 @@ fun AllRunScreenContent(
     selectedSortType: SortType,
     onSortTypeSelected: (SortType) -> Unit,
     modifier: Modifier = Modifier,
+    isSortDropdownExpanded: Boolean = false,
+    expandedRunIds: Set<Int> = emptySet(),
+    onSortDropdownToggled: (Boolean) -> Unit = {},
+    onToggleExpandRun: (Int) -> Unit = {},
 ) {
     val filterOptions = stringArrayResource(id = UiR.array.filter_options)
-    var dropdownExpanded by remember { mutableStateOf(false) }
 
-    val selectedIndex = when (selectedSortType) {
-        SortType.DATE -> 0
-        SortType.RUNNING_TIME -> 1
-        SortType.DISTANCE -> 2
-        SortType.AVG_SPEED -> 3
-        SortType.CALORIES_BURNED -> 4
-        SortType.DATE_ASC -> 5
-    }
+    val selectedIndex =
+        when (selectedSortType) {
+            SortType.DATE -> 0
+            SortType.RUNNING_TIME -> 1
+            SortType.DISTANCE -> 2
+            SortType.AVG_SPEED -> 3
+            SortType.CALORIES_BURNED -> 4
+            SortType.DATE_ASC -> 5
+        }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .statusBarsPadding()
+                .navigationBarsPadding(),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 24.dp, end = 16.dp, top = 24.dp, bottom = 16.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, end = 16.dp, top = 24.dp, bottom = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -154,9 +168,10 @@ fun AllRunScreenContent(
                 Spacer(modifier = Modifier.width(8.dp))
                 Box {
                     Row(
-                        modifier = Modifier
-                            .clickable { dropdownExpanded = true }
-                            .padding(vertical = 8.dp, horizontal = 8.dp),
+                        modifier =
+                            Modifier
+                                .clickable { onSortDropdownToggled(true) }
+                                .padding(vertical = 8.dp, horizontal = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
@@ -175,8 +190,8 @@ fun AllRunScreenContent(
                     }
 
                     DropdownMenu(
-                        expanded = dropdownExpanded,
-                        onDismissRequest = { dropdownExpanded = false },
+                        expanded = isSortDropdownExpanded,
+                        onDismissRequest = { onSortDropdownToggled(false) },
                     ) {
                         filterOptions.forEachIndexed { index, label ->
                             DropdownMenuItem(
@@ -187,15 +202,15 @@ fun AllRunScreenContent(
                                     )
                                 },
                                 onClick = {
-                                    dropdownExpanded = false
-                                    val sortType = when (index) {
-                                        0 -> SortType.DATE
-                                        1 -> SortType.RUNNING_TIME
-                                        2 -> SortType.DISTANCE
-                                        3 -> SortType.AVG_SPEED
-                                        4 -> SortType.CALORIES_BURNED
-                                        else -> SortType.DATE_ASC
-                                    }
+                                    val sortType =
+                                        when (index) {
+                                            0 -> SortType.DATE
+                                            1 -> SortType.RUNNING_TIME
+                                            2 -> SortType.DISTANCE
+                                            3 -> SortType.AVG_SPEED
+                                            4 -> SortType.CALORIES_BURNED
+                                            else -> SortType.DATE_ASC
+                                        }
                                     onSortTypeSelected(sortType)
                                 },
                             )
@@ -206,9 +221,10 @@ fun AllRunScreenContent(
         }
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 24.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp),
             contentPadding = PaddingValues(bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -216,7 +232,12 @@ fun AllRunScreenContent(
                 items = runs,
                 key = { run -> run.id ?: run.hashCode() },
             ) { run ->
-                ExpandableRunCard(run = run)
+                val runKey = run.id ?: run.hashCode()
+                ExpandableRunCard(
+                    run = run,
+                    expanded = runKey in expandedRunIds,
+                    onToggleExpand = { onToggleExpandRun(runKey) },
+                )
             }
         }
     }
@@ -226,9 +247,9 @@ fun AllRunScreenContent(
 fun ExpandableRunCard(
     run: Run,
     modifier: Modifier = Modifier,
+    expanded: Boolean = false,
+    onToggleExpand: () -> Unit = {},
 ) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
-
     val headerBackgroundColor by animateColorAsState(
         targetValue = if (expanded) LerunGreen else LerunSecondaryDark,
         animationSpec = tween(durationMillis = 300),
@@ -250,27 +271,31 @@ fun ExpandableRunCard(
         label = "arrowRotation",
     )
 
-    val formattedDate = remember(run.timestamp) {
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis = run.timestamp
+    val formattedDate =
+        remember(run.timestamp) {
+            val calendar =
+                Calendar.getInstance().apply {
+                    timeInMillis = run.timestamp
+                }
+            SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault()).format(calendar.time)
         }
-        SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault()).format(calendar.time)
-    }
 
     Card(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = headerBackgroundColor),
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { expanded = !expanded },
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clickable(onClick = onToggleExpand),
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(headerBackgroundColor)
-                    .padding(8.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(headerBackgroundColor)
+                        .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Card(
@@ -286,9 +311,10 @@ fun ExpandableRunCard(
                         )
                     } else {
                         Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(LerunMainDark),
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .background(LerunMainDark),
                         )
                     }
                 }
@@ -320,9 +346,10 @@ fun ExpandableRunCard(
                     painter = painterResource(id = UiR.drawable.ic_down),
                     contentDescription = if (expanded) "Collapse" else "Expand",
                     tint = titleColor,
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .rotate(arrowRotation),
+                    modifier =
+                        Modifier
+                            .padding(end = 8.dp)
+                            .rotate(arrowRotation),
                 )
             }
 
@@ -350,23 +377,26 @@ private fun ExpandableRunStatsGrid(
     calories: String,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
-            .background(LerunGreen),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .background(LerunGreen),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
             ) {
                 ExpandableStatCell(
                     label = "Distance",
                     value = distance,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
                 )
                 VerticalDivider(
                     thickness = 1.dp,
@@ -375,9 +405,10 @@ private fun ExpandableRunStatsGrid(
                 ExpandableStatCell(
                     label = "Average Speed",
                     value = avgSpeed,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
                 )
             }
             HorizontalDivider(
@@ -385,16 +416,18 @@ private fun ExpandableRunStatsGrid(
                 color = LerunMainDark.copy(alpha = 0.25f),
             )
             Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
             ) {
                 ExpandableStatCell(
                     label = "Duration",
                     value = duration,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
                 )
                 VerticalDivider(
                     thickness = 1.dp,
@@ -403,9 +436,10 @@ private fun ExpandableRunStatsGrid(
                 ExpandableStatCell(
                     label = "Calories Burned",
                     value = calories,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .fillMaxHeight(),
                 )
             }
         }
@@ -446,17 +480,18 @@ private fun ExpandableStatCell(
 private fun AllRunScreenPreview() {
     LerunTheme(darkTheme = true) {
         AllRunScreenContent(
-            runs = listOf(
-                Run(
-                    id = 1,
-                    title = "Morning Run",
-                    timestamp = System.currentTimeMillis(),
-                    avgSpeedInKMH = 10.5f,
-                    distanceInMeters = 5200,
-                    timeInMillis = 1800000L,
-                    caloriesBurned = 450,
+            runs =
+                listOf(
+                    Run(
+                        id = 1,
+                        title = "Morning Run",
+                        timestamp = System.currentTimeMillis(),
+                        avgSpeedInKMH = 10.5f,
+                        distanceInMeters = 5200,
+                        timeInMillis = 1800000L,
+                        caloriesBurned = 450,
+                    ),
                 ),
-            ),
             selectedSortType = SortType.DATE,
             onSortTypeSelected = {},
         )
