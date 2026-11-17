@@ -57,17 +57,18 @@ import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.arrazyfathan.lerun.feature.home.navigation.AllRunsNavRoute
+import com.arrazyfathan.lerun.feature.home.navigation.DetailRunNavRoute
+import com.arrazyfathan.lerun.feature.home.navigation.RunNavRoute
+import com.arrazyfathan.lerun.feature.home.navigation.homeEntries
 import com.arrazyfathan.lerun.feature.onboarding.navigation.OnboardingNavRoute
 import com.arrazyfathan.lerun.feature.onboarding.navigation.onboardingEntry
-import com.arrazyfathan.lerun.feature.run.navigation.AllRunsNavRoute
-import com.arrazyfathan.lerun.feature.run.navigation.DetailRunNavRoute
-import com.arrazyfathan.lerun.feature.run.navigation.RunNavRoute
-import com.arrazyfathan.lerun.feature.run.navigation.TrackingNavRoute
-import com.arrazyfathan.lerun.feature.run.navigation.runEntries
 import com.arrazyfathan.lerun.feature.settings.navigation.SettingsNavRoute
 import com.arrazyfathan.lerun.feature.settings.navigation.settingsEntry
 import com.arrazyfathan.lerun.feature.statistics.navigation.StatisticsNavRoute
 import com.arrazyfathan.lerun.feature.statistics.navigation.statisticsEntry
+import com.arrazyfathan.lerun.feature.tracking.navigation.TrackingNavRoute
+import com.arrazyfathan.lerun.feature.tracking.navigation.trackingEntry
 import com.arrazyfathan.lerun.ui.designsystem.LerunGreen
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
@@ -80,30 +81,34 @@ private data class TopLevelDestination(
     @DrawableRes val unselectedIcon: Int,
 )
 
-private val RunDestination = TopLevelDestination(
-    route = RunNavRoute,
-    label = "Activity",
-    selectedIcon = UiR.drawable.ic_activity_selected,
-    unselectedIcon = UiR.drawable.ic_activity_unselected,
-)
+private val RunDestination =
+    TopLevelDestination(
+        route = RunNavRoute,
+        label = "Activity",
+        selectedIcon = UiR.drawable.ic_activity_selected,
+        unselectedIcon = UiR.drawable.ic_activity_unselected,
+    )
 
-private val SettingsDestination = TopLevelDestination(
-    route = SettingsNavRoute,
-    label = "Setting",
-    selectedIcon = UiR.drawable.ic_setting_selected,
-    unselectedIcon = UiR.drawable.ic_setting_unselected,
-)
+private val SettingsDestination =
+    TopLevelDestination(
+        route = SettingsNavRoute,
+        label = "Setting",
+        selectedIcon = UiR.drawable.ic_setting_selected,
+        unselectedIcon = UiR.drawable.ic_setting_unselected,
+    )
 
-private val TopLevelRoutes: List<NavKey> = listOf(
-    RunDestination.route,
-    SettingsDestination.route,
-)
+private val TopLevelRoutes: List<NavKey> =
+    listOf(
+        RunDestination.route,
+        SettingsDestination.route,
+    )
 
-private val BottomBarRoutes: Set<NavKey> = setOf(
-    RunNavRoute,
-    SettingsNavRoute,
-    StatisticsNavRoute,
-)
+private val BottomBarRoutes: Set<NavKey> =
+    setOf(
+        RunNavRoute,
+        SettingsNavRoute,
+        StatisticsNavRoute,
+    )
 
 class NavigationState(
     val startRoute: NavKey,
@@ -142,11 +147,12 @@ class NavigationState(
     }
 
     val stacksInUse: List<NavKey>
-        get() = if (currentTopLevelRoute !in topLevelRoutes || currentTopLevelRoute == startRoute) {
-            listOf(currentTopLevelRoute)
-        } else {
-            listOf(startRoute, currentTopLevelRoute)
-        }
+        get() =
+            if (currentTopLevelRoute !in topLevelRoutes || currentTopLevelRoute == startRoute) {
+                listOf(currentTopLevelRoute)
+            } else {
+                listOf(startRoute, currentTopLevelRoute)
+            }
 }
 
 @Composable
@@ -155,17 +161,20 @@ fun rememberNavigationState(
     topLevelRoutes: List<NavKey>,
     homeRoute: NavKey = startRoute,
 ): NavigationState {
-    val topLevelRoute = key("top_level_route") {
-        rememberNavBackStack(startRoute)
-    }
-    val stackRoots = remember(startRoute, topLevelRoutes) {
-        (listOf(startRoute) + topLevelRoutes).distinct()
-    }
-    val backStacks = stackRoots.associateWith { routeKey ->
-        key("stack_$routeKey") {
-            rememberNavBackStack(routeKey)
+    val topLevelRoute =
+        key("top_level_route") {
+            rememberNavBackStack(startRoute)
         }
-    }
+    val stackRoots =
+        remember(startRoute, topLevelRoutes) {
+            (listOf(startRoute) + topLevelRoutes).distinct()
+        }
+    val backStacks =
+        stackRoots.associateWith { routeKey ->
+            key("stack_$routeKey") {
+                rememberNavBackStack(routeKey)
+            }
+        }
 
     return remember(homeRoute, topLevelRoutes, topLevelRoute, backStacks) {
         NavigationState(
@@ -177,7 +186,9 @@ fun rememberNavigationState(
     }
 }
 
-class Navigator(val state: NavigationState) {
+class Navigator(
+    val state: NavigationState,
+) {
     fun navigate(route: NavKey) {
         if (route in state.topLevelRoutes) {
             val targetStack = state.backStacks[route]
@@ -203,8 +214,9 @@ class Navigator(val state: NavigationState) {
     }
 
     fun goBack() {
-        val currentStack = state.backStacks[state.currentTopLevelRoute]
-            ?: error("Stack for ${state.currentTopLevelRoute} not found")
+        val currentStack =
+            state.backStacks[state.currentTopLevelRoute]
+                ?: error("Stack for ${state.currentTopLevelRoute} not found")
         val currentRoute = currentStack.last()
 
         if (currentRoute == state.currentTopLevelRoute) {
@@ -223,20 +235,20 @@ class Navigator(val state: NavigationState) {
 }
 
 @Composable
-fun NavigationState.toEntries(
-    entryProvider: (NavKey) -> NavEntry<NavKey>,
-): SnapshotStateList<NavEntry<NavKey>> {
-    val decoratedEntries = backStacks.mapValues { (_, stack) ->
-        val decorators = listOf(
-            rememberSaveableStateHolderNavEntryDecorator<NavKey>(),
-            rememberViewModelStoreNavEntryDecorator(),
-        )
-        rememberDecoratedNavEntries(
-            backStack = stack,
-            entryDecorators = decorators,
-            entryProvider = entryProvider,
-        )
-    }
+fun NavigationState.toEntries(entryProvider: (NavKey) -> NavEntry<NavKey>): SnapshotStateList<NavEntry<NavKey>> {
+    val decoratedEntries =
+        backStacks.mapValues { (_, stack) ->
+            val decorators =
+                listOf(
+                    rememberSaveableStateHolderNavEntryDecorator<NavKey>(),
+                    rememberViewModelStoreNavEntryDecorator(),
+                )
+            rememberDecoratedNavEntries(
+                backStack = stack,
+                entryDecorators = decorators,
+                entryProvider = entryProvider,
+            )
+        }
 
     return stacksInUse
         .flatMap { decoratedEntries[it] ?: emptyList() }
@@ -250,11 +262,12 @@ fun MainApp(
     onTrackingIntentConsumed: () -> Unit = {},
 ) {
     val initialRoute: NavKey = if (isProfileCompleted) RunNavRoute else OnboardingNavRoute
-    val navigationState = rememberNavigationState(
-        startRoute = initialRoute,
-        topLevelRoutes = TopLevelRoutes,
-        homeRoute = RunNavRoute,
-    )
+    val navigationState =
+        rememberNavigationState(
+            startRoute = initialRoute,
+            topLevelRoutes = TopLevelRoutes,
+            homeRoute = RunNavRoute,
+        )
     val navigator = remember(navigationState) { Navigator(navigationState) }
 
     LaunchedEffect(isProfileCompleted) {
@@ -272,21 +285,24 @@ fun MainApp(
         }
     }
 
-    val entryProvider = entryProvider<NavKey> {
-        onboardingEntry(
-            onNavigateToRun = { navigator.completeOnboarding() },
-        )
-        runEntries(
-            onOpenAllRuns = { navigator.navigate(AllRunsNavRoute) },
-            onOpenRunDetail = { runId -> navigator.navigate(DetailRunNavRoute(runId)) },
-            onCloseTrackingToRun = {
-                navigator.popToCurrentTopLevel()
-                navigator.navigate(RunNavRoute)
-            },
-        )
-        settingsEntry()
-        statisticsEntry()
-    }
+    val entryProvider =
+        entryProvider<NavKey> {
+            onboardingEntry(
+                onNavigateToRun = { navigator.completeOnboarding() },
+            )
+            homeEntries(
+                onOpenAllRuns = { navigator.navigate(AllRunsNavRoute) },
+                onOpenRunDetail = { runId -> navigator.navigate(DetailRunNavRoute(runId)) },
+            )
+            trackingEntry(
+                onCloseTrackingToRun = {
+                    navigator.popToCurrentTopLevel()
+                    navigator.navigate(RunNavRoute)
+                },
+            )
+            settingsEntry()
+            statisticsEntry()
+        }
 
     val currentRoute = navigationState.currentRoute
     val showBottomBar = currentRoute in BottomBarRoutes
@@ -299,18 +315,22 @@ fun MainApp(
         isBottomBarHidden = 0f
     }
 
-    val nestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                if (available.y < -4f) {
-                    isBottomBarHidden = 1f
-                } else if (available.y > 4f) {
-                    isBottomBarHidden = 0f
+    val nestedScrollConnection =
+        remember {
+            object : NestedScrollConnection {
+                override fun onPreScroll(
+                    available: Offset,
+                    source: NestedScrollSource,
+                ): Offset {
+                    if (available.y < -4f) {
+                        isBottomBarHidden = 1f
+                    } else if (available.y > 4f) {
+                        isBottomBarHidden = 0f
+                    }
+                    return Offset.Zero
                 }
-                return Offset.Zero
             }
         }
-    }
 
     val animatedTranslationY by animateFloatAsState(
         targetValue = if (isBottomBarHidden > 0.5f) maxHideOffsetPx else 0f,
@@ -319,9 +339,10 @@ fun MainApp(
     )
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .nestedScroll(nestedScrollConnection),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .nestedScroll(nestedScrollConnection),
     ) {
         NavDisplay(
             entries = navigationState.toEntries(entryProvider),
@@ -379,21 +400,22 @@ fun MainApp(
 
         if (showBottomBar) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .align(Alignment.BottomCenter)
-                    .graphicsLayer {
-                        translationY = animatedTranslationY
-                    }
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                MaterialTheme.colorScheme.background,
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .align(Alignment.BottomCenter)
+                        .graphicsLayer {
+                            translationY = animatedTranslationY
+                        }.background(
+                            Brush.verticalGradient(
+                                colors =
+                                    listOf(
+                                        Color.Transparent,
+                                        MaterialTheme.colorScheme.background,
+                                    ),
                             ),
                         ),
-                    ),
             )
 
             LerunFloatingBottomBar(
@@ -404,13 +426,13 @@ fun MainApp(
                 onOpenTracking = {
                     navigator.navigate(TrackingNavRoute)
                 },
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .graphicsLayer {
-                        translationY = animatedTranslationY
-                    }
-                    .navigationBarsPadding()
-                    .padding(bottom = 30.dp),
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .graphicsLayer {
+                            translationY = animatedTranslationY
+                        }.navigationBarsPadding()
+                        .padding(bottom = 30.dp),
             )
         }
     }
@@ -427,9 +449,10 @@ fun LerunFloatingBottomBar(
         shape = RoundedCornerShape(100.dp),
         color = MaterialTheme.colorScheme.surface,
         shadowElevation = 20.dp,
-        modifier = modifier
-            .width(270.dp)
-            .height(90.dp),
+        modifier =
+            modifier
+                .width(270.dp)
+                .height(90.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -438,31 +461,35 @@ fun LerunFloatingBottomBar(
         ) {
             val isRunSelected = currentRoute == RunDestination.route
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        role = Role.Tab,
-                        onClick = { onNavigateToRoute(RunDestination.route) },
-                    ),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            role = Role.Tab,
+                            onClick = { onNavigateToRoute(RunDestination.route) },
+                        ),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    painter = painterResource(
-                        id = if (isRunSelected) {
-                            RunDestination.selectedIcon
-                        } else {
-                            RunDestination.unselectedIcon
-                        },
-                    ),
+                    painter =
+                        painterResource(
+                            id =
+                                if (isRunSelected) {
+                                    RunDestination.selectedIcon
+                                } else {
+                                    RunDestination.unselectedIcon
+                                },
+                        ),
                     contentDescription = RunDestination.label,
-                    tint = if (isRunSelected) {
-                        MaterialTheme.colorScheme.onSurface
-                    } else {
-                        Color(0xFF59595C)
-                    },
+                    tint =
+                        if (isRunSelected) {
+                            MaterialTheme.colorScheme.onSurface
+                        } else {
+                            Color(0xFF59595C)
+                        },
                     modifier = Modifier.size(24.dp),
                 )
             }
@@ -471,10 +498,11 @@ fun LerunFloatingBottomBar(
                 shape = CircleShape,
                 colors = CardDefaults.cardColors(containerColor = LerunGreen),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-                modifier = Modifier
-                    .size(60.dp)
-                    .clip(CircleShape)
-                    .clickable(onClick = onOpenTracking),
+                modifier =
+                    Modifier
+                        .size(60.dp)
+                        .clip(CircleShape)
+                        .clickable(onClick = onOpenTracking),
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -490,31 +518,35 @@ fun LerunFloatingBottomBar(
 
             val isSettingsSelected = currentRoute == SettingsDestination.route
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        role = Role.Tab,
-                        onClick = { onNavigateToRoute(SettingsDestination.route) },
-                    ),
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            role = Role.Tab,
+                            onClick = { onNavigateToRoute(SettingsDestination.route) },
+                        ),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
-                    painter = painterResource(
-                        id = if (isSettingsSelected) {
-                            SettingsDestination.selectedIcon
-                        } else {
-                            SettingsDestination.unselectedIcon
-                        },
-                    ),
+                    painter =
+                        painterResource(
+                            id =
+                                if (isSettingsSelected) {
+                                    SettingsDestination.selectedIcon
+                                } else {
+                                    SettingsDestination.unselectedIcon
+                                },
+                        ),
                     contentDescription = SettingsDestination.label,
-                    tint = if (isSettingsSelected) {
-                        MaterialTheme.colorScheme.onSurface
-                    } else {
-                        Color(0xFF59595C)
-                    },
+                    tint =
+                        if (isSettingsSelected) {
+                            MaterialTheme.colorScheme.onSurface
+                        } else {
+                            Color(0xFF59595C)
+                        },
                     modifier = Modifier.size(24.dp),
                 )
             }

@@ -10,16 +10,19 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class ObserveUserImageUseCase @Inject constructor(
-    private val imageRepository: ImageRepository,
-    private val userSettingStorage: UserSettingStorage,
-) {
-    @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(): Flow<UserImage?> = userSettingStorage
-        .observeUserSettings()
-        .map { it.userName }
-        .distinctUntilChanged()
-        .flatMapLatest { userName ->
-            imageRepository.observeImage(userName)
-        }
-}
+class ObserveUserImageUseCase
+    @Inject
+    constructor(
+        private val imageRepository: ImageRepository,
+        private val userSettingStorage: UserSettingStorage,
+    ) {
+        @OptIn(ExperimentalCoroutinesApi::class)
+        operator fun invoke(): Flow<UserImage?> =
+            userSettingStorage
+                .observeUserSettings()
+                .map { it.userName }
+                .distinctUntilChanged()
+                .flatMapLatest { userName ->
+                    imageRepository.observeImage(userName)
+                }
+    }

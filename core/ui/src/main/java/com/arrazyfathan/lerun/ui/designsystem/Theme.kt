@@ -11,37 +11,39 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-val DarkColorScheme = darkColorScheme(
-    primary = LerunGreen,
-    background = Color.Black,
-    surface = LerunSecondaryDark,
-    surfaceVariant = LerunMainDark,
-    secondary = LerunWhite,
-    tertiary = LerunWhite,
-    primaryContainer = LerunGreen30,
-    onPrimary = LerunMainDark,
-    onBackground = Color.White,
-    onSurface = Color.White,
-    onSurfaceVariant = LerunDarkAccentText,
-    error = LerunErrorColor,
-    errorContainer = LerunDarkRed5,
-)
+val DarkColorScheme =
+    darkColorScheme(
+        primary = LerunGreen,
+        background = Color.Black,
+        surface = LerunSecondaryDark,
+        surfaceVariant = LerunMainDark,
+        secondary = LerunWhite,
+        tertiary = LerunWhite,
+        primaryContainer = LerunGreen30,
+        onPrimary = LerunMainDark,
+        onBackground = Color.White,
+        onSurface = Color.White,
+        onSurfaceVariant = LerunDarkAccentText,
+        error = LerunErrorColor,
+        errorContainer = LerunDarkRed5,
+    )
 
-val LightColorScheme = lightColorScheme(
-    primary = LerunGreen,
-    background = LerunMainLight,
-    surface = LerunSecondaryLight,
-    surfaceVariant = LerunMainLight,
-    secondary = LerunMainDark,
-    tertiary = LerunMainDark,
-    primaryContainer = LerunGreen30,
-    onPrimary = LerunMainDark,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    onSurfaceVariant = LerunDarkAccentText,
-    error = LerunErrorColor,
-    errorContainer = LerunDarkRed5,
-)
+val LightColorScheme =
+    lightColorScheme(
+        primary = LerunGreen,
+        background = LerunMainLight,
+        surface = LerunSecondaryLight,
+        surfaceVariant = LerunMainLight,
+        secondary = LerunMainDark,
+        tertiary = LerunMainDark,
+        primaryContainer = LerunGreen30,
+        onPrimary = LerunMainDark,
+        onBackground = Color.Black,
+        onSurface = Color.Black,
+        onSurfaceVariant = LerunDarkAccentText,
+        error = LerunErrorColor,
+        errorContainer = LerunDarkRed5,
+    )
 
 @Composable
 fun LerunTheme(

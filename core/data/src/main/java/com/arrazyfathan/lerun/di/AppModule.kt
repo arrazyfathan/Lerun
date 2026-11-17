@@ -3,8 +3,6 @@ package com.arrazyfathan.lerun.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import com.arrazyfathan.lerun.data.local.db.RunningDatabase
 import dagger.Module
 import dagger.Provides
@@ -20,11 +18,12 @@ object AppModule {
     @Provides
     fun provideRunningDatabase(
         @ApplicationContext app: Context,
-    ) = Room.databaseBuilder(
-        app,
-        RunningDatabase::class.java,
-        RUNNING_DATABASE_NAME,
-    ).build()
+    ) = Room
+        .databaseBuilder(
+            app,
+            RunningDatabase::class.java,
+            RUNNING_DATABASE_NAME,
+        ).build()
 
     @Singleton
     @Provides
@@ -36,13 +35,14 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideEncryptedSharedPreferences(@ApplicationContext context: Context): SharedPreferences = EncryptedSharedPreferences(
-        context,
-        "user_setting_pref",
-        MasterKey(context),
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
-    )
+    fun provideSharedPreferences(
+        @ApplicationContext context: Context,
+    ): SharedPreferences =
+        context.getSharedPreferences(
+            USER_SETTING_PREF_NAME,
+            Context.MODE_PRIVATE,
+        )
 
     private const val RUNNING_DATABASE_NAME = "running_db"
+    private const val USER_SETTING_PREF_NAME = "user_setting_pref"
 }

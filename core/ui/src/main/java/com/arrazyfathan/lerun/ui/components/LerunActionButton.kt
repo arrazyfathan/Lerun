@@ -34,33 +34,38 @@ fun LerunActionButton(
     Button(
         onClick = onClick,
         enabled = enabled,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContainerColor = LerunGray,
-            disabledContentColor = LerunBlack,
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                disabledContainerColor = LerunGray,
+                disabledContentColor = LerunBlack,
+            ),
         shape = RoundedCornerShape(100f),
-        modifier = modifier
-            .height(IntrinsicSize.Min),
+        modifier =
+            modifier
+                .height(IntrinsicSize.Min),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
             contentAlignment = Alignment.Center,
         ) {
             CircularProgressIndicator(
-                modifier = Modifier
-                    .size(15.dp)
-                    .alpha(if (isLoading) 1f else 0f),
+                modifier =
+                    Modifier
+                        .size(15.dp)
+                        .alpha(if (isLoading) 1f else 0f),
                 strokeWidth = 1.5.dp,
                 color = MaterialTheme.colorScheme.onPrimary,
             )
             Text(
                 text = text,
-                modifier = Modifier
-                    .alpha(if (isLoading) 0f else 1f),
+                modifier =
+                    Modifier
+                        .alpha(if (isLoading) 0f else 1f),
                 fontWeight = FontWeight.SemiBold,
             )
         }
@@ -78,34 +83,40 @@ fun LerunOutlinedActionButton(
     OutlinedButton(
         onClick = onClick,
         enabled = enabled,
-        colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground,
-        ),
-        border = BorderStroke(
-            width = 0.5.dp,
-            color = MaterialTheme.colorScheme.onBackground,
-        ),
+        colors =
+            ButtonDefaults.outlinedButtonColors(
+                contentColor = MaterialTheme.colorScheme.onBackground,
+            ),
+        border =
+            BorderStroke(
+                width = 0.5.dp,
+                color = MaterialTheme.colorScheme.onBackground,
+            ),
         shape = RoundedCornerShape(100f),
-        modifier = modifier
-            .height(IntrinsicSize.Min),
+        modifier =
+            modifier
+                .height(IntrinsicSize.Min),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
             contentAlignment = Alignment.Center,
         ) {
             CircularProgressIndicator(
-                modifier = Modifier
-                    .size(15.dp)
-                    .alpha(if (isLoading) 1f else 0f),
+                modifier =
+                    Modifier
+                        .size(15.dp)
+                        .alpha(if (isLoading) 1f else 0f),
                 strokeWidth = 1.5.dp,
                 color = MaterialTheme.colorScheme.onBackground,
             )
             Text(
                 text = text,
-                modifier = Modifier
-                    .alpha(if (isLoading) 0f else 1f),
+                modifier =
+                    Modifier
+                        .alpha(if (isLoading) 0f else 1f),
                 fontWeight = FontWeight.Medium,
             )
         }

@@ -1,5 +1,5 @@
 pluginManagement {
-    includeBuild("plugins")
+    includeBuild("build-logic")
     repositories {
         gradlePluginPortal()
         google()
@@ -16,14 +16,15 @@ dependencyResolutionManagement {
         maven { url = "https://jitpack.io" }
     }
 }
-rootProject.name='Lerun'
+rootProject.name = 'Lerun'
 include ':app'
 include ':baselineprofile'
 include ':core:domain'
 include ':core:data'
 include ':core:ui'
 include ':core:common'
-include ':feature:run'
+include ':feature:home'
+include ':feature:tracking'
 include ':feature:statistics'
 include ':feature:settings'
 include ':feature:onboarding'

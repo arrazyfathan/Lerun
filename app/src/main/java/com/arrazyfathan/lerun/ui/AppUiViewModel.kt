@@ -30,43 +30,44 @@ sealed interface AppUiEvent {
 }
 
 @HiltViewModel
-class AppUiViewModel @Inject constructor(
-    observeUserSettingsUseCase: ObserveUserSettingsUseCase,
-) : ViewModel() {
+class AppUiViewModel
+    @Inject
+    constructor(
+        observeUserSettingsUseCase: ObserveUserSettingsUseCase,
+    ) : ViewModel() {
+        private val initialSettings = observeUserSettingsUseCase.current()
 
-    private val initialSettings = observeUserSettingsUseCase.current()
+        private val _state =
+            MutableStateFlow(
+                AppUiState(
+                    isDarkTheme = initialSettings.isDarkTheme,
+                    isProfileCompleted = initialSettings.isProfileCompleted,
+                ),
+            )
+        val state = _state.asStateFlow()
 
-    private val _state = MutableStateFlow(
-        AppUiState(
-            isDarkTheme = initialSettings.isDarkTheme,
-            isProfileCompleted = initialSettings.isProfileCompleted,
-        ),
-    )
-    val state = _state.asStateFlow()
+        private val _events = Channel<AppUiEvent>(Channel.BUFFERED)
+        val events = _events.receiveAsFlow()
 
-    private val _events = Channel<AppUiEvent>(Channel.BUFFERED)
-    val events = _events.receiveAsFlow()
+        init {
+            observeUserSettingsUseCase()
+                .onEach { settings ->
+                    _state.update {
+                        AppUiState(
+                            isDarkTheme = settings.isDarkTheme,
+                            isProfileCompleted = settings.isProfileCompleted,
+                        )
+                    }
+                }.launchIn(viewModelScope)
+        }
 
-    init {
-        observeUserSettingsUseCase()
-            .onEach { settings ->
-                _state.update {
-                    AppUiState(
-                        isDarkTheme = settings.isDarkTheme,
-                        isProfileCompleted = settings.isProfileCompleted,
-                    )
-                }
-            }
-            .launchIn(viewModelScope)
-    }
-
-    fun onAction(action: AppUiAction) {
-        when (action) {
-            AppUiAction.OnTrackingIntentReceived -> {
-                viewModelScope.launch {
-                    _events.send(AppUiEvent.NavigateToTracking)
+        fun onAction(action: AppUiAction) {
+            when (action) {
+                AppUiAction.OnTrackingIntentReceived -> {
+                    viewModelScope.launch {
+                        _events.send(AppUiEvent.NavigateToTracking)
+                    }
                 }
             }
         }
     }
-}

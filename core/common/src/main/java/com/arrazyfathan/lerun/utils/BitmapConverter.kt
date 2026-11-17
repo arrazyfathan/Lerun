@@ -15,15 +15,19 @@ object BitmapConverter {
         return Base64.encodeToString(byteArray, Base64.DEFAULT)
     }
 
-    fun converterStringToBitmap(encodedString: String): Bitmap? = try {
-        val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
-        BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
+    fun converterStringToBitmap(encodedString: String): Bitmap? =
+        try {
+            val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
 
-    fun convertImageUriToBase64(uri: Uri, context: Context): String {
+    fun convertImageUriToBase64(
+        uri: Uri,
+        context: Context,
+    ): String {
         val imageStream = context.contentResolver.openInputStream(uri)
         val selectedImage = BitmapFactory.decodeStream(imageStream)
         val encodedImage = converterBitmapToString(selectedImage)

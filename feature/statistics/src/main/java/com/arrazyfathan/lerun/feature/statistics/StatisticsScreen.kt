@@ -1,4 +1,4 @@
-package com.arrazyfathan.lerun.presentation.statistic
+package com.arrazyfathan.lerun.feature.statistics
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -27,12 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.arrazyfathan.lerun.domain.model.Run
-import com.arrazyfathan.lerun.feature.statistics.StatisticAction
-import com.arrazyfathan.lerun.feature.statistics.StatisticState
-import com.arrazyfathan.lerun.feature.statistics.StatisticViewModel
 import com.arrazyfathan.lerun.ui.designsystem.Inter
 import com.arrazyfathan.lerun.ui.designsystem.LerunDarkAccentText
 import com.arrazyfathan.lerun.ui.designsystem.LerunTheme
@@ -46,7 +43,7 @@ import com.arrazyfathan.lerun.core.ui.R as UiR
 
 @Composable
 fun StatisticsRoute(modifier: Modifier = Modifier) {
-    val viewModel: StatisticViewModel = viewModel()
+    val viewModel: StatisticViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     StatisticsScreen(
         state = state,

@@ -23,20 +23,20 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.arrazyfathan.lerun.domain.model.Run
 import com.arrazyfathan.lerun.domain.model.SortType
+import com.arrazyfathan.lerun.feature.home.allruns.AllRunScreenContent
+import com.arrazyfathan.lerun.feature.home.detail.DetailRunScreen
+import com.arrazyfathan.lerun.feature.home.home.RunScreenContent
+import com.arrazyfathan.lerun.feature.home.navigation.RunNavRoute
+import com.arrazyfathan.lerun.feature.onboarding.SetupScreenContent
 import com.arrazyfathan.lerun.feature.onboarding.navigation.OnboardingNavRoute
-import com.arrazyfathan.lerun.feature.run.navigation.RunNavRoute
+import com.arrazyfathan.lerun.feature.settings.SettingsScreenContent
 import com.arrazyfathan.lerun.feature.settings.navigation.SettingsNavRoute
+import com.arrazyfathan.lerun.feature.statistics.StatisticsScreenContent
+import com.arrazyfathan.lerun.feature.tracking.TrackingScreenContent
 import com.arrazyfathan.lerun.navigation.LerunFloatingBottomBar
 import com.arrazyfathan.lerun.navigation.Navigator
 import com.arrazyfathan.lerun.navigation.rememberNavigationState
 import com.arrazyfathan.lerun.navigation.toEntries
-import com.arrazyfathan.lerun.presentation.allrun.AllRunScreenContent
-import com.arrazyfathan.lerun.presentation.detailrun.DetailRunScreen
-import com.arrazyfathan.lerun.presentation.home.RunScreenContent
-import com.arrazyfathan.lerun.presentation.onboarding.SetupScreenContent
-import com.arrazyfathan.lerun.presentation.run.TrackingScreenContent
-import com.arrazyfathan.lerun.presentation.settings.SettingsScreenContent
-import com.arrazyfathan.lerun.presentation.statistic.StatisticsScreenContent
 import com.arrazyfathan.lerun.ui.designsystem.LerunTheme
 import org.junit.Rule
 import org.junit.Test
@@ -44,7 +44,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ComposeScreensTest {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -65,15 +64,16 @@ class ComposeScreensTest {
 
     @Test
     fun runScreen_displaysStatsAndRecentActivities() {
-        val sampleRun = Run(
-            id = 1,
-            title = "Morning 5K",
-            timestamp = 1700000000000L,
-            avgSpeedInKMH = 10.5f,
-            distanceInMeters = 5000,
-            timeInMillis = 1800000L,
-            caloriesBurned = 350,
-        )
+        val sampleRun =
+            Run(
+                id = 1,
+                title = "Morning 5K",
+                timestamp = 1700000000000L,
+                avgSpeedInKMH = 10.5f,
+                distanceInMeters = 5000,
+                timeInMillis = 1800000L,
+                caloriesBurned = 350,
+            )
         composeTestRule.setContent {
             LerunTheme(darkTheme = true) {
                 RunScreenContent(
@@ -140,15 +140,16 @@ class ComposeScreensTest {
 
     @Test
     fun allRunScreen_expandsRunCardOnClick() {
-        val sampleRun = Run(
-            id = 1,
-            title = "Evening Jog",
-            timestamp = 1700000000000L,
-            avgSpeedInKMH = 9.2f,
-            distanceInMeters = 4200,
-            timeInMillis = 1600000L,
-            caloriesBurned = 290,
-        )
+        val sampleRun =
+            Run(
+                id = 1,
+                title = "Evening Jog",
+                timestamp = 1700000000000L,
+                avgSpeedInKMH = 9.2f,
+                distanceInMeters = 4200,
+                timeInMillis = 1600000L,
+                caloriesBurned = 290,
+            )
         composeTestRule.setContent {
             var expandedIds by remember { mutableStateOf(emptySet<Int>()) }
             LerunTheme(darkTheme = true) {
@@ -170,15 +171,16 @@ class ComposeScreensTest {
 
     @Test
     fun detailRunScreen_displaysRunDetails() {
-        val sampleRun = Run(
-            id = 1,
-            title = "Weekend Long Run",
-            timestamp = 1700000000000L,
-            avgSpeedInKMH = 11.0f,
-            distanceInMeters = 10000,
-            timeInMillis = 3270000L,
-            caloriesBurned = 700,
-        )
+        val sampleRun =
+            Run(
+                id = 1,
+                title = "Weekend Long Run",
+                timestamp = 1700000000000L,
+                avgSpeedInKMH = 11.0f,
+                distanceInMeters = 10000,
+                timeInMillis = 3270000L,
+                caloriesBurned = 700,
+            )
         composeTestRule.setContent {
             LerunTheme(darkTheme = true) {
                 DetailRunScreen(run = sampleRun)
@@ -234,19 +236,21 @@ class ComposeScreensTest {
     fun navigation3_switchesFromRunToSettingsAndBackToRun() {
         composeTestRule.setContent {
             LerunTheme(darkTheme = true) {
-                val navigationState = rememberNavigationState(
-                    startRoute = RunNavRoute,
-                    topLevelRoutes = listOf(RunNavRoute, SettingsNavRoute),
-                )
+                val navigationState =
+                    rememberNavigationState(
+                        startRoute = RunNavRoute,
+                        topLevelRoutes = listOf(RunNavRoute, SettingsNavRoute),
+                    )
                 val navigator = remember(navigationState) { Navigator(navigationState) }
-                val entryProvider = entryProvider<NavKey> {
-                    entry<RunNavRoute> {
-                        Text("Home Screen Content")
+                val entryProvider =
+                    entryProvider<NavKey> {
+                        entry<RunNavRoute> {
+                            Text("Home Screen Content")
+                        }
+                        entry<SettingsNavRoute> {
+                            Text("Settings Screen Content")
+                        }
                     }
-                    entry<SettingsNavRoute> {
-                        Text("Settings Screen Content")
-                    }
-                }
                 Box(modifier = Modifier.fillMaxSize()) {
                     NavDisplay(
                         entries = navigationState.toEntries(entryProvider),
@@ -274,25 +278,27 @@ class ComposeScreensTest {
     fun navigation3_completesOnboardingToRunAndClearsOnboardingRoot() {
         composeTestRule.setContent {
             LerunTheme(darkTheme = true) {
-                val navigationState = rememberNavigationState(
-                    startRoute = OnboardingNavRoute,
-                    topLevelRoutes = listOf(RunNavRoute, SettingsNavRoute),
-                    homeRoute = RunNavRoute,
-                )
+                val navigationState =
+                    rememberNavigationState(
+                        startRoute = OnboardingNavRoute,
+                        topLevelRoutes = listOf(RunNavRoute, SettingsNavRoute),
+                        homeRoute = RunNavRoute,
+                    )
                 val navigator = remember(navigationState) { Navigator(navigationState) }
-                val entryProvider = entryProvider<NavKey> {
-                    entry<OnboardingNavRoute> {
-                        Button(onClick = { navigator.completeOnboarding() }) {
-                            Text("Complete Onboarding")
+                val entryProvider =
+                    entryProvider<NavKey> {
+                        entry<OnboardingNavRoute> {
+                            Button(onClick = { navigator.completeOnboarding() }) {
+                                Text("Complete Onboarding")
+                            }
+                        }
+                        entry<RunNavRoute> {
+                            Text("Home Screen Content")
+                        }
+                        entry<SettingsNavRoute> {
+                            Text("Settings Screen Content")
                         }
                     }
-                    entry<RunNavRoute> {
-                        Text("Home Screen Content")
-                    }
-                    entry<SettingsNavRoute> {
-                        Text("Settings Screen Content")
-                    }
-                }
                 NavDisplay(
                     entries = navigationState.toEntries(entryProvider),
                     onBack = { navigator.goBack() },

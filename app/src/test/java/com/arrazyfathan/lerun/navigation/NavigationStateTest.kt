@@ -2,30 +2,31 @@ package com.arrazyfathan.lerun.navigation
 
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import com.arrazyfathan.lerun.feature.home.navigation.AllRunsNavRoute
+import com.arrazyfathan.lerun.feature.home.navigation.DetailRunNavRoute
+import com.arrazyfathan.lerun.feature.home.navigation.RunNavRoute
 import com.arrazyfathan.lerun.feature.onboarding.navigation.OnboardingNavRoute
-import com.arrazyfathan.lerun.feature.run.navigation.AllRunsNavRoute
-import com.arrazyfathan.lerun.feature.run.navigation.DetailRunNavRoute
-import com.arrazyfathan.lerun.feature.run.navigation.RunNavRoute
-import com.arrazyfathan.lerun.feature.run.navigation.TrackingNavRoute
 import com.arrazyfathan.lerun.feature.settings.navigation.SettingsNavRoute
+import com.arrazyfathan.lerun.feature.tracking.navigation.TrackingNavRoute
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class NavigationStateTest {
-
     private fun createNavigator(startRoute: NavKey): Pair<NavigationState, Navigator> {
         val topLevelRoutes = setOf<NavKey>(RunNavRoute, SettingsNavRoute)
-        val backStacks = (listOf(startRoute) + topLevelRoutes).distinct().associateWith { route ->
-            NavBackStack(route)
-        }
-        val state = NavigationState(
-            startRoute = RunNavRoute,
-            topLevelRoute = NavBackStack(startRoute),
-            backStacks = backStacks,
-            topLevelRoutes = topLevelRoutes,
-        )
+        val backStacks =
+            (listOf(startRoute) + topLevelRoutes).distinct().associateWith { route ->
+                NavBackStack(route)
+            }
+        val state =
+            NavigationState(
+                startRoute = RunNavRoute,
+                topLevelRoute = NavBackStack(startRoute),
+                backStacks = backStacks,
+                topLevelRoutes = topLevelRoutes,
+            )
         return state to Navigator(state)
     }
 

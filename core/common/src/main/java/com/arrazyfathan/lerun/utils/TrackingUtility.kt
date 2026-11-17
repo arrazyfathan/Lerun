@@ -2,26 +2,34 @@ package com.arrazyfathan.lerun.utils
 
 import android.Manifest
 import android.content.Context
-import android.location.Location
+import android.content.pm.PackageManager
 import android.os.Build
-import com.google.android.gms.maps.model.LatLng
-import pub.devrel.easypermissions.EasyPermissions
+import androidx.core.content.ContextCompat
 import java.util.concurrent.TimeUnit
 
 object TrackingUtility {
-    fun hasLocationPermissions(context: Context) = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-        EasyPermissions.hasPermissions(
-            context,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-        )
-    } else {
-        EasyPermissions.hasPermissions(
-            context,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-        )
+    fun hasLocationPermissions(context: Context): Boolean {
+        val hasFine =
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+            ) == PackageManager.PERMISSION_GRANTED
+        val hasCoarse =
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+            ) == PackageManager.PERMISSION_GRANTED
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            return hasFine && hasCoarse
+        }
+
+        val hasBackground =
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+            ) == PackageManager.PERMISSION_GRANTED
+        return hasFine && hasCoarse && hasBackground
     }
 
     fun getFormattedStopWatchTime(
@@ -59,25 +67,5 @@ object TrackingUtility {
         } else {
             "${if (hours < 10) "" else ""}${hours}h" + "${if (minutes < 10) "0" else ""}${minutes}m"
         }
-    }
-
-    fun calculatePolylineLength(polyline: List<LatLng>): Float {
-        var distance = 0f
-        for (i in 0..polyline.size - 2) {
-            val pos1 = polyline[i]
-            val pos2 = polyline[i + 1]
-
-            val result = FloatArray(1)
-            Location.distanceBetween(
-                pos1.latitude,
-                pos1.longitude,
-                pos2.latitude,
-                pos2.longitude,
-                result,
-            )
-
-            distance += result[0]
-        }
-        return distance
     }
 }

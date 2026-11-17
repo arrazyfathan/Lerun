@@ -33,107 +33,139 @@ object AppNavigationTransitions {
     val HierarchicalPop: ContentTransform
         get() = hierarchicalPopEnter() togetherWith hierarchicalPopExit()
 
-    fun topLevelForwardEnter(): EnterTransition = slideInHorizontally(
-        initialOffsetX = { fullWidth -> fullWidth / TopLevelSlideFactor },
-        animationSpec = tween(
-            durationMillis = TopLevelEnterDurationMs,
-            easing = LinearOutSlowInEasing,
-        ),
-    ) + fadeIn(
-        animationSpec = tween(
-            durationMillis = TopLevelEnterDurationMs,
-            easing = LinearOutSlowInEasing,
-        ),
-    )
+    fun topLevelForwardEnter(): EnterTransition =
+        slideInHorizontally(
+            initialOffsetX = { fullWidth -> fullWidth / TopLevelSlideFactor },
+            animationSpec =
+                tween(
+                    durationMillis = TopLevelEnterDurationMs,
+                    easing = LinearOutSlowInEasing,
+                ),
+        ) +
+            fadeIn(
+                animationSpec =
+                    tween(
+                        durationMillis = TopLevelEnterDurationMs,
+                        easing = LinearOutSlowInEasing,
+                    ),
+            )
 
-    fun topLevelForwardExit(): ExitTransition = slideOutHorizontally(
-        targetOffsetX = { fullWidth -> -fullWidth / TopLevelSlideFactor },
-        animationSpec = tween(
-            durationMillis = TopLevelExitDurationMs,
-            easing = FastOutSlowInEasing,
-        ),
-    ) + fadeOut(
-        animationSpec = tween(
-            durationMillis = TopLevelExitDurationMs,
-            easing = FastOutSlowInEasing,
-        ),
-    )
+    fun topLevelForwardExit(): ExitTransition =
+        slideOutHorizontally(
+            targetOffsetX = { fullWidth -> -fullWidth / TopLevelSlideFactor },
+            animationSpec =
+                tween(
+                    durationMillis = TopLevelExitDurationMs,
+                    easing = FastOutSlowInEasing,
+                ),
+        ) +
+            fadeOut(
+                animationSpec =
+                    tween(
+                        durationMillis = TopLevelExitDurationMs,
+                        easing = FastOutSlowInEasing,
+                    ),
+            )
 
-    fun topLevelBackwardEnter(): EnterTransition = slideInHorizontally(
-        initialOffsetX = { fullWidth -> -fullWidth / TopLevelSlideFactor },
-        animationSpec = tween(
-            durationMillis = TopLevelEnterDurationMs,
-            easing = LinearOutSlowInEasing,
-        ),
-    ) + fadeIn(
-        animationSpec = tween(
-            durationMillis = TopLevelEnterDurationMs,
-            easing = LinearOutSlowInEasing,
-        ),
-    )
+    fun topLevelBackwardEnter(): EnterTransition =
+        slideInHorizontally(
+            initialOffsetX = { fullWidth -> -fullWidth / TopLevelSlideFactor },
+            animationSpec =
+                tween(
+                    durationMillis = TopLevelEnterDurationMs,
+                    easing = LinearOutSlowInEasing,
+                ),
+        ) +
+            fadeIn(
+                animationSpec =
+                    tween(
+                        durationMillis = TopLevelEnterDurationMs,
+                        easing = LinearOutSlowInEasing,
+                    ),
+            )
 
-    fun topLevelBackwardExit(): ExitTransition = slideOutHorizontally(
-        targetOffsetX = { fullWidth -> fullWidth / TopLevelSlideFactor },
-        animationSpec = tween(
-            durationMillis = TopLevelExitDurationMs,
-            easing = FastOutSlowInEasing,
-        ),
-    ) + fadeOut(
-        animationSpec = tween(
-            durationMillis = TopLevelExitDurationMs,
-            easing = FastOutSlowInEasing,
-        ),
-    )
+    fun topLevelBackwardExit(): ExitTransition =
+        slideOutHorizontally(
+            targetOffsetX = { fullWidth -> fullWidth / TopLevelSlideFactor },
+            animationSpec =
+                tween(
+                    durationMillis = TopLevelExitDurationMs,
+                    easing = FastOutSlowInEasing,
+                ),
+        ) +
+            fadeOut(
+                animationSpec =
+                    tween(
+                        durationMillis = TopLevelExitDurationMs,
+                        easing = FastOutSlowInEasing,
+                    ),
+            )
 
-    fun hierarchicalPushEnter(): EnterTransition = slideInHorizontally(
-        initialOffsetX = { fullWidth -> fullWidth / HierarchicalForegroundSlideFactor },
-        animationSpec = tween(
-            durationMillis = HierarchicalEnterDurationMs,
-            easing = LinearOutSlowInEasing,
-        ),
-    ) + fadeIn(
-        animationSpec = tween(
-            durationMillis = HierarchicalEnterDurationMs,
-            easing = LinearOutSlowInEasing,
-        ),
-    )
+    fun hierarchicalPushEnter(): EnterTransition =
+        slideInHorizontally(
+            initialOffsetX = { fullWidth -> fullWidth / HierarchicalForegroundSlideFactor },
+            animationSpec =
+                tween(
+                    durationMillis = HierarchicalEnterDurationMs,
+                    easing = LinearOutSlowInEasing,
+                ),
+        ) +
+            fadeIn(
+                animationSpec =
+                    tween(
+                        durationMillis = HierarchicalEnterDurationMs,
+                        easing = LinearOutSlowInEasing,
+                    ),
+            )
 
-    fun hierarchicalPushExit(): ExitTransition = slideOutHorizontally(
-        targetOffsetX = { fullWidth -> -fullWidth / HierarchicalBackgroundSlideFactor },
-        animationSpec = tween(
-            durationMillis = HierarchicalExitDurationMs,
-            easing = FastOutSlowInEasing,
-        ),
-    ) + fadeOut(
-        animationSpec = tween(
-            durationMillis = HierarchicalExitDurationMs,
-            easing = FastOutSlowInEasing,
-        ),
-    )
+    fun hierarchicalPushExit(): ExitTransition =
+        slideOutHorizontally(
+            targetOffsetX = { fullWidth -> -fullWidth / HierarchicalBackgroundSlideFactor },
+            animationSpec =
+                tween(
+                    durationMillis = HierarchicalExitDurationMs,
+                    easing = FastOutSlowInEasing,
+                ),
+        ) +
+            fadeOut(
+                animationSpec =
+                    tween(
+                        durationMillis = HierarchicalExitDurationMs,
+                        easing = FastOutSlowInEasing,
+                    ),
+            )
 
-    fun hierarchicalPopEnter(): EnterTransition = slideInHorizontally(
-        initialOffsetX = { fullWidth -> -fullWidth / HierarchicalBackgroundSlideFactor },
-        animationSpec = tween(
-            durationMillis = HierarchicalEnterDurationMs,
-            easing = LinearOutSlowInEasing,
-        ),
-    ) + fadeIn(
-        animationSpec = tween(
-            durationMillis = HierarchicalEnterDurationMs,
-            easing = LinearOutSlowInEasing,
-        ),
-    )
+    fun hierarchicalPopEnter(): EnterTransition =
+        slideInHorizontally(
+            initialOffsetX = { fullWidth -> -fullWidth / HierarchicalBackgroundSlideFactor },
+            animationSpec =
+                tween(
+                    durationMillis = HierarchicalEnterDurationMs,
+                    easing = LinearOutSlowInEasing,
+                ),
+        ) +
+            fadeIn(
+                animationSpec =
+                    tween(
+                        durationMillis = HierarchicalEnterDurationMs,
+                        easing = LinearOutSlowInEasing,
+                    ),
+            )
 
-    fun hierarchicalPopExit(): ExitTransition = slideOutHorizontally(
-        targetOffsetX = { fullWidth -> fullWidth / HierarchicalForegroundSlideFactor },
-        animationSpec = tween(
-            durationMillis = HierarchicalExitDurationMs,
-            easing = FastOutSlowInEasing,
-        ),
-    ) + fadeOut(
-        animationSpec = tween(
-            durationMillis = HierarchicalExitDurationMs,
-            easing = FastOutSlowInEasing,
-        ),
-    )
+    fun hierarchicalPopExit(): ExitTransition =
+        slideOutHorizontally(
+            targetOffsetX = { fullWidth -> fullWidth / HierarchicalForegroundSlideFactor },
+            animationSpec =
+                tween(
+                    durationMillis = HierarchicalExitDurationMs,
+                    easing = FastOutSlowInEasing,
+                ),
+        ) +
+            fadeOut(
+                animationSpec =
+                    tween(
+                        durationMillis = HierarchicalExitDurationMs,
+                        easing = FastOutSlowInEasing,
+                    ),
+            )
 }

@@ -1,24 +1,10 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.lerun.android.library)
+    alias(libs.plugins.lerun.android.compose)
 }
 
 android {
     namespace = "com.arrazyfathan.lerun.core.ui"
-    compileSdk = 37
-
-    defaultConfig {
-        minSdk = 24
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
 }
 
 dependencies {
@@ -32,5 +18,4 @@ dependencies {
     api(libs.androidx.material3)
     api(libs.androidx.lifecycle.runtime.compose)
     api(libs.androidx.lifecycle.viewmodel.compose)
-    debugImplementation(libs.androidx.ui.tooling)
 }

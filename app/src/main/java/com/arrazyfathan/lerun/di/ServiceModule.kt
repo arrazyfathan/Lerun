@@ -30,36 +30,39 @@ object ServiceModule {
     @Provides
     fun provideMainActivityPendingIntent(
         @ApplicationContext app: Context,
-    ): PendingIntent = if (Build.VERSION.SDK_INT >= 31) {
-        PendingIntent.getActivity(
-            app,
-            0,
-            Intent(app, MainActivity::class.java).also {
-                it.action = Constants.ACTION_SHOW_TRACKING_FRAGMENT
-            },
-            PendingIntent.FLAG_IMMUTABLE,
-        )
-    } else {
-        PendingIntent.getActivity(
-            app,
-            0,
-            Intent(app, MainActivity::class.java).also {
-                it.action = Constants.ACTION_SHOW_TRACKING_FRAGMENT
-            },
-            PendingIntent.FLAG_UPDATE_CURRENT,
-        )
-    }
+    ): PendingIntent =
+        if (Build.VERSION.SDK_INT >= 31) {
+            PendingIntent.getActivity(
+                app,
+                0,
+                Intent(app, MainActivity::class.java).also {
+                    it.action = Constants.ACTION_SHOW_TRACKING_FRAGMENT
+                },
+                PendingIntent.FLAG_IMMUTABLE,
+            )
+        } else {
+            PendingIntent.getActivity(
+                app,
+                0,
+                Intent(app, MainActivity::class.java).also {
+                    it.action = Constants.ACTION_SHOW_TRACKING_FRAGMENT
+                },
+                PendingIntent.FLAG_UPDATE_CURRENT,
+            )
+        }
 
     @ServiceScoped
     @Provides
     fun provideBaseNotificationBuilder(
         @ApplicationContext app: Context,
         pendingIntent: PendingIntent,
-    ): NotificationCompat.Builder = NotificationCompat.Builder(app, Constants.NOTIFICATION_CHANNEL_ID)
-        .setAutoCancel(false)
-        .setOngoing(true)
-        .setSmallIcon(UiR.drawable.ic_directions_run_black_24dp)
-        .setContentTitle("Lerun")
-        .setContentText("00:00:00")
-        .setContentIntent(pendingIntent)
+    ): NotificationCompat.Builder =
+        NotificationCompat
+            .Builder(app, Constants.NOTIFICATION_CHANNEL_ID)
+            .setAutoCancel(false)
+            .setOngoing(true)
+            .setSmallIcon(UiR.drawable.ic_directions_run_black_24dp)
+            .setContentTitle("Lerun")
+            .setContentText("00:00:00")
+            .setContentIntent(pendingIntent)
 }

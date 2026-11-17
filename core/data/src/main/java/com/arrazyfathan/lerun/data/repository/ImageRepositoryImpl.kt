@@ -13,15 +13,16 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ImageRepositoryImpl @Inject constructor(
-    private val imageDao: ImageDao,
-) : ImageRepository {
+class ImageRepositoryImpl
+    @Inject
+    constructor(
+        private val imageDao: ImageDao,
+    ) : ImageRepository {
+        override fun observeImage(id: String): Flow<UserImage?> = imageDao.observeImageById(id).map { it?.toDomain() }
 
-    override fun observeImage(id: String): Flow<UserImage?> = imageDao.observeImageById(id).map { it?.toDomain() }
-
-    override suspend fun upsertImage(userImage: UserImage) {
-        withContext(Dispatchers.IO) {
-            imageDao.insertImage(userImage.toEntity())
+        override suspend fun upsertImage(userImage: UserImage) {
+            withContext(Dispatchers.IO) {
+                imageDao.insertImage(userImage.toEntity())
+            }
         }
     }
-}

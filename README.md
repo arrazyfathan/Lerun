@@ -26,12 +26,12 @@
 
 ### Key Features
 
-- **Real-Time GPS Run Tracking**: Tracks your running route, live duration, distance, average speed, and calories burned using a `StateFlow`-backed foreground location service (`TrackingService`).
+- **Real-Time GPS Run Tracking**: Tracks your running route, live duration, distance, average speed, and calories burned using a `StateFlow`-backed foreground location service (`TrackingService`) isolated in `:feature:tracking`.
 - **Interactive Route Visualization**: Smoothly loads Google Maps (`MapsInitializer.Renderer.LATEST`), centers the camera on the user's live location pin within a bounded viewport, provides a **My Location** re-center button and a location-loading indicator, draws smoothed live polylines, and captures route snapshots upon completing a run.
-- **Run History & Filtering**: Browse recent runs on the home screen or view all runs sorted by Date, Duration, Distance, Average Speed, or Calories Burned.
-- **Detailed Run Breakdown**: Inspect individual run metrics, route snapshots, and manage saved runs.
-- **Workout Statistics**: Visualize your cumulative progress (total distance, total time, total calories, average speed) alongside interactive bar charts.
-- **Personalized Onboarding & Settings**: Set up your profile (name, weight, profile picture with cropping) and toggle between **Dark** and **Light** themes with edge-to-edge system bar support.
+- **Run Dashboard & History**: View greeting, promo banner, summary stats, interactive speed line chart, and recent activities on the home screen, or browse all runs sorted by Date, Duration, Distance, Average Speed, or Calories Burned (`:feature:home`).
+- **Detailed Run Breakdown**: Inspect individual run metrics and route snapshots with dedicated screen state (`DetailRunViewModel`).
+- **Workout Statistics**: Visualize your cumulative progress (total distance, total time, total calories, average speed) alongside interactive bar charts (`:feature:statistics`).
+- **Personalized Onboarding & Settings**: Set up your profile (name, weight, profile picture with a **native Jetpack Compose pinch-to-zoom image cropper**), inspect **open-source licenses in a Compose dialog**, and toggle between **Dark** and **Light** themes with edge-to-edge system bar support.
 
 <br clear="both"/>
 
@@ -39,7 +39,7 @@
 
 ## Migration from XML to Jetpack Compose
 
-Lerun originally started as a single-module Android app built with legacy **XML Views, Fragments, and Navigation Component**, and has been **migrated to 100% Jetpack Compose** alongside a **multi-module Clean Architecture**:
+Lerun originally started as a single-module Android app built with legacy **XML Views, Fragments, and Navigation Component**, and has been **migrated to 100% Jetpack Compose** alongside a **multi-module Clean Architecture** and **`build-logic` Gradle Convention Plugins**:
 
 | Area | Legacy (XML) | Modernized (Jetpack Compose) |
 | :--- | :--- | :--- |
@@ -47,33 +47,38 @@ Lerun originally started as a single-module Android app built with legacy **XML 
 | **App Structure** | Multiple `Fragment` classes hosted in an XML `NavHostFragment` | Single-Activity (`MainActivity`) with **Compose screens & routes** |
 | **Navigation** | Fragment XML Navigation Graph | Modularized, type-safe **Jetpack Navigation 3** (`NavDisplay`, `NavBackStack`, feature `EntryProviderScope<NavKey>` builders, `kotlinx.serialization`) |
 | **Design System** | XML styles & attributes | Centralized Compose theme (`LerunTheme`, `Color`, `Type`, `Icons`) in `:core:ui` |
-| **Visual Effects** | `BlurView` (View hierarchy blur) | Compose-native glassmorphism with **Haze** (`dev.chrisbanes.haze`) |
-| **View Interop** | Native XML widgets | Seamless Compose `AndroidView` interoperability for Google Maps `MapView` & `MPAndroidChart` `BarChart` |
+| **Visual Effects** | `BlurView` (View hierarchy blur) | Compose-native glassmorphism with **Haze 2.1** (`dev.chrisbanes.haze.blur`) |
+| **Image Cropping & OSS Licenses** | Legacy AppCompat Activities (`Android-Image-Cropper`, `OssLicensesMenuActivity`) | 100% Compose `ImageCropperDialog` (pinch-to-zoom, pan & EXIF handling) & `OssLicensesDialog` |
+| **View Interop** | Native XML widgets | Seamless Compose `AndroidView` interoperability for Google Maps `MapView` & `MPAndroidChart` |
 
-> **Current Migration Status**: All core user flows (**Onboarding**, **Home / Run Dashboard**, **Live Tracking**, **All Runs**, **Run Detail**, **Statistics**, and **Settings**) and app navigation are implemented in Jetpack Compose with **Jetpack Navigation 3**. Each `:feature:*` module defines its own serializable `NavKey` routes and `EntryProviderScope<NavKey>` entry builders, assembled in `:app` (`AppNavigation.kt`) with onboarding hosted directly inside `NavDisplay`. Legacy View dependencies (`MPAndroidChart`, Google Maps `MapView`, and `Android-Image-Cropper`) are bridged cleanly via Compose interoperability APIs.
+> **Current Migration Status**: All user flows (**Onboarding**, **Home Dashboard**, **All Runs**, **Run Detail**, **Live Tracking**, **Statistics**, and **Settings**) and app navigation are implemented in Jetpack Compose with **Jetpack Navigation 3**. Each `:feature:*` module defines its own serializable `NavKey` routes and `EntryProviderScope<NavKey>` entry builders, assembled in `:app` (`AppNavigation.kt`) with onboarding hosted directly inside `NavDisplay`.
 
 ---
 
 ## Architecture & Module Structure
 
-The project follows **Clean Architecture** principles combined with **MVI (Model-View-Intent) / Unidirectional Data Flow (UDF)** and **100% Kotlin Flow** across all layers (no `LiveData`), organized into feature and core modules for scalability and build performance:
+The project follows **Clean Architecture** principles combined with **MVI (Model-View-Intent) / Unidirectional Data Flow (UDF)** and **100% Kotlin Flow** across all layers (no `LiveData`), organized into feature, core, and `build-logic` modules for strict dependency encapsulation and build performance:
 
-- **Consistent MVI Pattern**: Every feature exposes an `@Immutable` `State`, a sealed `Action` interface for user/system intents, and a `Channel`-backed `Event` `Flow` for one-off side effects (`AppUiViewModel`, `OnboardingViewModel`, `MainViewModel`, `TrackingViewModel`, `SettingViewModel`, `StatisticViewModel`).
-- **Compose Stability & State-Holder Split**: Route composables resolve `viewModel()` and pass immutable state plus `onAction` callbacks into stateless UI composables—avoiding `ViewModel` parameters in UI composables for clean previews, testing, and recomposition skipping.
+- **Consistent MVI Pattern**: Every screen exposes an `@Immutable` `State`, a sealed `Action` interface for user/system intents, and a `Channel`-backed `Event` `Flow` for one-off side effects (`AppUiViewModel`, `OnboardingViewModel`, `HomeViewModel`, `AllRunsViewModel`, `DetailRunViewModel`, `TrackingViewModel`, `SettingViewModel`, `StatisticViewModel`).
+- **Compose Stability & State-Holder Split**: Route composables resolve their `@HiltViewModel` via `hiltViewModel()` and pass immutable state plus `onAction` callbacks into stateless UI composables—avoiding `ViewModel` parameters in UI composables for clean previews, testing, and recomposition skipping.
+- **Strict Clean Architecture Boundaries**: `:feature:*` modules depend only on `:core:domain`, `:core:ui`, and `:core:common` (never `:core:data`), while `:app` assembles the Hilt dependency graph with `:core:data`.
 
 ```text
 Lerun/
-├── app/                   # Application entry point (MainActivity), AppUiViewModel, Navigation 3 NavDisplay host & transitions, DI & Services
+├── build-logic/
+│   └── convention/        # Gradle Convention Plugins (lerun.android.application, library, compose, hilt, feature)
+├── app/                   # Application entry point (MainActivity), AppUiViewModel, Navigation 3 NavDisplay host & DI wiring
 ├── core/
-│   ├── common/            # Shared utilities, constants, formatters, and tracking helpers
+│   ├── common/            # Lightweight shared utilities, constants, bitmap converters, and formatting helpers
 │   ├── domain/            # Pure business logic: Domain models, Flow-based Repository interfaces, and UseCases
-│   ├── data/              # Data layer: Room database (Flow queries), DAOs, encrypted preferences, mappers & Repository impls
-│   └── ui/                # Shared Compose Design System (LerunTheme, typography, colors) & reusable UI components
+│   ├── data/              # Data layer: Room database (Flow queries), DAOs, SharedPreferences storage, mappers & Repository impls
+│   └── ui/                # Shared Compose Design System (LerunTheme, typography, colors, icons) & reusable UI components
 ├── feature/
 │   ├── onboarding/        # First-time user setup screen, OnboardingViewModel (MVI) & OnboardingNavigation
-│   ├── run/               # Home dashboard, Live GPS Tracking (TrackingViewModel + TrackingService), All Runs, Run Detail & RunNavigation
+│   ├── home/              # Home dashboard (HomeViewModel), All Runs history (AllRunsViewModel), Run Detail (DetailRunViewModel) & HomeNavigation
+│   ├── tracking/          # Live GPS workout recording (TrackingScreen, TrackingViewModel, TrackingService) & TrackingNavigation
 │   ├── statistics/        # Running analytics, chart visualization screen, StatisticViewModel (MVI) & StatisticsNavigation
-│   └── settings/          # User profile settings, image picker/cropper, theme switching, SettingViewModel (MVI) & SettingsNavigation
+│   └── settings/          # User profile settings, Compose ImageCropperDialog & OssLicensesDialog, SettingViewModel & SettingsNavigation
 └── baselineprofile/       # Macrobenchmark & Baseline Profile generator for startup & runtime optimization
 ```
 
@@ -81,29 +86,28 @@ Lerun/
 
 ## Tech Stack & Open-Source Libraries
 
-### Core & Asynchronous
+### Core & Build Logic
 - **[Kotlin](https://kotlinlang.org/)**: 100% Kotlin codebase with Kotlinx Serialization.
 - **[Coroutines](https://github.com/Kotlin/kotlinx.coroutines) & [Flow](https://kotlinlang.org/docs/flow.html)**: Structured concurrency and reactive state streams (`Flow`, `StateFlow`, `Channel` events) end-to-end from Room DAOs to UI, with zero `LiveData` usage.
+- **Gradle Convention Plugins (`build-logic`)**: Centralized build configuration for AGP 9, Compose Compiler, Hilt, KSP, and feature dependencies.
 - **Java & Android SDK**: Java 11 bytecode compatibility target (`minSdk = 24`, `targetSdk = 37`, `compileSdk = 37`), built with JDK 17+.
 
 ### UI & Navigation
 - **[Jetpack Compose](https://developer.android.com/jetpack/compose)**: Modern declarative UI toolkit with **Material 3**.
 - **[Jetpack Navigation 3](https://developer.android.com/guide/navigation)**: Modularized type-safe Compose navigation (`androidx.navigation3:navigation3-runtime`, `navigation3-ui`, and `lifecycle-viewmodel-navigation3`) with per-tab back stacks, onboarding inside `NavDisplay`, and custom hierarchical/top-level transitions.
-- **[Haze](https://github.com/chrisbanes/haze)**: Glassmorphism and background blur effects for Jetpack Compose.
-- **[MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)**: Interactive bar charts rendered via Compose `AndroidView`.
-- **[Android Image Cropper](https://github.com/CanHub/Android-Image-Cropper)**: Profile photo selection and cropping.
+- **[Haze 2.1](https://github.com/chrisbanes/haze)**: Modular background blur and material presets (`haze`, `haze-blur`, `haze-blur-materials`) for Jetpack Compose.
+- **[MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)**: Interactive line and bar charts rendered via Compose `AndroidView`.
 
 ### Architecture, DI & Jetpack
-- **[Hilt (Dagger)](https://dagger.dev/hilt/)**: Compile-time dependency injection with KSP.
+- **[Hilt (Dagger)](https://dagger.dev/hilt/)**: Compile-time dependency injection with KSP and `hiltViewModel()` Compose integration.
 - **[Jetpack Lifecycle & ViewModel](https://developer.android.com/topic/libraries/architecture/lifecycle)**: Lifecycle-aware state holders (`collectAsStateWithLifecycle`, `LifecycleService`).
 - **[Room Persistence](https://developer.android.com/training/data-storage/room)**: Local SQLite database abstraction for storing runs, route bitmaps, and user images.
-- **[Jetpack Security Crypto](https://developer.android.com/topic/security/data)**: Encrypted `SharedPreferences` for storing user profile settings and theme preferences.
 - **[Baseline Profiles](https://developer.android.com/topic/performance/baselineprofiles)**: Ahead-of-time (AOT) compilation profiles for faster app startup and smoother Compose scrolling.
 
 ### Location, Maps & Services
 - **[Google Maps SDK for Android](https://developers.google.com/maps/documentation/android-sdk/overview)**: Displays live running routes, custom markers, and snapshots.
 - **[Google Play Services Location](https://developers.google.com/android/guides/setup)**: `FusedLocationProviderClient` for high-accuracy location tracking.
-- **[EasyPermissions](https://github.com/googlesamples/easypermissions)** & Activity Result APIs: Runtime location and notification permission handling.
+- **Activity Result APIs**: Compose `rememberLauncherForActivityResult` for runtime location, notification, and photo picker permissions.
 
 ### Firebase & Tooling
 - **Firebase Suite**: Analytics, Crashlytics, Performance Monitoring, Remote Config, Cloud Messaging, and App Distribution.

@@ -10,18 +10,18 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class BaselineProfileGenerator {
-
     @get:Rule
     val baselineProfileRule = BaselineProfileRule()
 
     @Test
-    fun generate() = baselineProfileRule.collect(
-        packageName = "com.arrazyfathan.lerun",
-    ) {
-        pressHome()
-        startActivityAndWait()
+    fun generate() =
+        baselineProfileRule.collect(
+            packageName = "com.arrazyfathan.lerun",
+        ) {
+            pressHome()
+            startActivityAndWait()
 
-        // Expand this with the app's critical paths so the generated profile
-        // covers startup plus the screens users hit most often.
-    }
+            // Expand this with the app's critical paths so the generated profile
+            // covers startup plus the screens users hit most often.
+        }
 }

@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ImageDao {
-
     @Upsert
     suspend fun insertImage(userImage: UserImageEntity)
 

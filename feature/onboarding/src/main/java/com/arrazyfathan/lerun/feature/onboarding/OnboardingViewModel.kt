@@ -1,4 +1,4 @@
-package com.arrazyfathan.lerun.presentation.onboarding
+package com.arrazyfathan.lerun.feature.onboarding
 
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
@@ -25,78 +25,89 @@ data class OnboardingState(
 
 sealed interface OnboardingAction {
     data object OnStarted : OnboardingAction
-    data class OnNameChanged(val name: String) : OnboardingAction
-    data class OnWeightChanged(val weight: String) : OnboardingAction
+
+    data class OnNameChanged(
+        val name: String,
+    ) : OnboardingAction
+
+    data class OnWeightChanged(
+        val weight: String,
+    ) : OnboardingAction
+
     data object OnContinueClick : OnboardingAction
 }
 
 sealed interface OnboardingEvent {
-    data class ShowMessage(val message: String) : OnboardingEvent
+    data class ShowMessage(
+        val message: String,
+    ) : OnboardingEvent
+
     data object NavigateToRun : OnboardingEvent
 }
 
 @HiltViewModel
-class OnboardingViewModel @Inject constructor(
-    private val observeUserSettingsUseCase: ObserveUserSettingsUseCase,
-    private val saveUserProfileUseCase: SaveUserProfileUseCase,
-) : ViewModel() {
+class OnboardingViewModel
+    @Inject
+    constructor(
+        private val observeUserSettingsUseCase: ObserveUserSettingsUseCase,
+        private val saveUserProfileUseCase: SaveUserProfileUseCase,
+    ) : ViewModel() {
+        private val _state =
+            MutableStateFlow(
+                OnboardingState(
+                    isProfileCompleted = observeUserSettingsUseCase.current().isProfileCompleted,
+                ),
+            )
+        val state = _state.asStateFlow()
 
-    private val _state = MutableStateFlow(
-        OnboardingState(
-            isProfileCompleted = observeUserSettingsUseCase.current().isProfileCompleted,
-        ),
-    )
-    val state = _state.asStateFlow()
+        private val _events = Channel<OnboardingEvent>(Channel.BUFFERED)
+        val events = _events.receiveAsFlow()
 
-    private val _events = Channel<OnboardingEvent>(Channel.BUFFERED)
-    val events = _events.receiveAsFlow()
+        init {
+            observeUserSettingsUseCase()
+                .onEach { settings ->
+                    _state.update {
+                        it.copy(isProfileCompleted = settings.isProfileCompleted)
+                    }
+                }.launchIn(viewModelScope)
+        }
 
-    init {
-        observeUserSettingsUseCase()
-            .onEach { settings ->
-                _state.update {
-                    it.copy(isProfileCompleted = settings.isProfileCompleted)
-                }
-            }
-            .launchIn(viewModelScope)
-    }
-
-    fun onAction(action: OnboardingAction) {
-        when (action) {
-            OnboardingAction.OnStarted -> {
-                if (observeUserSettingsUseCase.current().isProfileCompleted) {
-                    viewModelScope.launch {
-                        _events.send(OnboardingEvent.NavigateToRun)
+        fun onAction(action: OnboardingAction) {
+            when (action) {
+                OnboardingAction.OnStarted -> {
+                    if (observeUserSettingsUseCase.current().isProfileCompleted) {
+                        viewModelScope.launch {
+                            _events.send(OnboardingEvent.NavigateToRun)
+                        }
                     }
                 }
-            }
 
-            is OnboardingAction.OnNameChanged -> {
-                _state.update { it.copy(name = action.name) }
-            }
+                is OnboardingAction.OnNameChanged -> {
+                    _state.update { it.copy(name = action.name) }
+                }
 
-            is OnboardingAction.OnWeightChanged -> {
-                _state.update { it.copy(weight = action.weight) }
-            }
+                is OnboardingAction.OnWeightChanged -> {
+                    _state.update { it.copy(weight = action.weight) }
+                }
 
-            OnboardingAction.OnContinueClick -> {
-                submitProfile()
+                OnboardingAction.OnContinueClick -> {
+                    submitProfile()
+                }
+            }
+        }
+
+        private fun submitProfile() {
+            val trimmedName = _state.value.name.trim()
+            val trimmedWeight = _state.value.weight.trim()
+            val parsedWeight = trimmedWeight.toFloatOrNull()?.toInt() ?: 0
+
+            viewModelScope.launch {
+                if (trimmedName.isBlank() || trimmedWeight.isBlank() || parsedWeight <= 0) {
+                    _events.send(OnboardingEvent.ShowMessage("Please enter all the fields"))
+                } else {
+                    saveUserProfileUseCase(trimmedName, trimmedWeight)
+                    _events.send(OnboardingEvent.NavigateToRun)
+                }
             }
         }
     }
-
-    private fun submitProfile() {
-        val trimmedName = _state.value.name.trim()
-        val trimmedWeight = _state.value.weight.trim()
-        val parsedWeight = trimmedWeight.toFloatOrNull()?.toInt() ?: 0
-
-        viewModelScope.launch {
-            if (trimmedName.isBlank() || trimmedWeight.isBlank() || parsedWeight <= 0) {
-                _events.send(OnboardingEvent.ShowMessage("Please enter all the fields"))
-            } else {
-                saveUserProfileUseCase(trimmedName, trimmedWeight)
-                _events.send(OnboardingEvent.NavigateToRun)
-            }
-        }
-    }
-}

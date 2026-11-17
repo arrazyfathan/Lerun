@@ -1,31 +1,25 @@
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.lerun.android.application)
+    alias(libs.plugins.lerun.android.compose)
+    alias(libs.plugins.lerun.android.hilt)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.androidx.baselineprofile)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt.android)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.firebase.appdistribution)
-    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
-    compileSdk = 37
     namespace = "com.arrazyfathan.lerun"
 
     defaultConfig {
         applicationId = "com.arrazyfathan.lerun"
-        minSdk = 24
-        targetSdk = 37
         versionCode = 1
         versionName = "1.2.1"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
     }
 
@@ -59,12 +53,7 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
     buildFeatures {
-        compose = true
         buildConfig = true
     }
 
@@ -73,14 +62,15 @@ android {
 
 dependencies {
     implementation(project(":core:domain"))
+    implementation(project(":core:data"))
     implementation(project(":core:ui"))
     implementation(project(":core:common"))
-    implementation(project(":feature:run"))
+    implementation(project(":feature:home"))
+    implementation(project(":feature:tracking"))
     implementation(project(":feature:statistics"))
     implementation(project(":feature:settings"))
     implementation(project(":feature:onboarding"))
 
-    implementation(fileTree("src/main/libs") { include("*.jar") })
     implementation(libs.androidx.profileinstaller)
     baselineProfile(project(":baselineprofile"))
 
@@ -103,17 +93,14 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
-    debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
-    // Google Maps Location Services
+    // Google Maps Location Services (for ServiceModule)
     implementation(libs.google.play.service.location)
 
     // Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
     ksp(libs.androidx.hilt.compiler)
 
     // Activity KTX for viewModels()
@@ -122,13 +109,10 @@ dependencies {
     // Timber
     implementation(libs.timber)
 
-    implementation(libs.androidx.lifecycle.service)
-
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.perf)
     implementation(libs.firebase.config)
     implementation(libs.firebase.messaging)
-
 }

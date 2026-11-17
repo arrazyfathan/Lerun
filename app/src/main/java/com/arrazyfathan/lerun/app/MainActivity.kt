@@ -24,7 +24,6 @@ import com.arrazyfathan.lerun.ui.AppUiViewModel
 import com.arrazyfathan.lerun.ui.designsystem.LerunTheme
 import com.arrazyfathan.lerun.utils.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.google.firebase.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
@@ -36,7 +35,6 @@ import com.arrazyfathan.lerun.core.ui.R as UiR
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     private val appUiViewModel: AppUiViewModel by viewModels()
 
     private lateinit var remoteConfig: FirebaseRemoteConfig
@@ -45,20 +43,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.auto(
-                Color.TRANSPARENT,
-                Color.TRANSPARENT,
-            ),
-            navigationBarStyle = SystemBarStyle.auto(
-                Color.TRANSPARENT,
-                Color.TRANSPARENT,
-            ),
+            statusBarStyle =
+                SystemBarStyle.auto(
+                    Color.TRANSPARENT,
+                    Color.TRANSPARENT,
+                ),
+            navigationBarStyle =
+                SystemBarStyle.auto(
+                    Color.TRANSPARENT,
+                    Color.TRANSPARENT,
+                ),
         )
         window.disableNavigationBarContrastEnforcement(Build.VERSION.SDK_INT)
 
         setupRemoteConfig()
         setTheme(UiR.style.Base_Theme_Lerun)
-        generateNewToken()
         requestPermissions()
 
         if (savedInstanceState == null) {
@@ -67,11 +66,12 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val appUiState by appUiViewModel.state.collectAsStateWithLifecycle()
-            val trackingIntentEvents = remember(appUiViewModel) {
-                appUiViewModel.events
-                    .filterIsInstance<AppUiEvent.NavigateToTracking>()
-                    .map { }
-            }
+            val trackingIntentEvents =
+                remember(appUiViewModel) {
+                    appUiViewModel.events
+                        .filterIsInstance<AppUiEvent.NavigateToTracking>()
+                        .map { }
+                }
 
             LerunTheme(darkTheme = appUiState.isDarkTheme) {
                 MainApp(
@@ -89,27 +89,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun generateNewToken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Timber.w("Fetching FCM registration token failed ${task.exception}")
-                return@addOnCompleteListener
-            }
-            val token = task.result
-            Timber.d(token)
-        }
-    }
-
     private fun setupRemoteConfig() {
         remoteConfig = Firebase.remoteConfig
-        val configSetting = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 60
-        }
+        val configSetting =
+            remoteConfigSettings {
+                minimumFetchIntervalInSeconds = 60
+            }
 
         remoteConfig.setConfigSettingsAsync(configSetting)
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
 
-        remoteConfig.fetchAndActivate()
+        remoteConfig
+            .fetchAndActivate()
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val updated = task.result

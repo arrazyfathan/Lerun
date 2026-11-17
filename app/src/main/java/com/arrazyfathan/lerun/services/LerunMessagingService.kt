@@ -48,7 +48,8 @@ class LerunMessagingService : FirebaseMessagingService() {
         val channelId = FIREBASE_CHANNEL_ID
         // ngtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder =
-            NotificationCompat.Builder(this, channelId)
+            NotificationCompat
+                .Builder(this, channelId)
                 .setSmallIcon(UiR.drawable.ic_run)
                 .setContentTitle("Lerun")
                 .setContentText(messageBody)
@@ -71,13 +72,5 @@ class LerunMessagingService : FirebaseMessagingService() {
         }
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
-    }
-
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-        sendRegistrationToServer(token)
-    }
-
-    private fun sendRegistrationToServer(token: String) {
     }
 }
