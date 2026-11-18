@@ -133,12 +133,12 @@ cd Lerun
 
 ### 2. Configure Google Maps API Key
 
-Lerun uses the Google Maps SDK to render live tracking maps and route snapshots.
+Lerun uses the Google Maps SDK to render live tracking maps and route snapshots. The API key is loaded from `local.properties` (which is ignored by Git) or the `MAPS_API_KEY` environment variable and injected into `AndroidManifest.xml` via `manifestPlaceholders`.
 
 1. Obtain a **Maps SDK for Android** API key from the [Google Cloud Console](https://console.cloud.google.com/).
-2. Update the `google_maps_key` string resource in [`core/ui/src/main/res/values/strings.xml`](core/ui/src/main/res/values/strings.xml):
-   ```xml
-   <string name="google_maps_key">YOUR_GOOGLE_MAPS_API_KEY</string>
+2. Add `MAPS_API_KEY` to your root `local.properties` file:
+   ```properties
+   MAPS_API_KEY=YOUR_GOOGLE_MAPS_API_KEY
    ```
 
 ### 3. Firebase Configuration
